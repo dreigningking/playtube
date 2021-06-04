@@ -1,0 +1,12 @@
+in default/layout/watch/content
+run ajax frontend code for scam and legit
+
+get ajax call from backend to increment scam and legit count
+
+find other places in the script where scam and legit are supposed to appear
+
+replicate everything for vidplay layout
+
+DONATE button on default/layout/watch/content
+
+onclick donate, what should happen
