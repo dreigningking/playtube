@@ -1,0 +1,42 @@
+themes->default->layout->home->list: added html span for
+<div class="video-list-by">
+    <span>
+        <a href="{{USER url}}" data-load="?link1=timeline&id={{USER username}}">{{USER name_v}}</a>
+        <span class="bold">|</span> <span>{{TIME}}</span>
+    </span><br/>
+    <span>{{VIEWS}} {{LANG views}}</span> <span class="bold">|</span> <span class=""><span>7.8k scam</span><span class="bold">|</span> <span>8.9k Legit</span></span>
+</div>
+
+added field scam (int 11, default 0) and legit (int 11, default 0) to video table in database
+
+sources/home/content: added to everywhere there is 'VIEWS' => number_format($video->views),
+'SCAM' => number_format($video->scam),
+'LEGIT' => number_format($video->legit),
+
+sources/home/content: added to everywhere there is 'VIEWS' => $get_video->views,
+'SCAM' => $get_video->scam,
+'LEGIT' => $get_video->legit,
+
+themes->default->layout->home->list: replaced 7.8k scam and Legit
+{{SCAM}} {{LEGIT}}
+
+
+themes->default->css->style.css line 204 : adjusted width to 200px
+
+
+themes->default->layout->watch->content.html : commented line 448 to 453 and duplicated the likes and dislikes icon
+then edited the duplicate like this
+<div class="like-btn text-right {{DIS_ACTIVE_CLASS}}" id="dislikes-bar" onclick="Wo_LikeSystem('{{ID}}', 'dislike', this, 'is_ajax')" data-likes="{{RAEL_DISLIKES}}" {{ISDISLIKED}}>
+    <!-- <svg xmlns="http://www.w3.org/2000/svg" class="feather feather-thumbs-down" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19,15H23V3H19M15,3H6C5.17,3 4.46,3.5 4.16,4.22L1.14,11.27C1.05,11.5 1,11.74 1,12V14A2,2 0 0,0 3,16H9.31L8.36,20.57C8.34,20.67 8.33,20.77 8.33,20.88C8.33,21.3 8.5,21.67 8.77,21.94L9.83,23L16.41,16.41C16.78,16.05 17,15.55 17,15V5C17,3.89 16.1,3 15,3Z" /></svg> -->
+    <i class="fa fa-ban" style="font-size:16px"></i>
+    <span class="likes" id="dislikes">{{DISLIKES}}</span>
+</div>
+<div class="like-btn text-right {{DIS_ACTIVE_CLASS}}" id="dislikes-bar" onclick="Wo_LikeSystem('{{ID}}', 'dislike', this, 'is_ajax')" data-likes="{{RAEL_DISLIKES}}" {{ISDISLIKED}}>
+    <!-- <svg xmlns="http://www.w3.org/2000/svg" class="feather feather-thumbs-down" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19,15H23V3H19M15,3H6C5.17,3 4.46,3.5 4.16,4.22L1.14,11.27C1.05,11.5 1,11.74 1,12V14A2,2 0 0,0 3,16H9.31L8.36,20.57C8.34,20.67 8.33,20.77 8.33,20.88C8.33,21.3 8.5,21.67 8.77,21.94L9.83,23L16.41,16.41C16.78,16.05 17,15.55 17,15V5C17,3.89 16.1,3 15,3Z" /></svg> -->
+    <i class="fa fa-check-circle-o" style="font-size:16px"></i>
+    <span class="likes" id="dislikes">{{DISLIKES}}</span>
+</div>
+
+sources/watch/content: added to everywhere there is 'LIKES' => number_format($get_video->likes),
+'SCAM' => number_format($get_video->scam),
+'LEGIT' => number_format($get_video->legit),
