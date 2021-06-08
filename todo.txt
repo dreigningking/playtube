@@ -10,3 +10,17 @@ replicate everything for vidplay layout
 DONATE button on default/layout/watch/content
 
 onclick donate, what should happen
+
+
+Wo_LikeSystem
+PT_Ajax_Requests_File
+
+
+PT_GetVideoByID in source/watch/content.php
+is where eloquent queries are run to get video
+
+getOne is a php database function to get one item in the table
+T_VIDEOS is a constant meaning videos..defined in assets/includes/tables.php
+
+
+
