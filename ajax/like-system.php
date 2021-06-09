@@ -4,6 +4,7 @@ if (IS_LOGGED == false) {
     echo json_encode($data);
     exit();
 }
+
 if (!empty($_GET['first']) && !empty($_POST['id'])) {
     $id                  = PT_Secure($_POST['id']);
     $video_data = $db->where('id', $id)->getOne(T_VIDEOS);
@@ -101,10 +102,108 @@ if (!empty($_GET['first']) && !empty($_POST['id'])) {
             }
         }
 
+        else if ($_GET['first'] == 'legit') {
+            $db->where('user_id', $user->id);
+            $db->where('video_id', $id);
+            $db->where('type', 3);
+            $check_for_like = $db->getValue(T_DIS_LIKES, 'count(*)');
+            if ($check_for_like > 0) {
+                $db->where('user_id', $user->id);
+                $db->where('video_id', $id);
+                $db->where('type', 3);
+                $delete = $db->delete(T_DIS_LIKES);
+                $data   = array(
+                    'status' => 200,
+                    'type' => 'deleted_legit'
+                );
+            } 
+
+            else {
+                $db->where('user_id', $user->id);
+                $db->where('video_id', $id);
+                $db->where('type', 4);
+                $check_for_dislike = $db->getValue(T_DIS_LIKES, 'count(*)');
+                if ($check_for_dislike) {
+                    $db->where('user_id', $user->id);
+                    $db->where('video_id', $id);
+                    $db->where('type', 4);
+                    $delete = $db->delete(T_DIS_LIKES);
+                }
+                $insert_data = array(
+                    'user_id' => $user->id,
+                    'video_id' => $id,
+                    'time' => time(),
+                    'type' => 3
+                );
+                $insert      = $db->insert(T_DIS_LIKES, $insert_data);
+                if ($insert) {
+                    $data = array(
+                        'status' => 200,
+                        'type' => 'added_legit'
+                    );
+
+                }
+            }
+        }
+
+        else if ($_GET['first'] == 'scam') {
+            $db->where('user_id', $user->id);
+            $db->where('video_id', $id);
+            $db->where('type', 4);
+            $check_for_like = $db->getValue(T_DIS_LIKES, 'count(*)');
+            if ($check_for_like > 0) {
+                $db->where('user_id', $user->id);
+                $db->where('video_id', $id);
+                $db->where('type', 4);
+                $delete = $db->delete(T_DIS_LIKES);
+                $data   = array(
+                    'status' => 200,
+                    'type' => 'deleted_scam'
+                );
+            } 
+
+            else {
+                $db->where('user_id', $user->id);
+                $db->where('video_id', $id);
+                $db->where('type', 3);
+                $check_for_dislike = $db->getValue(T_DIS_LIKES, 'count(*)');
+                if ($check_for_dislike) {
+                    $db->where('user_id', $user->id);
+                    $db->where('video_id', $id);
+                    $db->where('type', 3);
+                    $delete = $db->delete(T_DIS_LIKES);
+                }
+                $insert_data = array(
+                    'user_id' => $user->id,
+                    'video_id' => $id,
+                    'time' => time(),
+                    'type' => 4
+                );
+                $insert      = $db->insert(T_DIS_LIKES, $insert_data);
+                if ($insert) {
+                    $data = array(
+                        'status' => 200,
+                        'type' => 'added_scam'
+                    );
+
+                }
+            }
+        }
+
         #Send notification to video owner
-        if (in_array($data['type'], array('added_dislike','added_like'))) {
+        if (in_array($data['type'], array('added_dislike','added_like','added_legit','added_scam'))) {
             if ($video_data->user_id != $user->id) {
-                $type    = ($data['type'] == 'added_dislike') ? 'disliked_ur_video' : 'liked_ur_video';
+                //$type    = ($data['type'] == 'added_dislike') ? 'disliked_ur_video' : 'liked_ur_video';
+                switch($data['type']){
+                    case 'added_dislike': $type = 'disliked_ur_video';
+                    break;
+                    case 'added_like': $type = 'liked_ur_video';
+                    break;
+                    case 'added_legit': $type = 'legit_ur_video';
+                    break;
+                    case 'added_scam': $type = 'scammed_ur_video';
+                    break; 
+                }
                 $uniq_id = $video_data->video_id;
                 $notif_data = array(
                     'notifier_id' => $pt->user->id,

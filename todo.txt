@@ -22,5 +22,23 @@ is where eloquent queries are run to get video
 getOne is a php database function to get one item in the table
 T_VIDEOS is a constant meaning videos..defined in assets/includes/tables.php
 
+click scam
+1. script to locate ajax
+2. route to ajax file
+3. ajax file and database execution
+4. return response
+4. script to apply response to html
+
+data-likes="{{RAEL_DISLIKES}}" {{ISDISLIKED}}
+
+number3
+RegisterPoint in like-system.php was not calculated for scam and legit
+located function in functions_one.php
+
+likes_dislikes table..
+use type 3 for legit, type 4 for scam
+change the scam and legit calculations from the video table
+
+in contents, get all the rael likes and rael dislikes
 
 

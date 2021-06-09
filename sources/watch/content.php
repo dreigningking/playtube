@@ -1016,10 +1016,16 @@ $pt->content = PT_LoadPage("watch/$content_page", array(
     'DISLIKES_P' => $get_video->dislikes_percent,
     'RAEL_LIKES' => $get_video->likes,
     'RAEL_DISLIKES' => $get_video->dislikes,
+    'RAEL_SCAM' => $get_video->scam,
+    'RAEL_LEGIT' => $get_video->legit,
     'ISLIKED' => ($get_video->is_liked > 0) ? 'liked="true"' : '',
     'ISDISLIKED' => ($get_video->is_disliked > 0) ? 'disliked="true"' : '',
+    'ISSCAM' => ($get_video->is_scam > 0) ? 'scam="true"' : '',
+    'ISLEGIT' => ($get_video->is_legit > 0) ? 'legit="true"' : '',
     'LIKE_ACTIVE_CLASS' => ($get_video->is_liked > 0) ? 'active' : '',
     'DIS_ACTIVE_CLASS' => ($get_video->is_disliked > 0) ? 'active' : '',
+    'SCAM_ACTIVE_CLASS' => ($get_video->is_scam > 0) ? 'active' : '',
+    'LEGIT_ACTIVE_CLASS' => ($get_video->is_legit > 0) ? 'active' : '', 
 
     'VIDEO_COMMENTS' => PT_LoadPage('watch/video-comments',array(
         'COUNT_COMMENTS' => $pt->count_comments,

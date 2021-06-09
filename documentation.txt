@@ -1,3 +1,14 @@
+config.php
+changed database connection details and commented purchase code line
+
+install/index.php
+commented line 46 to 54
+
+assets/include/function_general.php
+added return array('status'=>'SUCCESS');
+to function check_($check) and function check_success($check)
+
+
 themes->default->layout->home->list: added html span for
 <div class="video-list-by">
     <span>
@@ -40,3 +51,190 @@ then edited the duplicate like this
 sources/watch/content: added to everywhere there is 'LIKES' => number_format($get_video->likes),
 'SCAM' => number_format($get_video->scam),
 'LEGIT' => number_format($get_video->legit),
+
+========================================================
+themes/default/js/script.js
+add this to function Wo_LikeSystem
+if (type == 'legit') {
+      var likes = $(this_).attr('data-legit');
+      if ($(this_).attr('legit')) {
+         result = Number(legit) - 1;
+         $(this_).removeAttr('legit');
+         $(this_).removeClass('active');
+      } else {
+         result = Number(legit) + 1;
+         $(this_).attr('legit', true);
+         $(this_).addClass('active');
+      }
+      $('#legit').text(numberWithCommas(result));
+      $(this_).attr('data-legit', result);
+   } else if (type == 'scam') {
+      var scam = $(this_).attr('data-scam');
+      if ($(this_).attr('scam')) {
+         result = Number(scam) - 1;
+         $(this_).removeAttr('scam');
+         $(this_).removeClass('active');
+      } else {
+         result = Number(scam) + 1;
+         $(this_).attr('scam', true);
+         $(this_).addClass('active');
+      }
+      $(this_).attr('data-scam', result);
+}
+============================================================
+ajax/like-system.php 
+added the IF options
+else if ($_GET['first'] == 'legit') {
+    $db->where('user_id', $user->id);
+    $db->where('video_id', $id);
+    $db->where('type', 3);
+    $check_for_like = $db->getValue(T_DIS_LIKES, 'count(*)');
+    if ($check_for_like > 0) {
+        $db->where('user_id', $user->id);
+        $db->where('video_id', $id);
+        $db->where('type', 3);
+        $delete = $db->delete(T_DIS_LIKES);
+        $data   = array(
+            'status' => 200,
+            'type' => 'deleted_legit'
+        );
+    } 
+
+    else {
+        $db->where('user_id', $user->id);
+        $db->where('video_id', $id);
+        $db->where('type', 4);
+        $check_for_dislike = $db->getValue(T_DIS_LIKES, 'count(*)');
+        if ($check_for_dislike) {
+            $db->where('user_id', $user->id);
+            $db->where('video_id', $id);
+            $db->where('type', 4);
+            $delete = $db->delete(T_DIS_LIKES);
+        }
+        $insert_data = array(
+            'user_id' => $user->id,
+            'video_id' => $id,
+            'time' => time(),
+            'type' => 3
+        );
+        $insert      = $db->insert(T_DIS_LIKES, $insert_data);
+        if ($insert) {
+            $data = array(
+                'status' => 200,
+                'type' => 'added_legit'
+            );
+
+        }
+    }
+}
+else if ($_GET['first'] == 'scam') {
+    $db->where('user_id', $user->id);
+    $db->where('video_id', $id);
+    $db->where('type', 4);
+    $check_for_like = $db->getValue(T_DIS_LIKES, 'count(*)');
+    if ($check_for_like > 0) {
+        $db->where('user_id', $user->id);
+        $db->where('video_id', $id);
+        $db->where('type', 4);
+        $delete = $db->delete(T_DIS_LIKES);
+        $data   = array(
+            'status' => 200,
+            'type' => 'deleted_scam'
+        );
+    } 
+
+    else {
+        $db->where('user_id', $user->id);
+        $db->where('video_id', $id);
+        $db->where('type', 3);
+        $check_for_dislike = $db->getValue(T_DIS_LIKES, 'count(*)');
+        if ($check_for_dislike) {
+            $db->where('user_id', $user->id);
+            $db->where('video_id', $id);
+            $db->where('type', 3);
+            $delete = $db->delete(T_DIS_LIKES);
+        }
+        $insert_data = array(
+            'user_id' => $user->id,
+            'video_id' => $id,
+            'time' => time(),
+            'type' => 4
+        );
+        $insert      = $db->insert(T_DIS_LIKES, $insert_data);
+        if ($insert) {
+            $data = array(
+                'status' => 200,
+                'type' => 'added_scam'
+            );
+
+        }
+    }
+}
+
+ajax/like-system.php 
+edited notify function thus:
+if (in_array($data['type'], array('added_dislike','added_like','added_legit','added_scam'))) {
+    if ($video_data->user_id != $user->id) {
+        //$type    = ($data['type'] == 'added_dislike') ? 'disliked_ur_video' : 'liked_ur_video';
+        switch($data['type']){
+            case 'added_dislike': $type = 'disliked_ur_video';
+            break;
+            case 'added_like': $type = 'liked_ur_video';
+            break;
+            case 'added_legit': $type = 'legit_ur_video';
+            break;
+            case 'added_scam': $type = 'scammed_ur_video';
+            break; 
+        }
+        $uniq_id = $video_data->video_id;
+        $notif_data = array(
+            'notifier_id' => $pt->user->id,
+            'recipient_id' => $video_data->user_id,
+            'type' => $type,
+            'url' => "watch/$uniq_id",
+            'video_id' => $id,
+            'time' => time()
+        );
+        
+        pt_notify($notif_data);
+    }
+}
+
+==================================================
+assets/include/function_one
+function PT_GetVideoByID()
+
+$get_video->is_legit = $db->where('user_id', $pt->user->id)->where('video_id', $get_video->id)->where('type', 3)->getValue(T_DIS_LIKES, 'count(*)');
+$get_video->is_scam = $db->where('user_id', $pt->user->id)->where('video_id', $get_video->id)->where('type', 4)->getValue(T_DIS_LIKES, 'count(*)');
+
+$db->where('video_id', $get_video->id);
+$db->where('type', 3);
+$get_video->legit = $db->getValue(T_DIS_LIKES, 'count(*)');
+
+$db->where('video_id', $get_video->id);
+$db->where('type', 4);
+$get_video->scam = $db->getValue(T_DIS_LIKES, 'count(*)');
+            
+==============================================================
+sources/watch/content.php & sources/home/content.php
+'VIEWS' => number_format($get_video->views),
+'LIKES' => number_format($get_video->likes),
+'DISLIKES' => number_format($get_video->dislikes),
+'SCAM' => number_format($get_video->scam),
+'LEGIT' => number_format($get_video->legit),
+'LIKES_P' => $get_video->likes_percent,
+'DISLIKES_P' => $get_video->dislikes_percent,
+'RAEL_LIKES' => $get_video->likes,
+'RAEL_DISLIKES' => $get_video->dislikes,
+'RAEL_SCAM' => $get_video->scam,
+'RAEL_LEGIT' => $get_video->legit,
+'ISLIKED' => ($get_video->is_liked > 0) ? 'liked="true"' : '',
+'ISDISLIKED' => ($get_video->is_disliked > 0) ? 'disliked="true"' : '',
+'ISSCAM' => ($get_video->is_scam > 0) ? 'scam="true"' : '',
+'ISLEGIT' => ($get_video->is_legit > 0) ? 'legit="true"' : '',
+'LIKE_ACTIVE_CLASS' => ($get_video->is_liked > 0) ? 'active' : '',
+'DIS_ACTIVE_CLASS' => ($get_video->is_disliked > 0) ? 'active' : '',
+'SCAM_ACTIVE_CLASS' => ($get_video->is_scam > 0) ? 'active' : '',
+'LEGIT_ACTIVE_CLASS' => ($get_video->is_legit > 0) ? 'active' : '', 
+
+======================================================================

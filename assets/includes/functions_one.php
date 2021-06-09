@@ -326,6 +326,8 @@ function PT_GetVideoByID($video_id = '', $add_views = 0, $likes_dislikes = 0, $r
         $get_video->owner              = PT_UserData($get_video->user_id);
         $get_video->is_liked           = 0;
         $get_video->is_disliked        = 0;
+        $get_video->is_legit           = 0;
+        $get_video->is_scam            = 0;
         $get_video->is_owner           = false;
         $get_video->is_purchased = 0;
         
@@ -333,6 +335,8 @@ function PT_GetVideoByID($video_id = '', $add_views = 0, $likes_dislikes = 0, $r
             $get_video->is_purchased = $db->where('video_id',$get_video->id)->where('paid_id',$pt->user->id)->getValue(T_VIDEOS_TRSNS,"count(*)");
             $get_video->is_liked    = $db->where('user_id', $pt->user->id)->where('video_id', $get_video->id)->where('type', 1)->getValue(T_DIS_LIKES, 'count(*)');
             $get_video->is_disliked = $db->where('user_id', $pt->user->id)->where('video_id', $get_video->id)->where('type', 2)->getValue(T_DIS_LIKES, 'count(*)');
+            $get_video->is_legit = $db->where('user_id', $pt->user->id)->where('video_id', $get_video->id)->where('type', 3)->getValue(T_DIS_LIKES, 'count(*)');
+            $get_video->is_scam = $db->where('user_id', $pt->user->id)->where('video_id', $get_video->id)->where('type', 4)->getValue(T_DIS_LIKES, 'count(*)');
             if ($get_video->owner->id == $pt->user->id || PT_IsAdmin()) {
                 $get_video->is_owner           = true;
             }
@@ -349,7 +353,16 @@ function PT_GetVideoByID($video_id = '', $add_views = 0, $likes_dislikes = 0, $r
             $db->where('type', 2);
             $get_video->dislikes = $db->getValue(T_DIS_LIKES, 'count(*)');
             
+            $db->where('video_id', $get_video->id);
+            $db->where('type', 3);
+            $get_video->legit = $db->getValue(T_DIS_LIKES, 'count(*)');
+
+            $db->where('video_id', $get_video->id);
+            $db->where('type', 4);
+            $get_video->scam = $db->getValue(T_DIS_LIKES, 'count(*)');
+
             $total                    = $get_video->likes + $get_video->dislikes;
+
             $get_video->likes_percent = 0;
             if ($get_video->likes > 0) {
                 $get_video->likes_percent = round(($get_video->likes / $total) * 100);

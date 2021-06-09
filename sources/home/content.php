@@ -87,7 +87,7 @@ if (empty($trending_data)) {
 } 
 
 foreach ($trending_data as $key => $video) {
-    $video = $pt->video =  PT_GetVideoByID($video, 0, 0, 0);
+    $video = $pt->video =  PT_GetVideoByID($video, 0, 1, 0);
     $trending_list .= PT_LoadPage('home/list', array(
         'ID' => $video->id,
         'TITLE' => $video->title,
@@ -121,7 +121,7 @@ if (empty($top_data)) {
 }
 
 foreach ($top_data as $key => $video) {
-    $video = $pt->video =  PT_GetVideoByID($video, 0, 0, 0);
+    $video = $pt->video =  PT_GetVideoByID($video, 0, 1, 0);
     $top_list .= PT_LoadPage('home/list', array(
         'ID' => $video->id,
         'TITLE' => $video->title,
@@ -155,7 +155,7 @@ if ($pt->config->live_video == 1) {
     }
 
     foreach ($live_data as $key => $video) {
-        $video = $pt->video = PT_GetVideoByID($video, 0, 0, 0);
+        $video = $pt->video = PT_GetVideoByID($video, 0, 1, 0);
         $live_list .= PT_LoadPage('home/list', array(
             'ID' => $video->id,
             'TITLE' => $video->title,
@@ -210,7 +210,7 @@ if (empty($latest_data)) {
 }
 
 foreach ($latest_data as $key => $video) {
-    $video = $pt->video =  PT_GetVideoByID($video, 0, 0, 0);
+    $video = $pt->video =  PT_GetVideoByID($video, 0, 1, 0);
     $latest_list .= PT_LoadPage('home/list', array(
         'ID' => $video->id,
         'TITLE' => $video->title,
@@ -336,18 +336,24 @@ $pt->content = PT_LoadPage('home/content', array(
     'USER_DATA' => $user_data_f,
     'SUBSCIBE_BUTTON' => PT_GetSubscribeButton($user_data_f->id),
     'VIEWS' => $get_video->views,
-    'SCAM' => $get_video->scam,
-    'LEGIT' => $get_video->legit,
+    'SCAM' => number_format($get_video->scam),
+    'LEGIT' => number_format($get_video->legit),
     'LIKES' => number_format($get_video->likes),
     'DISLIKES' => number_format($get_video->dislikes),
     'LIKES_P' => $get_video->likes_percent,
     'DISLIKES_P' => $get_video->dislikes_percent,
     'RAEL_LIKES' => $get_video->likes,
     'RAEL_DISLIKES' => $get_video->dislikes,
+    'RAEL_SCAM' => $get_video->scam,
+    'RAEL_LEGIT' => $get_video->legit,
     'ISLIKED' => ($get_video->is_liked > 0) ? 'liked="true"' : '',
     'ISDISLIKED' => ($get_video->is_disliked > 0) ? 'disliked="true"' : '',
+    'ISSCAM' => ($get_video->is_scam > 0) ? 'scam="true"' : '',
+    'ISLEGIT' => ($get_video->is_legit > 0) ? 'legit="true"' : '',
     'LIKE_ACTIVE_CLASS' => ($get_video->is_liked > 0) ? 'active' : '',
     'DIS_ACTIVE_CLASS' => ($get_video->is_disliked > 0) ? 'active' : '', 
+    'SCAM_ACTIVE_CLASS' => ($get_video->is_scam > 0) ? 'active' : '',
+    'LEGIT_ACTIVE_CLASS' => ($get_video->is_legit > 0) ? 'active' : '', 
     'SAVED_BUTTON' => $save_button,
     'IS_SAVED' => ($is_saved > 0) ? 'saved="true"' : '',
     'ENCODED_URL' => urlencode($get_video->url),

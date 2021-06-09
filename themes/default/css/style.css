@@ -201,6 +201,8 @@ header .live-button:hover {color: #fff !important;background: #4caf50 !important
 .video-likes .like-btn svg.feather { margin-top: 0; width: 18px; height: 18px; }
 .video-likes .like-btn.active svg.feather-thumbs-up { color: #4caf50; fill: #cfffd1; }
 .video-likes .like-btn.active svg.feather-thumbs-down { color: #f44336; fill: #ffd8d5; }
+.video-likes .like-btn.active .fa-check-circle-o { color: #122eac; fill: #cfffd1; }
+.video-likes .like-btn.active .fa-ban { color: #ff0000; fill: #ffd8d5; }
 .pt_mn_wtch_liks_prnt {position: relative;width: 200px;justify-content: space-between;}
 .pt_mn_wtch_liks {position: absolute;bottom: -10px;}
 .pt_mn_wtch_liks .video-info-element {width: 135px;margin: 0;float: none !important;}

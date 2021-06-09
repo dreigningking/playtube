@@ -150,6 +150,55 @@ function Wo_LikeSystem(id, type, this_, is_ajax, repeat) {
          }
       }
    }
+   if (type == 'legit') {
+      var legit = $(this_).attr('data-legit');
+      if ($(this_).attr('legit')) {
+         result = Number(legit) - 1;
+         $(this_).removeAttr('legit');
+         $(this_).removeClass('active');
+      } else {
+         result = Number(legit) + 1;
+         $(this_).attr('legit', true);
+         $(this_).addClass('active');
+      }
+      $(this_).attr('data-legit', result);
+      $('#legit').text(numberWithCommas(result));
+      if ($('#scam-bar').attr('data-legit') > 0) {
+         if ($('#scam-bar').hasClass('active')) {
+             $('#scam-bar').removeAttr('scam');
+             $('#scam-bar').removeClass('active');
+             result = Number($('#scam-bar').attr('data-legit')) - 1;
+             $('#scam').text(numberWithCommas(result));
+             $('#scam-bar').attr('data-legit', result);
+         }
+      }
+   } 
+    else if (type == 'scam') {
+      var scam = $(this_).attr('data-legit');
+      
+      if ($(this_).attr('scam')) {
+         result = Number(scam) - 1;
+         console.log(result);
+         $(this_).removeAttr('scam');
+         $(this_).removeClass('active');
+      } else {
+         result = Number(scam) + 1;
+         console.log(result);
+         $(this_).attr('scam', true);
+         $(this_).addClass('active');
+      }
+      $(this_).attr('data-likes', result);
+      $('#scam').text(numberWithCommas(result));
+      if ($('#legit-bar').attr('data-legit') > 0) {
+         if ($('#legit-bar').hasClass('active')) {
+             $('#legit-bar').removeAttr('legit');
+             $('#legit-bar').removeClass('active');
+             result = Number($('#legit-bar').attr('data-legit')) - 1;
+             $('#legit').text(numberWithCommas(result));
+             $('#legit-bar').attr('data-legit', result);
+         }
+      }
+  }
    if (is_ajax == 'is_ajax') {
       $.post(PT_Ajax_Requests_File() + 'aj/like-system/' + type, {id: id, type:type});
    }
