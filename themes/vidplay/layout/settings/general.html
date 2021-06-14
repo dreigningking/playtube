@@ -52,10 +52,16 @@
 				</div>
 			</div>
 			<?php if ($pt->config->donate_system == 'on') { ?>
-			<div class="col-md-6">
+			<!-- <div class="col-md-6">
 				<div class="pp_mat_input">
 					<input id="donation_paypal_email" name="donation_paypal_email" type="email" placeholder="{{LANG donation_paypal_email}}" value="{{USER donation_paypal_email}}">
 					<label for="donation_paypal_email">{{LANG donation_paypal_email}}</label>
+				</div>
+			</div> -->
+      <div class="col-md-6">
+				<div class="pp_mat_input">
+					<input id="donation_paypal_email" name="crypto_wallet_address" type="text" placeholder="Token Wallet Address" value="{{USER crypto_wallet_address}}">
+					<label for="donation_paypal_email">Donation Wallet Address</label>
 				</div>
 			</div>
 			<?php } ?>

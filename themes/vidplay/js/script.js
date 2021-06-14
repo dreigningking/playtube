@@ -196,6 +196,26 @@ function Wo_LikeSystem(id, type, this_, is_ajax, repeat) {
    }
 }
 
+$('.set_token_amount').click(function(){
+  $('#token_amount').val($(this).attr('data-token-amount'));
+});
+
+function transferToken(){
+  var token_error = '';
+  if($('#receiver_address').val() == '')
+  token_error = 'Receivers address cannot be null';
+  if($('#sender_address').val() == '')
+  token_error = 'Your token address is invalid';
+  if($('#token_amount').val() == '')
+  token_error = 'Token amount cannot be null';
+  
+  if($('#token_amount').val() == '' || $('#sender_address').val() == '' || $('#receiver_address').val() == ''){
+    $('#token_error').html(token_error);
+  }
+  // alert($('#token_amount').val())
+  
+}
+
 function PT_AddLike(id, this_, type , is_ajax) {
    if (!id || !type) { return false; }
 

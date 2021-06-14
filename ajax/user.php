@@ -114,10 +114,13 @@ if ($first == 'general') {
             if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
                 $errors[] = $error_icon . $lang->email_invalid_characters;
             }
-            if (!empty($_POST['donation_paypal_email'])) {
-                if (!filter_var($_POST['donation_paypal_email'], FILTER_VALIDATE_EMAIL)) {
-                    $errors[] = $error_icon . $lang->email_invalid_characters;
-                }
+            // if (!empty($_POST['donation_paypal_email'])) {
+            //     if (!filter_var($_POST['donation_paypal_email'], FILTER_VALIDATE_EMAIL)) {
+            //         $errors[] = $error_icon . $lang->email_invalid_characters;
+            //     }
+            // }
+            if (empty($_POST['crypto_wallet_address'])) {
+                $errors[] = $error_icon . 'Invalid Token Address';
             }
 
             if (strlen($_POST['username']) < 4 || strlen($_POST['username']) > 32) {
@@ -231,7 +234,8 @@ if ($first == 'general') {
                     'age' => $age,
                     'age_changed' => $age_changed,
                     'newsletters' => $newsletters,
-                    'donation_paypal_email' => PT_Secure($_POST['donation_paypal_email'])
+                    // 'donation_paypal_email' => PT_Secure($_POST['donation_paypal_email'])
+                    'crypto_wallet_address' => PT_Secure($_POST['crypto_wallet_address'])
                 );
                 
 
