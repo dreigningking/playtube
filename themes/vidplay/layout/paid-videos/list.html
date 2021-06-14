@@ -1,0 +1,28 @@
+<?php if (!empty($_GET['type']) && $_GET['type'] == 'movies' && $pt->config->movies_videos == 'on') { ?>
+	<div class="vid_movie_list">
+		<div class="video-wrapper" data-id="{{ID}}" data-tr="{{ID}}">
+			<a class="pt_mv_list_thumb" href="{{URL}}" data-load="?link1=watch&id={{VIDEO_ID_}}" title="{{TITLE}}">
+				<img data-src="{{THUMBNAIL}}" alt="{{TITLE}}">
+				<div class="vid_movie_list_details">
+					<h3>{{TITLE}}</h3>
+					<div class="vid_movie_list_sub_info"><span>{{USER name_v}}</span> <span class="bold">·</span> <span>{{TIME}}</span></div>
+					<p>{{DESC}}</p>
+				</div>
+			</a>
+		</div>
+	</div>
+<?php } else { ?>
+	<div class="video-wrapper vid_analts_info" data-id="{{ID}}" data-tr="{{ID}}">
+		<div class="video-thumb">
+			<a href="{{URL}}" data-load="?link1=watch&id={{VIDEO_ID_}}">
+				<img src="{{THUMBNAIL}}" alt="{{TITLE}}">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#04abf2" d="M10,16.5V7.5L16,12M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"></path></svg>
+			</a>
+		</div>
+		<div class="video-info">
+			<div><a href="{{USER url}}" data-load="?link1=timeline&id={{USER username}}">{{USER name_v}}</a></div>
+			<div class="video-title"><a href="{{URL}}" data-load="?link1=watch&id={{VIDEO_ID_}}"><h4 title="{{TITLE}}">{{TITLE}}</h4></a></div>
+			<div><span>{{TIME}}</span></div>
+		</div>
+	</div>
+<?php } ?>

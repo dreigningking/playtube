@@ -1,0 +1,93 @@
+<form class="form-horizontal user_sttng_panel pt_shadow row vp_forms" id="profile-settings" method="POST">
+	<div class="col-md-1"></div>
+	<div class="col-md-10">
+		<h2 class="user_sttng_panel_hd">{{LANG profile}} {{LANG settings}}</h2>
+		<div class="setting-profile-alert"></div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="pp_mat_input">
+					<input type="text" name="first_name" id="first_name" placeholder="{{LANG first_name}}" value="{{USER first_name}}" autofocus>
+					<label for="first_name">{{LANG first_name}}</label>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="pp_mat_input">
+					<input type="text" name="last_name" id="last_name" placeholder="{{LANG last_name}}" value="{{USER last_name}}">
+					<label for="last_name">{{LANG last_name}}</label>
+				</div>
+			</div>
+		</div>
+		<div class="pp_mat_input">
+			<textarea name="about" id="about" placeholder="{{LANG about_profile}}" rows="5">{{USER about_decoded}}</textarea>
+			<label for="about">{{LANG about_profile}}</label>
+		</div>
+		<hr>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="pp_mat_input">
+					<input type="text" name="facebook" id="facebook" placeholder="{{LANG facebook}}" value="{{USER facebook}}">
+					<label for="facebook">{{LANG facebook}}</label>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="pp_mat_input">
+					<input type="text" name="google" id="google" placeholder="{{LANG google_plus}}" value="{{USER google}}">
+					<label for="google">{{LANG google_plus}}</label>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="pp_mat_input">
+					<input type="text" name="twitter" id="twitter" placeholder="{{LANG twitter}}" value="{{USER twitter}}">
+					<label for="twitter">{{LANG twitter}}</label>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="pp_mat_input">
+					<input type="text" name="instagram" id="instagram" placeholder="{{LANG instagram}}" value="{{USER instagram}}">
+					<label for="instagram">{{LANG instagram}}</label>
+				</div>
+			</div>
+		</div>
+		{{CUSTOM_FIELDS}}
+		<input type="hidden" name="hash_id" value="<?php echo PT_CreateSession()?>">
+		<input type="hidden" name="user_id" value="{{USER id}}">
+		<input type="hidden" name="cf" value="{{CUSTOM_DATA}}">
+		<!-- Button (Double) -->
+		<div class="vp_forms_sbm_btn text-center">
+			<button type="submit" class="btn btn_primary" id="submit" name="submit"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z" /></svg> {{LANG save}}</button>
+		</div>
+	</div>
+	<div class="col-md-1"></div>
+</form>
+
+<script>
+    $(function() {
+        var form = $('form#profile-settings');
+        form.ajaxForm({
+            url: '{{LINK aj/user/profile}}?hash=' + $('.main_session').val(),
+            beforeSend: function() {
+                form.find('button').text("{{LANG please_wait}}");
+                // FL_progressIconLoader(form.find('button'));
+            },
+            success: function(data) {
+                scrollToTop();
+                if (data.status == 200) {
+                    $('.setting-profile-alert').html('<div class="alert alert-success">' + data.message + '</div>');
+                    $('.alert-success').fadeIn('fast', function() {
+                        $(this).delay(2500).slideUp(500, function() {
+                            $(this).remove();
+                        });
+                    });
+                } else if (data.errors) {
+                    var errors = data.errors.join("<br>");
+                    $('.setting-profile-alert').html('<div class="alert alert-danger">' + errors + '</div>');
+                    $('.alert-danger').fadeIn(300);
+                }
+                form.find('button').html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z" /></svg> {{LANG save}}');
+                // FL_progressIconLoader(form.find('button'));
+            }
+        });
+    });
+</script>

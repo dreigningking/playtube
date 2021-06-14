@@ -1,0 +1,19 @@
+<div class="user_sttng_panel pt_shadow row vp_forms">
+    <h2 class="user_sttng_panel_hd">{{LANG withdrawals_history}}</h2>
+	<table id="withdrawal-requests" class="table table-responsive">
+		<thead>
+			<th>ID</th>
+			<th>{{LANG requested_at}}</th>
+			<th>{{LANG amount}}</th>
+			<th>{{LANG status}}</th>
+		</thead>
+		<tbody>
+			{{WITHDRAWAL_HISTORY_LIST}}
+		</tbody>
+	</table>
+</div>
+<script>
+    jQuery(document).ready(function($) {
+        $("#withdrawal-requests").DataTable();
+    });
+</script>

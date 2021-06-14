@@ -1,0 +1,62 @@
+<form class="form-horizontal user_sttng_panel pt_shadow row vp_forms" id="two-factor" method="POST">
+	<div class="col-md-1"></div>
+	<div class="col-md-10">
+		<h2 class="user_sttng_panel_hd">{{LANG two_factor}}</h2>
+		<div class="two-factor-alert"></div>
+		<div class="empty_state vp_sett_2fa">
+			<svg height="464pt" viewBox="-56 0 464 464" width="464pt" xmlns="http://www.w3.org/2000/svg"><path d="m80 0h192c8.835938 0 16 7.164062 16 16v128c0 8.835938-7.164062 16-16 16h-192c-8.835938 0-16-7.164062-16-16v-128c0-8.835938 7.164062-16 16-16zm0 0" fill="#7fcac9"/><path d="m128 32h96v64h-96zm0 0" fill="#ffd782"/><path d="m96 128h32v32h-32zm0 0" fill="#ffd782"/><path d="m224 128h32v32h-32zm0 0" fill="#ffd782"/><path d="m104 352h144v80c0 17.671875-14.328125 32-32 32h-80c-17.671875 0-32-14.328125-32-32zm0 0" fill="#5a6470"/><path d="m0 192h352v64h-352zm0 0" fill="#87cee9"/><path d="m216 288h-80c-8.582031.585938-15.414062 7.417969-16 16v48h32v-32h48v32h32v-48c-.585938-8.582031-7.417969-15.414062-16-16zm0 0" fill="#aabece"/><g fill="#143441"><path d="m120 216h16v16h-16zm0 0"/><path d="m152 216h16v16h-16zm0 0"/><path d="m184 216h16v16h-16zm0 0"/><path d="m216 216h16v16h-16zm0 0"/></g><path d="m64 368c-4.417969 0-8-3.582031-8-8 0-1.183594.230469-29.054688 20.425781-39.199219 3.953125-1.976562 8.757813-.371093 10.734375 3.582031 1.976563 3.957032.371094 8.761719-3.585937 10.738282-11.253907 5.679687-11.574219 24.6875-11.574219 24.878906 0 4.417969-3.582031 8-8 8zm0 0" fill="#dd3e46"/><path d="m32 352c-4.417969 0-8-3.582031-8-8 0-1.183594.230469-29.054688 20.425781-39.199219 3.953125-1.976562 8.757813-.371093 10.734375 3.582031 1.976563 3.957032.371094 8.761719-3.585937 10.738282-11.253907 5.679687-11.574219 24.6875-11.574219 24.878906 0 4.417969-3.582031 8-8 8zm0 0" fill="#dd3e46"/><path d="m288 368c-4.417969 0-8-3.582031-8-8 0-.367188-.496094-19.328125-11.574219-24.863281-3.957031-1.976563-5.5625-6.78125-3.585937-10.738281 1.976562-3.953126 6.78125-5.558594 10.734375-3.582032 20.195312 10.128906 20.425781 38 20.425781 39.183594 0 4.417969-3.582031 8-8 8zm0 0" fill="#dd3e46"/><path d="m320 352c-4.417969 0-8-3.582031-8-8 0-.367188-.496094-19.328125-11.574219-24.863281-3.957031-1.976563-5.5625-6.78125-3.585937-10.738281 1.976562-3.953126 6.78125-5.558594 10.734375-3.582032 20.195312 10.128906 20.425781 38 20.425781 39.183594 0 4.417969-3.582031 8-8 8zm0 0" fill="#dd3e46"/><path d="m128 96h96v64h-96zm0 0" fill="#2d75bb"/><path d="m112 96h16v32h-32v-16c0-8.835938 7.164062-16 16-16zm0 0" fill="#134268"/><path d="m256 128h-32v-32h16c8.835938 0 16 7.164062 16 16zm0 0" fill="#134268"/><path d="m160 420v-24c0-6.628906 5.371094-12 12-12h8c6.628906 0 12 5.371094 12 12v24c0 6.628906-5.371094 12-12 12h-8c-6.628906 0-12-5.371094-12-12zm0 0" fill="#fff"/><path d="m152 56h16v16h-16zm0 0" fill="#5a6470"/><path d="m184 56h16v16h-16zm0 0" fill="#5a6470"/></svg>
+			<p>{{LANG two_factor_description}}</p>
+		</div>
+		<hr>
+		<div class="row">
+			<div class="col-md-3"></div>
+			<div class="col-md-6">
+				<div class="pp_mat_input">
+					<select id="two_factor" name="two_factor">
+						<option value="0" <?php echo ($pt->settings->two_factor == '0') ? 'selected': '';?>>{{LANG disable}}</option>
+						<option value="1" <?php echo ($pt->settings->two_factor == '1') ? 'selected': '';?>>{{LANG enable}}</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-md-3"></div>
+		</div>
+
+		<input type="hidden" name="hash_id" value="<?php echo PT_CreateSession()?>">
+		<input type="hidden" name="user_id" value="{{USER id}}">
+		<!-- Button (Double) -->
+		<div class="vp_forms_sbm_btn text-center">
+			<button type="submit" class="btn btn_primary" id="submit" name="submit"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z" /></svg> {{LANG save}}</button>
+		</div>
+	</div>
+	<div class="col-md-1"></div>
+</form>
+
+<script>
+    $(function() {
+        var form = $('form#two-factor');
+
+        form.ajaxForm({
+            url: '{{LINK aj/user/two_factor}}?hash=' + $('.main_session').val(),
+            beforeSend: function() {
+                form.find('button').text("{{LANG please_wait}}");
+            },
+            success: function(data) {
+                scrollToTop();
+                if (data.status == 200) {
+                    $('.two-factor-alert').html('<div class="alert alert-success">' + data.message + '</div>');
+                    $('.alert-success').fadeIn('fast', function() {
+                        $(this).delay(2500).slideUp(500, function() {
+                            $(this).remove();
+                        });
+                    });
+                } else if (data.errors) {
+                    var errors = data.errors.join("<br>");
+                    $('.two-factor-alert').html('<div class="alert alert-danger">' + errors + '</div>');
+                    $('.alert-danger').fadeIn(300);
+                }
+                form.find('button').html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z" /></svg> {{LANG save}}');
+                // FL_progressIconLoader(form.find('button'));
+            }
+        });
+    });
+</script>

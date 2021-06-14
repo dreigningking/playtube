@@ -1,0 +1,54 @@
+<div>
+	<h4 class="ptitle">
+		<div><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24"><path fill="currentColor" d="M3,10 L3,17 L12,17 L12,19 L2.81818182,19 C1.81402773,19 1,18.1045695 1,17 L1,5 C1,3.8954305 1.81402773,3 2.81818182,3 L21.1818182,3 C22.1859723,3 23,3.8954305 23,5 L23,12 L21,12 L21,10 L3,10 Z M3,8 L21,8 L21,5 L3,5 L3,8 Z M18.5857864,17 L14,17 L14,15 L18.5857864,15 L17.2928932,13.7071068 L18.7071068,12.2928932 L22.4142136,16 L18.7071068,19.7071068 L17.2928932,18.2928932 L18.5857864,17 Z"></path></svg></div> {{LANG purchased}}
+	</h4>
+	<div class="vp_dash_links">
+		<ul>
+			<li <?php echo empty($_GET['type']) || $_GET['type'] != 'movies' ? 'class="active"' : ''; ?>>
+					<a href="{{LINK paid-videos?type=videos}}" data-load="?link1=paid-videos&type=videos">{{LANG videos}}</a>
+			</li>
+			<?php if ($pt->config->movies_videos == 'on') { ?>
+				<li <?php echo !empty($_GET['type']) && $_GET['type'] == 'movies' ? 'class="active"' : ''; ?>>
+					<a href="{{LINK paid-videos?type=movies}}" data-load="?link1=paid-videos&type=movies">{{LANG movies}}</a>
+				</li>
+			<?php } ?>
+		</ul>
+	</div>
+	<?php if (count($pt->videos) == 0) { ?>
+		<div class="empty_state">
+			<span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20,8H4V6H20M20,18H4V12H20M20,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6C22,4.89 21.1,4 20,4Z" /></svg></span>
+			<p>{{LANG no_videos_found_paid}}</p>
+		</div>
+	<?php } else { ?>
+		<?php if (!empty($_GET['type']) && $_GET['type'] == 'movies' && $pt->config->movies_videos == 'on') { ?>
+			<div class="vid_movie_cont">
+				{{PAID_LIST}}
+			</div>
+			<script type="text/javascript">
+				$(document).ready(function() {
+					$("img[data-src]").unveil(200, function() {
+						$(this).on('load', function() {
+							this.style.opacity = 1;
+						});
+					});
+				});
+			</script>
+		<?php } else { ?>
+			<div class="row">
+				<div class="col-md-2"></div>
+				<div class="col-md-8">
+					<div class="videos-list paid_vids_list">
+						{{PAID_LIST}}
+					</div>
+				</div>
+				<div class="col-md-2"></div>
+			</div>
+		<?php } ?>
+	<?php } ?>
+	<?php if (count($pt->videos) > 0) { ?>
+		<button class="watch-video-show-more desc load-more vp_load_more" data-type="paid_videos">
+			<span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"></path></svg></span> {{LANG show_more}}
+		</button>
+	<?php } ?>
+	<div class="clear"></div>
+</div>

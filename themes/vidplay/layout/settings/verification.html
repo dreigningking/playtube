@@ -1,0 +1,119 @@
+<?php if ($pt->user->verified == 1): ?>
+	<div class="user_sttng_panel pt_shadow row vp_forms">
+		<h2 class="user_sttng_panel_hd">{{LANG profile}} {{LANG verification}}</h2>
+		<div class="empty_state"><svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg> {{LANG u_are_verified}}</div>
+	</div>
+<?php elseif(pt_vrequest_exists()): ?>
+	<div class="user_sttng_panel pt_shadow row vp_forms">
+		<h2 class="user_sttng_panel_hd">{{LANG profile}} {{LANG verification}}</h2>
+		<div class="empty_state">
+			<span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20,8L12,13L4,8V6L12,11L20,6M20,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6C22,4.89 21.1,4 20,4Z" /></svg></span>
+			<p>{{LANG verif_request_received}}</p>
+		</div>
+	</div>
+<?php else: ?>
+	<form class="form-horizontal user_sttng_panel pt_shadow row vp_forms verifiacation-request-form" id="verifiacation-request-form" method="POST">
+		<div class="col-md-1"></div>
+		<div class="col-md-10">
+			<h2 class="user_sttng_panel_hd">{{LANG profile}} {{LANG verification}}</h2>
+			<div class="setting-delete-alert"></div>
+	    	<div class="verifiacation-request-alert"></div>
+	    	<div class="fluid">
+		        <div class="upload-files" onclick="$('#identity').trigger('click');">
+	        		<div class="col-md-4 no-padding-both">
+	        			<div class="image-renderer" id="image-renderer">
+		        			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9.715,12c1.151,0,2-0.849,2-2s-0.849-2-2-2s-2,0.849-2,2S8.563,12,9.715,12z"/><path fill="currentColor" d="M20,4H4C2.897,4,2,4.897,2,6v12c0,1.103,0.897,2,2,2h16c1.103,0,2-0.897,2-2V6C22,4.897,21.103,4,20,4z M4,18V6h16 l0.001,12H4z"/><path fill="currentColor" d="M14 9H18V11H14zM15 13H18V15H15zM9.715 12.75C7.676 12.75 6 14.162 6 15.536V16h7.43v-.464C13.43 14.162 11.754 12.75 9.715 12.75z"/></svg>
+	        			</div>
+	        			<div class="clear"></div>
+	        		</div>
+	        		<div class="col-md-8">
+	        			<h4>{{LANG upload_id}}</h4>
+	        			<p>{{LANG select_id}}</p>
+		        		<div><button class="btn btn_primary" type="button">{{LANG choose_file}}</button></div>
+	        		</div>
+		        </div>
+	        </div>
+	       	<hr>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="pp_mat_input">
+						<input type="text" name="first_name" id="first_name" placeholder="{{LANG first_name}}">
+						<label for="first_name">{{LANG first_name}}</label>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="pp_mat_input">
+						<input type="text" name="last_name" id="last_name" placeholder="{{LANG last_name}}">
+						<label for="last_name">{{LANG last_name}}</label>
+					</div>
+				</div>
+			</div>
+			<div class="pp_mat_input">
+				<textarea name="message" id="message" placeholder="{{LANG message}}" rows="5"></textarea>
+				<label for="message">{{LANG message}}</label>
+			</div>
+	        
+	        <input type="hidden" name="hash_id" value="<?php echo PT_CreateSession()?>">
+	        <input type="hidden" name="user_id" value="{{USER id}}">
+	        <input type="file" name="identity" id="identity" class="hidden" accept="image/*">
+	        <!-- Button (Double) -->
+			<div class="vp_forms_sbm_btn text-center">
+				<button type="submit" class="btn btn_primary" id="submit" name="submit"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M2,21L23,12L2,3V10L17,12L2,14V21Z" /></svg> {{LANG submit_request}}</button>
+			</div>
+	        <div class="clear"></div>
+		</div>
+		<div class="col-md-1"></div>
+	</form>
+<?php endif; ?>
+
+<script>
+	jQuery(document).ready(function($) {
+		$('#identity').change(function(event) {
+			let file_size = $(this).prop('files')[0].size;
+		    if (file_size > "{{CONFIG max_upload}}") {
+		        swal({
+		            title: '{{LANG error}}',
+		            text:  "{{LANG file_is_too_big}} <?php echo pt_size_format($pt->config->max_upload); ?>",
+		            type: 'error',
+		            confirmButtonColor: '#3085d6',
+		            cancelButtonColor: '#d33',
+		            confirmButtonText: 'OK',
+		            buttonsStyling: true,
+		            confirmButtonClass: 'btn btn-success',
+		        }).then(function(){
+		            swal.close();
+		            $(this).val('');
+		         },
+		         function() {
+		            swal.close();
+		            $(this).val('');
+		         });
+		         return false;
+		    }
+		    else{
+		    	$("#image-renderer").html("<img src='" + window.URL.createObjectURL(this.files[0]) + "' alt='Picture'>");
+		    }	
+		});
+
+		$('#verifiacation-request-form').ajaxForm({
+		    url: '{{LINK aj/verification/request}}?hash=' + $('.main_session').val(),
+	        dataType:'json',
+		    beforeSend: function() {
+		    	/* pass */
+		    },
+		    success: function(data) {   
+		    	scrollToTop();  
+	            if (data.status == 200) {
+	            	$('.verifiacation-request-alert').html('<div class="alert alert-success bg-success"><i class="fa fa-check"></i> '+data.message+'</div>');
+	            	$('#verifiacation-request-form').resetForm();
+	            	PT_Delay(function(){
+	            		window.location.href = "{{LINK home}}";
+	            	},1500);
+	            }
+	            else{
+	               $('.verifiacation-request-alert').html('<div class="alert alert-danger bg-danger"> <i class="fa fa-info-circle"></i> '+data.message+'</div>');  
+	            }
+		    }
+		});
+	});
+</script>

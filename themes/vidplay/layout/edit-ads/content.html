@@ -1,0 +1,93 @@
+<link rel="stylesheet" href="{{CONFIG theme_url}}/css/bootstrap-select.min.css">
+<script src="{{CONFIG theme_url}}/js/bootstrap-select.min.js"></script>
+
+<div class="create-new-ad-container">
+	<form class="user-ads-settings-form row vp_forms" method="POST">
+		<div class="col-md-3"></div>
+		<div class="col-md-6">
+			<h2 class="user_sttng_panel_hd">{{LANG edit_ad}}</h2>
+			<div class="user-ads-settings-alert"></div>
+			<div class="alert alert-success ads-settings-alert"></div>
+			
+			<div class="pp_mat_input">
+				<input type="text" name="name" id="name" placeholder="{{LANG name}}" value="{{NAME}}">
+				<label for="name">{{LANG name}}</label>
+			</div>
+			
+			<div class="row">
+				<div class="col-md-6">
+					<div class="pp_mat_input">
+						<input type="text" name="url" id="url" placeholder="URL" value="{{URL}}">
+						<label for="url">URL</label>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="pp_mat_input">
+						<input type="text" name="title" id="title" placeholder="{{LANG title}}" value="{{TITLE}}">
+						<label for="title">{{LANG title}}</label>
+					</div>
+				</div>
+			</div>
+			
+			<div class="pp_mat_input">
+				<textarea name="desc" id="desc" placeholder="{{LANG description}}" rows="4">{{DESC}}</textarea>
+				<label for="desc">{{LANG description}}</label>
+			</div>
+			
+			<div class="pp_mat_input">
+				<select class="form-control selectpicker show-menu-arrow show-tick" multiple name="audience-list[]" data-live-search="true" title="{{LANG traget_audience}}" data-actions-box="true" name="audience-list[]">
+					<?php foreach ($countries_name as $country_id => $country_name): ?>
+						<?php if (in_array($country_id, $pt->audience)): ?>
+							<option value="<?php echo($country_id); ?>" selected><span><?php echo($country_name); ?></span></option> 
+						<?php else: ?>
+							<option value="<?php echo($country_id); ?>"><span><?php echo($country_name); ?></span></option>
+						<?php endif ?>
+					<?php endforeach; ?>
+				</select>
+			</div>
+			<div class="pp_mat_input">
+				<input type="number" name="day_limit" id="day_limit" placeholder="{{LANG ad_day_limit}}" value="{{DAY_LIMIT}}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+				<label for="day_limit">{{LANG ad_day_limit}}</label>
+			</div>
+			<div class="vp_forms_sbm_btn text-center">
+				<button type="submit" class="btn btn_primary" id="submit-btn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z" /></svg> {{LANG save}}</button>
+			</div>
+		</div>
+		<div class="col-md-3"></div>		
+    </form>     
+    <div class="clear"></div>
+</div>
+
+<script>
+	jQuery(document).ready(function($) {
+	  $('.selectpicker').selectpicker({});
+
+    $('.user-ads-settings-form').ajaxForm({
+      url: '{{LINK aj/ads/edit}}?hash=' + $('.main_session').val(),
+      dataType:"json",
+      data:{id:"{{ID}}"},
+      beforeSend: function() {
+        $('#submit-btn').attr('disabled', true).text("{{LANG please_wait}}");
+      },
+      success: function(data) {
+        scrollToTop();
+        
+        if (data.status == 200){
+          $(".user-ads-settings-alert").html('<div class="alert alert-success"><i class="fa fa-check"></i> '+
+            data.message
+            +'</div>');
+          PT_Delay(function(){
+            window.location.href = '{{LINK ads}}';
+          },2000);
+          
+        }
+        else {
+          $('#submit-btn').removeAttr('disabled').text('{{LANG save}}');
+          $(".user-ads-settings-alert").html('<div class="alert alert-danger"><i class="fa fa-info-circle"></i> '+
+            data.message
+            +'</div>');
+        }
+      }
+    });
+	});
+</script>

@@ -1,0 +1,25 @@
+<div class="list-unstyled head_table video-wrapper" data-id="{{ID}}" id="video-{{ID}}">
+	<div class="stud_table-video">
+		<div class="video-thumb">
+			<a href="{{URL}}" data-load="?link1=watch&id={{VIDEO_ID_}}">
+				<img src="{{THUMBNAIL}}" alt="{{TITLE}}">
+			</a>
+		</div>
+		<div class="video-title">
+			<h4 title="{{TITLE}}"><a href="{{URL}}" data-load="?link1=watch&id={{VIDEO_ID_}}">{{TITLE}}</a></h4>
+		</div>
+		<div class="video_actions dropdown">
+			<span class="dropdown-toggle" data-toggle="dropdown" role="button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z" /></svg></span>
+			<ul class="dropdown-menu dropdown-menu-right">
+				<li><a href="{{LINK edit-video/{{ID}}}}" data-load="?link1=edit-video&id=category&id={{ID}}" title="{{LANG edit_video}}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" /></svg> {{LANG edit}}</a></li>
+				<li><a href="javascript:void(0);" onclick="PT_DeleteVideo({{ID}}, 'manage-page')" title="{{LANG delete_videos}}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg> {{LANG delete}}</a></li>
+				<li><a href="{{LINK view_analytics/{{V_ID}}}}&type=today" data-load="?link1=view_analytics&id={{V_ID}}&type=today"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20,12c-0.249,0-0.483,0.051-0.703,0.133l-2.398-1.963C16.958,9.956,17,9.734,17,9.5C17,8.114,15.886,7,14.5,7 S12,8.114,12,9.5c0,0.396,0.1,0.765,0.262,1.097l-2.909,3.438C9.237,14.015,9.121,14,9,14c-0.179,0-0.348,0.03-0.512,0.074 l-2.563-2.563C5.97,11.348,6,11.179,6,11c0-1.108-0.892-2-2-2s-2,0.892-2,2s0.892,2,2,2c0.179,0,0.348-0.03,0.512-0.074 l2.563,2.563C7.03,15.652,7,15.821,7,16c0,1.108,0.892,2,2,2s2-0.892,2-2c0-0.237-0.048-0.46-0.123-0.671l2.913-3.442 C14.017,11.953,14.252,12,14.5,12c0.411,0,0.792-0.107,1.133-0.281l2.399,1.963C18.016,13.786,18,13.891,18,14c0,1.108,0.892,2,2,2 s2-0.892,2-2S21.108,12,20,12z"/></svg> {{LANG analytics}}</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="stud_table-time">{{TIME}}</div>
+	<div class="stud_table-views text-right">{{VIEWS}}</div>
+	<div class="stud_table-likes text-right">{{LIKES}}</div>
+	<div class="stud_table-dislikes text-right">{{DISLIKES}}</div>
+	<div class="stud_table-comments text-right">{{COMMENTS}}</div>
+</div>

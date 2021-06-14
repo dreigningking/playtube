@@ -1,0 +1,73 @@
+<div class="page-margin">
+	<div class="row sett_row_rev">
+		<div class="col-md-4">
+			<div class="settings-sidebar" id="mobi-set-side">
+				<ul class="scrollmenu pt_shadow">
+					<p>{{LANG settings}}</p>
+					<li class="general <?php echo ($pt->setting_page == 'general') ? 'active': '';?>">
+						<a href="{{LINK settings/general/<?php echo $pt->settings->username; ?>}}" data-load="?link1=settings&page=general"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M6.044,21.58l6.982-6.983c2.354,0.968,5.16,0.497,7.071-1.414c1.911-1.912,2.382-4.717,1.414-7.071l-3.89,3.889 l-3.535-3.536l3.889-3.889c-2.354-0.968-5.159-0.498-7.07,1.415c-1.911,1.911-2.382,4.717-1.414,7.071l-6.983,6.982L6.044,21.58z"/></svg></span> {{LANG general}}</a>
+					</li>
+					<?php if (($pt->config->usr_v_mon == 'on' || $pt->config->payed_subscribers == 'on') && ($pt->settings->id == $pt->user->id)): ?>
+						<li class="monetization <?php echo ($pt->setting_page == 'monetization') ? 'active': '';?>">
+							<a href="{{LINK settings/monetization/<?php echo $pt->settings->username; ?>}}" data-load="?link1=settings&page=monetization&user=<?php echo $pt->settings->username; ?>"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20,4H4C2.897,4,2,4.897,2,6v12c0,1.103,0.897,2,2,2h16c1.103,0,2-0.897,2-2V6C22,4.897,21.103,4,20,4z M20,6v2H4V6H20z M4,18v-6h16.001l0.001,6H4z"/><path fill="currentColor" d="M6 14H12V16H6z"/></svg></span> {{LANG monetization}}</a>
+						</li>
+					<?php endif; ?>
+					<?php if (($pt->config->usr_v_mon == 'on' && $pt->config->sell_videos_system == 'on') || ($pt->config->usr_v_mon == 'off' && $pt->config->sell_videos_system == 'on') || ($pt->config->usr_v_mon == 'on' && $pt->config->sell_videos_system == 'off') ) { ?>
+					<li class="balance <?php echo (in_array($pt->setting_page, array('withdrawals','balance'))) ? 'active': '';?>">
+						<a href="{{LINK settings/balance/<?php echo $pt->settings->username; ?>}}" data-load="?link1=settings&page=balance&user=<?php echo $pt->settings->username; ?>"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20,7V5c0-1.103-0.897-2-2-2H5C3.794,3,2,3.799,2,6v11c0,2.201,1.794,3,3,3h15c1.104,0,2-0.896,2-2V9 C22,7.896,21.104,7,20,7z M4,6c0-0.805,0.55-0.988,1-1h13v2H5.012C4.55,6.988,4,6.805,4,6z M19,15h-2v-3h2V15z"/></svg></span> {{LANG balance_}}</a>
+					</li>
+					<?php } ?>
+					<hr>
+					<p>{{LANG profile}}</p>
+					<li class="profile <?php echo ($pt->setting_page == 'profile') ? 'active': '';?>">
+						<a href="{{LINK settings/profile/<?php echo $pt->settings->username; ?>}}" data-load="?link1=settings&page=profile&user=<?php echo $pt->settings->username; ?>"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7.5 6.5C7.5 8.981 9.519 11 12 11s4.5-2.019 4.5-4.5S14.481 2 12 2 7.5 4.019 7.5 6.5zM20 21h1v-1c0-3.859-3.141-7-7-7h-4c-3.86 0-7 3.141-7 7v1h1 1 14H20z"/></svg></span> {{LANG profile}}</a>
+					</li>
+					<li class="avatar_c <?php echo ($pt->setting_page == 'avatar') ? 'active': '';?>">
+						<a href="{{LINK settings/avatar/<?php echo $pt->settings->username; ?>}}" data-load="?link1=settings&page=avatar&user=<?php echo $pt->settings->username; ?>"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M5,21h14c1.104,0,2-0.896,2-2V5c0-1.104-0.896-2-2-2H5C3.896,3,3,3.896,3,5v14C3,20.104,3.896,21,5,21z M8,14l2.363,2.363 L14,11l5,7H5L8,14z"/></svg></span> {{LANG avatar_and_cover}}</a>
+					</li>
+					<?php if ($pt->config->verification_badge == 'on'): ?>  
+						<li class="verification <?php echo ($pt->setting_page == 'verification') ? 'active': '';?>">
+							<a href="{{LINK settings/verification/<?php echo $pt->settings->username; ?>}}" data-load="?link1=settings&page=verification&user=<?php echo $pt->settings->username; ?>"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19.965,8.521C19.988,8.347,20,8.173,20,8c0-2.379-2.143-4.288-4.521-3.965C14.786,2.802,13.466,2,12,2 S9.214,2.802,8.521,4.035C6.138,3.712,4,5.621,4,8c0,0.173,0.012,0.347,0.035,0.521C2.802,9.215,2,10.535,2,12 s0.802,2.785,2.035,3.479C4.012,15.653,4,15.827,4,16c0,2.379,2.138,4.283,4.521,3.965C9.214,21.198,10.534,22,12,22 s2.786-0.802,3.479-2.035C17.857,20.283,20,18.379,20,16c0-0.173-0.012-0.347-0.035-0.521C21.198,14.785,22,13.465,22,12 S21.198,9.215,19.965,8.521z M10.955,16.416l-3.667-3.714l1.424-1.404l2.257,2.286l4.327-4.294l1.408,1.42L10.955,16.416z"/></svg></span> {{LANG verification}}</a>
+						</li>
+					<?php endif ?>
+					<?php if ($pt->config->block_system == 'on'): ?>  
+						<li class="block <?php echo ($pt->setting_page == 'blocked_users') ? 'active': '';?>">
+							<a href="{{LINK settings/blocked_users/<?php echo $pt->settings->username; ?>}}" data-load="?link1=settings&page=blocked_users&user=<?php echo $pt->settings->username; ?>"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12C4,13.85 4.63,15.55 5.68,16.91L16.91,5.68C15.55,4.63 13.85,4 12,4M12,20A8,8 0 0,0 20,12C20,10.15 19.37,8.45 18.32,7.09L7.09,18.32C8.45,19.37 10.15,20 12,20Z"/></svg></span> {{LANG blocked_users}}</a>
+						</li>
+					<?php endif ?>
+					<?php if ($pt->config->delete_account == 'on') { ?>
+						<li class="delete <?php echo ($pt->setting_page == 'delete') ? 'active': '';?>">
+							<a href="{{LINK settings/delete/<?php echo $pt->settings->username; ?>}}" data-load="?link1=settings&page=delete&user=<?php echo $pt->settings->username; ?>"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20.37,8.91L19.37,10.64L7.24,3.64L8.24,1.91L11.28,3.66L12.64,3.29L16.97,5.79L17.34,7.16L20.37,8.91M6,19V7H11.07L18,11V19A2,2 0 0,1 16,21H8A2,2 0 0,1 6,19Z"/></svg></span> {{LANG delete_account}}</a>
+						</li>
+					<?php } ?>
+					<hr>
+					<p>{{LANG privacy}}</p>
+					<li class="password <?php echo ($pt->setting_page == 'password') ? 'active': '';?>">
+						<a href="{{LINK settings/password/<?php echo $pt->settings->username; ?>}}" data-load="?link1=settings&page=password&user=<?php echo $pt->settings->username; ?>"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"/></svg></span> {{LANG password}}</a>
+					</li>
+					<?php if ($pt->config->two_factor_setting == 'on'): ?>  
+						<li class="two_factor <?php echo ($pt->setting_page == 'two_factor') ? 'active': '';?>">
+							<a href="{{LINK settings/two_factor/<?php echo $pt->settings->username; ?>}}" data-load="?link1=settings&page=two_factor&user=<?php echo $pt->settings->username; ?>"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,5A3,3 0 0,1 15,8A3,3 0 0,1 12,11A3,3 0 0,1 9,8A3,3 0 0,1 12,5M17.13,17C15.92,18.85 14.11,20.24 12,20.92C9.89,20.24 8.08,18.85 6.87,17C6.53,16.5 6.24,16 6,15.47C6,13.82 8.71,12.47 12,12.47C15.29,12.47 18,13.79 18,15.47C17.76,16 17.47,16.5 17.13,17Z"/></svg></span> {{LANG two_factor}}</a>
+						</li>
+					<?php endif ?>
+					<li class="session <?php echo ($pt->setting_page == 'manage_sessions') ? 'active': '';?>">
+						<a href="{{LINK settings/manage_sessions/<?php echo $pt->settings->username; ?>}}" data-load="?link1=settings&page=manage_sessions&user=<?php echo $pt->settings->username; ?>"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M5.962 17.674C7 19.331 7 20.567 7 22h2c0-1.521 0-3.244-1.343-5.389L5.962 17.674zM16.504 3.387C13.977 1.91 7.55.926 4.281 4.305c-3.368 3.481-2.249 9.072.001 11.392.118.122.244.229.369.333.072.061.146.116.205.184l1.494-1.33c-.124-.14-.269-.265-.419-.391-.072-.06-.146-.119-.214-.188-1.66-1.711-2.506-6.017.001-8.608 2.525-2.611 8.068-1.579 9.777-.581 2.691 1.569 4.097 4.308 4.109 4.333l1.789-.895C21.328 8.419 19.725 5.265 16.504 3.387z"/><path fill="currentColor" d="M9.34 12.822c-1.03-1.26-1.787-2.317-1.392-3.506.263-.785.813-1.325 1.637-1.604 1.224-.41 2.92-.16 4.04.601l1.123-1.654c-1.648-1.12-3.982-1.457-5.804-.841C7.536 6.294 6.509 7.313 6.052 8.684c-.776 2.328.799 4.254 1.74 5.405.149.183.29.354.409.512C11 18.323 11 20.109 11 22h2c0-2.036 0-4.345-3.201-8.601C9.665 13.221 9.508 13.028 9.34 12.822zM15.131 9.478c1.835 1.764 3.034 4.447 3.889 8.701l1.961-.395c-.939-4.678-2.316-7.685-4.463-9.748L15.131 9.478z"/><path fill="currentColor" d="M11.556 9.169l-1.115 1.66c.027.019 2.711 1.88 3.801 5.724l1.924-.545C14.867 11.426 11.69 9.259 11.556 9.169zM14.688 18.459C14.898 19.627 15 20.785 15 22h2c0-1.335-.112-2.608-.343-3.895L14.688 18.459z"/></svg></span> {{LANG manage_sessions}}</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-md-8">
+			{{SETTINGSPAGE}}
+		</div>
+		<div class="clear"></div>
+	</div>
+</div>
+
+<script>
+jQuery(document).ready(function($) {
+  var totalWidth = $("#mobi-set-side").outerWidth()
+  $('#mobi-set-side ul').css('width', totalWidth);
+    var myScrollPos = $('.active').offset().left + $('.active').outerWidth(true) / 2 + $('.scrollmenu').scrollLeft() - $('.scrollmenu').width() / 2;
+    $('.scrollmenu').scrollLeft(myScrollPos);
+});
+</script>

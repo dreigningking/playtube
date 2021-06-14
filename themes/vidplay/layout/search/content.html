@@ -1,0 +1,142 @@
+<div class="row">
+	<div class="col-md-9">
+		<div class="content pt_shadow">
+			<h4 class="ptitle">
+				<div><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24"><path fill="currentColor" d="M18,7c0-1.103-0.897-2-2-2H4C2.897,5,2,5.897,2,7v10c0,1.103,0.897,2,2,2h12c1.103,0,2-0.897,2-2v-3.333L22,17V7l-4,3.333 V7z"></path></svg></div> {{LANG search_results}}: {{KEYWORD}}
+			</h4>
+			<div class="videos-latest-list row no-margin-both vp_srch_page">
+				{{VIDEOS}}
+			</div>
+			
+			<?php if ($pt->total_pages > 1) { ?>
+				<!--<div class="pull-left showing_pages">
+					<?php echo "Showing $pt->page_number out of " . $pt->total_pages; ?>
+				</div>-->
+				<div class="text-center">
+					<nav class="showing_nav movies_pagntn">
+						<a href="javascript:void(0)" class="btn" title='First Page' onclick="GoToPage(1)">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" /></svg>
+						</a>
+						<ul class="pagination">
+							<?php if ($pt->page_number > 1) {  ?>
+								<li>
+									<a href="javascript:void(0)" onclick="GoToPage(<?php echo($pt->page_number - 1) ?>)" title='Previous Page'>
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z" /></svg>
+									</a>
+								</li>
+							<?php  } ?>
+							<?php 
+								$nums = 0;
+								$nums_pages = ($pt->page_number > 3) ? ($pt->page_number - 3) : $pt->page_number;
+								for ($i=$nums_pages; $i <= $pt->total_pages; $i++) { 
+									if ($nums < 4) {
+								?>
+									<li class="<?php echo ($pt->page_number == $i) ? 'active' : ''; ?>"><a href="javascript:void(0)" onclick="GoToPage(<?php echo($i); ?>)"><?php echo $i ?></a></li>
+							<?php } $nums++; } ?>
+							<?php if ($pt->total_pages > $pt->page_number) { ?>
+								<li>
+									<a href="javascript:void(0)" onclick="GoToPage(<?php echo ($pt->page_number + 1); ?>)" title="Next Page">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" /></svg>
+									</a>
+								</li>
+							<?php } ?>
+						</ul>
+						<a href="javascript:void(0)" onclick="GoToPage(<?php echo($pt->total_pages) ?>)" class="btn" title='Last Page'>
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" /></svg>
+						</a>
+					</nav>
+				</div>
+			<?php } ?>
+
+			<?php if (count($pt->videos) > 0 && empty($_GET['is_channel'])) { ?>
+				<!-- <button class="watch-video-show-more desc load-more vp_load_more" data-type="search" data-keyword="{{KEYWORD}}" data-by-category="{{CAT}}" data-by-date="<?php echo($_POST['date']); ?>">
+					<span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"></path></svg></span> {{LANG show_more}}
+				</button> -->
+			<?php } ?>
+			<div class="clear"></div>
+		</div>
+		<?php if (!empty($pt->users )) { ?>
+		<div class="content pt_shadow">
+			<h4 class="ptitle">
+				<div><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24"><path fill="currentColor" d="M17,10.5L21,6.5V17.5L17,13.5V17A1,1 0 0,1 16,18H4A1,1 0 0,1 3,17V7A1,1 0 0,1 4,6H16A1,1 0 0,1 17,7V10.5M14,16V15C14,13.67 11.33,13 10,13C8.67,13 6,13.67 6,15V16H14M10,8A2,2 0 0,0 8,10A2,2 0 0,0 10,12A2,2 0 0,0 12,10A2,2 0 0,0 10,8Z"></path></svg></div> {{LANG channels}}
+			</h4>
+			<div class="row vp_srch_usrs_lst">
+				{{USERS}}
+			</div>
+			<div class="clear"></div>
+		</div>
+		<?php } ?>
+	</div>
+	<div class="col-md-3">
+		<div class="content pt_shadow vp_search_filters <?php echo (empty($_POST['date']) && empty($_POST['category'])) ? 'no_filtr_applied': 'filtr_applied'?>" id="filter_settings">
+			<h4 class="ptitle">
+				<div><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24"><path fill="currentColor" d="M6,13H18V11H6M3,6V8H21V6M10,18H14V16H10V18Z"></path></svg></div> {{LANG filter_by}}
+			</h4>
+			<form class="search_filter_form" method="POST" action="">
+				<div class="form-group">
+					<p>{{LANG upload_date}}</p>
+					<div class="vp_custm_rdo">
+						<input onchange="ChangePage()" type="radio" name="date" id="date_last_hour" value="last_hour" <?php echo (isset($_POST['date']) && $_POST['date'] == 'last_hour') ? 'checked': ''?>>
+						<label for="date_last_hour">{{LANG last_hour}}</label>
+					</div>
+					<div class="vp_custm_rdo">
+						<input onchange="ChangePage()" type="radio" name="date" id="date_today" value="today" <?php echo (isset($_POST['date']) && $_POST['date'] == 'today') ? 'checked': ''?>>
+						<label for="date_today">{{LANG today}}</label>
+					</div>
+					<div class="vp_custm_rdo">
+						<input onchange="ChangePage()" type="radio" name="date" id="date_this_week" value="this_week" <?php echo (isset($_POST['date']) && $_POST['date'] == 'this_week') ? 'checked': ''?>>
+						<label for="date_this_week">{{LANG this_week}}</label>
+					</div>
+					<div class="vp_custm_rdo">
+						<input onchange="ChangePage()" type="radio" name="date" id="date_this_month" value="this_month" <?php echo (isset($_POST['date']) && $_POST['date'] == 'this_month') ? 'checked': ''?>>
+						<label for="date_this_month">{{LANG this_month}}</label>
+					</div>
+					<div class="vp_custm_rdo">
+						<input onchange="ChangePage()" type="radio" name="date" id="date_this_year" value="this_year" <?php echo (isset($_POST['date']) && $_POST['date'] == 'this_year') ? 'checked': ''?>>
+						<label for="date_this_year">{{LANG this_year}}</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<p>{{LANG categories}}</p>
+					<div class="srch_cats_filtr">
+						<?php foreach($pt->categories as $key => $category) { ?>
+							<div class="vp_custm_chk">
+								<input onchange="ChangePage()" type="checkbox" name="category[]" id="category_<?php echo $key; ?>" value="<?php echo $key; ?>" <?php echo (isset($_POST['category']) && in_array($key, $_POST['category'])) ? 'checked': ''?>>
+								<label for="category_<?php echo $key; ?>"><?php echo $category; ?></label>
+							</div>
+						<?php } ?>
+					</div>
+				</div>
+				<div class="clear"></div>
+				<button id="submit" name="submit" class="btn btn_primary"> {{LANG search}}</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$("img[data-src]").unveil(200, function() {
+		$(this).on('load', function() {
+			this.style.opacity = 1;
+		});
+	});
+});
+
+function ChangePage() {
+	$('.search_filter_form').attr('action', "{{LINK search}}<?php echo(!empty($_GET['keyword']) ? '?keyword='.$_GET['keyword'] : '') ?>&page_id=1");
+}
+function GoToPage(page_id) {
+	$('.search_filter_form').attr('action', "{{LINK search}}<?php echo(!empty($_GET['keyword']) ? '?keyword='.$_GET['keyword'] : '') ?>&page_id="+page_id);
+	$('#submit').click();
+}
+	
+function show_search_filter() {
+	if ($('#filter_settings').is(":hidden")) {
+		$('#filter_settings').slideDown('slow');
+	}
+	else{
+		$('#filter_settings').slideUp('slow');
+	}
+}
+</script>

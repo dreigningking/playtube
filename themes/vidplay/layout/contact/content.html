@@ -1,0 +1,64 @@
+<div class="row pt_page_margin">
+	<div class="col-md-3"></div>
+	<form class="form-horizontal contact-us-form user-setting-panel col-md-6 pt_forms" method="POST">
+		<h3>{{LANG contact_us}}</h3>
+		<div class="contact-us-alert"></div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="pp_mat_input">
+					<input type="text" name="first_name" id="first_name" placeholder="{{LANG first_name}}" autofocus>
+					<label for="first_name">{{LANG first_name}}</label>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="pp_mat_input">
+					<input type="text" name="last_name" id="last_name" placeholder="{{LANG last_name}}">
+					<label for="last_name">{{LANG last_name}}</label>
+				</div>
+			</div>
+		</div>
+		<div class="pp_mat_input">
+			<input type="email" name="email" id="email" placeholder="{{LANG email}}">
+			<label for="email">{{LANG email}}</label>
+		</div>
+		<div class="pp_mat_input">
+			<textarea name="message" id="message" placeholder="{{LANG message}}" rows="5"></textarea>
+			<label for="message">{{LANG message}}</label>
+		</div>
+		<div class="vp_forms_sbm_btn text-center">
+			<button type="submit" class="btn btn_primary" name="send" id="send"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M2,21L23,12L2,3V10L17,12L2,14V21Z" /></svg> {{LANG submit}}</button>
+		</div>
+		<div class="clear"></div>
+	</form>
+	<div class="col-md-3"></div>
+</div>
+
+<script>
+	$(function() {
+		var form = $('form.contact-us-form');
+		form.ajaxForm({
+			url: '{{LINK aj/contact_us}}?hash=' + $('.main_session').val(),
+			dataTyep:'json',
+			beforeSend: function() {
+				form.find('button').text("{{LANG please_wait}}");
+			},
+			success: function(data) {
+				if (data.status == 200) {
+					$('.contact-us-alert').html($('<div>',{
+						class: "alert alert-success",
+						html: data.message
+					}));
+
+					$('.alert-success').fadeIn(300);
+				} 
+				else {
+					$('.contact-us-alert').html($('<div>',{
+						class: "alert alert-danger",
+						html: data.message
+					}));
+				}
+				form.find('button').text("{{LANG submit}}");
+			}
+		});
+	});
+</script>

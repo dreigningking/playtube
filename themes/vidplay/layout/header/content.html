@@ -1,0 +1,213 @@
+<nav class="navbar navbar-findcond navbar-fixed-top header-layout">
+	<div class="container-fluid">
+		<div class="navbar-header pull-left">
+			<?php if ($pt->page != 'login') { ?>
+				<div class="pull-left yp_slide_menu">
+					<span id="open_slide">
+						<svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" /></svg>
+					</span>
+				</div>
+			<?php } ?>
+			<a class="navbar-brand logo-img" href="{{LINK }}" itemprop="url">
+				<img class="vp_pc_logo_img" itemprop="logo" src="{{CONFIG theme_url}}/img/<?php echo ($pt->mode != 'night') ? 'logo' : 'logo-light';?>.png" alt="{{CONFIG title}}">
+				<img class="vp_pc_mobi_img" src="{{CONFIG theme_url}}/img/icon.png" alt="{{CONFIG title}}">
+			</a>
+			<form class="navbar-form navbar-left search-header pull-left" role="search" action="{{LINK search}}" method="GET">
+                <div class="form-group">
+					<svg xmlns="http://www.w3.org/2000/svg" class="search-icon vid_close_srch" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"/></svg>
+                    <input type="text" class="form-control" id="search-bar" name="keyword" aria-label="{{LANG search_keyword}}" placeholder="{{LANG search_keyword}}" autocomplete="off" value="{{SEARCH_KEYWORD}}"> 
+                    <?php
+                    if (!empty($_GET['is_channel'])) {
+                    ?>
+                    <input type="hidden" name="is_channel" value="true">
+                    <?php } ?>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M10,18c1.846,0,3.543-0.635,4.897-1.688l4.396,4.396l1.414-1.414l-4.396-4.396C17.365,13.543,18,11.846,18,10 c0-4.411-3.589-8-8-8s-8,3.589-8,8S5.589,18,10,18z M10,4c3.309,0,6,2.691,6,6s-2.691,6-6,6s-6-2.691-6-6S6.691,4,10,4z"/></svg>
+					<div class="search-dropdown hidden"></div>
+                </div>
+            </form>
+		</div>
+		<div class="pull-right">
+			<ul class="nav navbar-nav navbar-right">
+				<?php if ($pt->config->upload_system == 'on' || $pt->config->import_system == 'on') { ?>
+				<li class="dropdown pull-left vid_upld_menu_vid_hdr">
+				    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" aria-label="{{LANG upload}}">
+				   		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#1350F3" d="M18,7c0-1.104-0.896-2-2-2H4C2.896,5,2,5.896,2,7v10c0,1.104,0.896,2,2,2h12c1.104,0,2-0.896,2-2v-3.333L22,17V7l-4,3.333 V7z M14,13h-3v3H9v-3H6v-2h3V8h2v3h3V13z" /></svg>
+				    </a>
+				    <ul class="dropdown-menu vp_creator_menu <?php if ($pt->config->upload_system == 'on') { ?><?php } else { ?>vp_single_crtr_menu<?php } ?> <?php if ($pt->config->import_system == 'on') { ?><?php } else { ?>vp_single_crtr_menu<?php } ?>" role="menu">
+						<?php if ($pt->config->upload_system == 'on') { ?> 
+							<li>
+								<a href="{{LINK upload-video}}" class="upload-button" data-load="?link1=upload-video"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z" /></svg> {{LANG upload}}</a>
+							</li>
+						<?php } ?>
+						<?php if ($pt->config->import_system == 'on') { ?> 
+							<li>
+								<a href="{{LINK import-video}}" class="import-button" data-load="?link1=import-video"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" /></svg> {{LANG import}}</a>
+							</li>
+						<?php } ?>
+				    </ul>
+				</li>
+				<?php } ?>
+				
+				<li class="show-in-mobile pull-left vp_srch_vid_hdr">
+					<a href="#" class="search-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#444" d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" /></svg></a>
+				</li>
+				<?php if (IS_LOGGED): ?>
+				<li class="hide-from-mobile pull-left vp_msg_vid_hdr">
+					 <a href="{{LINK messages}}" data-load="?link1=messages" aria-label="{{LANG messages}}">
+				   		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20,20H7A2,2 0 0,1 5,18V8.94L2.23,5.64C2.09,5.47 2,5.24 2,5A1,1 0 0,1 3,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20M8.5,7A0.5,0.5 0 0,0 8,7.5V8.5A0.5,0.5 0 0,0 8.5,9H18.5A0.5,0.5 0 0,0 19,8.5V7.5A0.5,0.5 0 0,0 18.5,7H8.5M8.5,11A0.5,0.5 0 0,0 8,11.5V12.5A0.5,0.5 0 0,0 8.5,13H18.5A0.5,0.5 0 0,0 19,12.5V11.5A0.5,0.5 0 0,0 18.5,11H8.5M8.5,15A0.5,0.5 0 0,0 8,15.5V16.5A0.5,0.5 0 0,0 8.5,17H13.5A0.5,0.5 0 0,0 14,16.5V15.5A0.5,0.5 0 0,0 13.5,15H8.5Z" /></svg>
+				   		<span id="new-messages"></span>
+				    </a>
+				</li>
+				<li class="hide-from-mobile dropdown pull-left vp_notif_vid_hdr">
+				    <a href="javascript:void(0);" id="get-notifications" class=" dropdown-toggle" data-toggle="dropdown" aria-label="{{LANG notifications}}">
+				   		<svg xmlns="http://www.w3.org/2000/svg" class="new_not_anim" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,22A2,2 0 0,0 14,20H10A2,2 0 0,0 12,22M18,16V11C18,7.93 16.36,5.36 13.5,4.68V4A1.5,1.5 0 0,0 12,2.5A1.5,1.5 0 0,0 10.5,4V4.68C7.63,5.36 6,7.92 6,11V16L4,18V19H20V18L18,16Z" /></svg>
+				   		<span id="new-notifications"></span>
+				    </a>
+				    <ul class="dropdown-menu notfi-dropdown" id="notifications">
+					    <li>
+					    	<h5>{{LANG notifications}} <b id="all-notifications"></b> <i class="fa fa-circle-o-notch spin hidden"></i></h5>
+					    </li>
+					    <li>
+					    	<ul id="notifications-list"></ul>
+					    </li>
+				    </ul>
+				</li>
+				<?php endif; ?>
+				{{SIDE_HEADER}}
+			</ul>
+		</div>
+	</div>
+</nav>
+
+<?php if (IS_LOGGED): ?>
+<script>
+	jQuery(document).ready(function($) {
+		pt_get_notifications({type:'new'});
+		
+		$("#get-notifications").click(function(event) {
+			if ($('#notifications').css('display') == 'none') {
+				var notfi_cont = $("ul.notfi-dropdown");
+				
+				if ($("span#new-notifications").html() != '') {
+					$(this).find('span#new-notifications').empty();
+				}
+
+				pt_get_notifications({sa:1});
+			}
+		});
+
+		setInterval(function(){
+			pt_get_notifications({type:'new'});
+		}, 6000);
+	});
+
+	function pt_get_notifications(args){
+		if (!args) {
+			args = {};
+		}
+		var notfi_cont = $("ul.notfi-dropdown");
+		var notfi_set  = $("ul#notifications");
+		
+		defparams = {
+			type: false,
+			sa:false
+		}
+
+		options = Object.assign(defparams,args);
+		data    = {'hash':$('.main_session').val()};
+
+		if (options['type']) {
+			data['t'] = options['type'];
+		}
+
+		if (options['sa']) {
+			data['sa'] = options['sa'];
+			notfi_set.find('i.spin').removeClass('hidden');
+		}
+
+		$.ajax({
+			url: '{{LINK aj/get_notifications}}',
+			type: 'GET',
+			dataType: 'json',
+			data:data
+		})
+		.done(function(data) {
+			if (data.status == 200) {
+				if (data.new) {
+					$('.new_not_anim').addClass('tada');
+					$("span#new-notifications").html($('<b>',{
+						text:data.new
+					}));
+				}
+				else{
+					notfi_set.find('b').text(data.len);
+					notfi_set.find('ul').html(data.html);
+				}			
+			}
+			else if(data.status == 304 && options['sa']){
+				notfi_set.find('b').text(0);
+				notfi_set.find('ul').html($("<li>",{
+					class:'no-notifications',
+					text: "{{LANG no_notifications}}"
+				}));
+			}
+			
+			if (data.count_messages > 0) {
+				$('#new-messages').html('<b>' + data.count_messages + '</b>');
+			} else {
+				$('#new-messages').html('');
+			}
+
+			if (options['sa']) {notfi_set.find('i.spin').addClass('hidden');}
+			
+		})
+		.fail(function() {
+			console.log("error");
+		});
+	}
+</script>
+<?php endif ?>
+
+<script>
+$('.search-icon').on('click', function(event) {
+	event.preventDefault();
+	$('.search-header').slideToggle(200);
+});
+
+$('#open_slide').on('click', function(event) {
+	event.preventDefault();
+	$('body').toggleClass('side_open');
+});
+//$('.sidenav-overlay').on('click', function() {
+//	$('body').removeClass('side_open');
+//});
+
+$('#search-bar').keyup(function(event) {
+	var search_value = $(this).val();
+	var search_dropdown = $('.search-dropdown');
+	if (search_value == '') {
+		search_dropdown.addClass('hidden');
+		search_dropdown.empty();
+		return false;
+	} else {
+		search_dropdown.removeClass('hidden');
+		$('#search-bar').addClass('srch_brdr');
+	}
+    $.post('{{LINK aj/search}}', {search_value: search_value}, function(data, textStatus, xhr) {
+    	if (data.status == 200) {
+    		search_dropdown.html(data.html);
+    	} else {
+	       search_dropdown.addClass('hidden');
+		   search_dropdown.empty();
+		   $('#search-bar').removeClass('srch_brdr');
+		   return false;
+    	}
+    });
+});
+
+jQuery(document).click(function(event){
+    if (!(jQuery(event.target).closest(".search-dropdown").length)) {
+        jQuery('.search-dropdown').addClass('hidden'),$('#search-bar').removeClass('srch_brdr');;
+    }
+});
+</script>

@@ -1,0 +1,54 @@
+<div class="articles-content">
+	<div class="subscriptions-list author-list articles-container">
+		<h3 class="recent-articles">
+			{{LANG recent_articles}} 
+			<?php if ($pt->config->all_create_articles == 'on') { ?>
+				<a href="{{LINK create_article}}" class="btn btn_primary_rev cret_artcle" data-load="?link1=create_article">{{LANG create_article}} </a><div class="clear"></div>
+			<?php } ?>
+			<div class="article-categories">
+				<div>
+					<form class="form search-articles-form" method="post" action="">
+						<div class="form-group">
+							<input type="text" class="form-control" placeholder="{{LANG search_articles}}" name="q">
+							<button type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</h3>
+			
+		<?php if ($pt->posts_count == 0) { ?>
+			<div class="empty_state">
+				<span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19,21 L5,21 C3.34314575,21 2,19.6568542 2,18 L2,3 L16,3 L18,3 L18,8 L22,8 L22,9 L22,18 C22,19.6568542 20.6568542,21 19,21 Z M16.1707057,19 C16.0601542,18.6872211 16,18.3506354 16,18 L16,5 L4,5 L4,18 C4,18.5522847 4.44771525,19 5,19 L16.1707057,19 Z M18,10 L18,18 C18,18.5522847 18.4477153,19 19,19 C19.5522847,19 20,18.5522847 20,18 L20,10 L18,10 Z M10,7 L10,11 L6,11 L6,7 L10,7 Z M14,8 L14,10 L11,10 L11,8 L14,8 Z M14,12 L14,14 L6,14 L6,12 L14,12 Z M14,15 L14,17 L6,17 L6,15 L14,15 Z" /></svg></span>
+				<p>{{LANG no_post_found}}</p>
+				<?php if ($pt->config->all_create_articles == 'on') { ?>
+					<a class="btn btn_primary" href="{{LINK admin-cp/create-article}}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path></svg> {{LANG create}}</a>
+				<?php } ?>
+			</div>
+		<?php } else { ?>
+			{{POSTS}}
+		<?php } ?>
+	</div>
+</div>
+<?php if ($pt->posts_count > 0) { ?>
+	<button class="watch-video-show-more desc vp_load_more" data-type="articles" onclick="PT_LoadPost('{{CATEGORY}}',this);">
+		<span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"></path></svg></span> {{LANG show_more}}
+	</button>
+<?php } ?>
+
+
+<script>
+   jQuery(document).ready(function($) {
+      $('.search-articles-form').submit(function(event) {
+         var query = $(this).find('input').val();
+         if (!query){
+            $(this).find('input').addClass('danger-field-border');
+            return false;
+         }
+         else if(query.length > 50){
+            $(this).find('input').addClass('danger-field-border');
+            return false;
+         }
+      });
+   });
+</script>

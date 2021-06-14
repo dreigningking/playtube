@@ -1,0 +1,588 @@
+<link rel="stylesheet" href="{{CONFIG theme_url}}/css/bootstrap-select.min.css">
+<script src="{{CONFIG theme_url}}/js/bootstrap-select.min.js"></script>
+
+<div class="row">
+	<div class="col-md-1"></div>
+	<div class="col-md-10">
+		<?php if ($pt->user->admin == 1) { ?>
+			<div class="alert alert-info upload_msg">
+				<h4>Just admin can see this message</h4>
+				<p>Note: Your server max upload size is: <?php echo ini_get('upload_max_filesize')?>, means you can't upload files that are larger than: <?php echo ini_get('upload_max_filesize')?></p>
+				<p> If you want to increase the limit or If you can't upload large files, go to Admin Settings > Settings > Site Settings > Max upload size and increase the value, if you still can't upload large files, please contact your host provider and let them increase the upload limit and max_execution_time.</p>
+			</div>
+		<?php } ?>
+		<div class="content pt_shadow vid_upload_vids">
+			<h2 class="user_sttng_panel_hd">{{LANG upload_new_video}}</h2>
+			<div class="pt_upload_vdo">
+				<div class="upload upload-video" data-block="video-drop-zone">
+					<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 488.013 488.013" xml:space="preserve"> <path style="fill:#007AF4;" d="M422.413,260.806c13.6-31.2,16.8-69.6-8.8-94.4c-24.8-24.8-60.8-30.4-91.2-18.4 c-0.8-45.6-37.6-82.4-84-82.4c-45.6-0.8-83.2,36.8-83.2,83.2l0,0c-8-3.2-13.6-4.8-21.6-4.8c-27.2,0-40,27.2-40,55.2 c0,7.2-8.8,8-5.6,14.4c-1.6,0-3.2-0.8-5.6-0.8c-17.6,0-21.6,19.2-21.6,36.8c0,5.6-8.8,5.6-6.4,10.4c-32,12-54.4,44.8-54.4,80.8 c0,46.4,22.4,85.6,68.8,93.6h350.4c46.4-8,68.8-47.2,68.8-93.6C487.213,304.006,455.213,272.006,422.413,260.806z"/> <path style="fill:#00A6F9;" d="M430.413,248.806c13.6-31.2,8-68.8-16.8-93.6s-60.8-30.4-91.2-18.4c-0.8-45.6-37.6-82.4-84-82.4 c-45.6,0-83.2,37.6-83.2,84l0,0c-8-3.2-13.6-4.8-21.6-4.8c-27.2,0-49.6,22.4-49.6,49.6c0,7.2,1.6,13.6,4,19.2 c-1.6,0-3.2-0.8-5.6-0.8c-17.6,0-32,14.4-32,32c0,5.6,1.6,10.4,4,15.2c-32,12-54.4,41.6-54.4,77.6c-0.8,47.2,36.8,84,83.2,84h320 c46.4,0,84-36.8,84-83.2C487.213,290.406,463.213,260.006,430.413,248.806z"/> <circle style="fill:#00B3F9;" cx="355.213" cy="89.606" r="19.2"/> <path style="fill:#007AF4;" d="M390.413,116.006c4.8,0,8.8-4,8.8-8.8s-4-8.8-8.8-8.8s-8.8,4-8.8,8.8 C381.613,112.006,385.613,116.006,390.413,116.006z"/> <g> <path style="fill:#0093F7;" d="M399.213,76.006c2.4,0,4.8-2.4,4.8-4.8s-2.4-4.8-4.8-4.8s-4.8,2.4-4.8,4.8 C395.213,73.606,396.813,76.006,399.213,76.006z"/> <path style="fill:#0093F7;" d="M487.213,327.206c0-36.8-24-67.2-56.8-79.2c13.6-31.2,8-68-16.8-93.6 c-24.8-24.8-60.8-30.4-91.2-18.4c-0.8-45.6-37.6-82.4-84-82.4c-45.6,0.8-83.2,38.4-83.2,84.8l0,0c-8-3.2-13.6-4.8-21.6-4.8 c-27.2,0-49.6,22.4-49.6,49.6c0,6.4,0.8,11.2,3.2,16.8l211.2,210.4h104.8C449.613,410.406,487.213,373.606,487.213,327.206z"/> </g> <g> <path style="fill:#007AF4;" d="M243.213,211.206l73.6,73.6c8.8,8.8,8.8,23.2,0,32s-23.2,8.8-32,0l-41.6-40.8l-40.8,40.8 c-8.8,8.8-23.2,8.8-32,0s-8.8-23.2,0-32L243.213,211.206z"/> <path style="fill:#007AF4;" d="M243.213,243.206c12.8,0,24,10.4,24,23.2v104c0,12.8-11.2,23.2-24,23.2c-12.8,0-24-10.4-24-23.2 v-104C219.213,253.606,230.413,243.206,243.213,243.206z"/> </g> <g> <path style="fill:#FFFFFF;" d="M243.213,194.406l73.6,73.6c8.8,8.8,8.8,23.2,0,32s-23.2,8.8-32,0l-41.6-40.8l-40.8,40.8 c-8.8,8.8-23.2,8.8-32,0s-8.8-23.2,0-32L243.213,194.406z"/> <path style="fill:#FFFFFF;" d="M243.213,227.206c12.8,0,24,10.4,24,23.2v104c0,12.8-11.2,23.2-24,23.2c-12.8,0-24-10.4-24-23.2 v-104C219.213,236.806,230.413,227.206,243.213,227.206z"/> </g></svg>
+					<h4>{{LANG darg_drop_video}}</h4>
+					<div class="or"><span>{{LANG or}}</span></div>
+					<p>{{LANG click_2choose_file}}</p>
+				</div>
+				<div class="vid_fake_uplding hidden">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13,9H18.5L13,3.5V9M6,2H14L20,8V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V4C4,2.89 4.89,2 6,2M17,19V13L14,15.2V13H7V19H14V16.8L17,19Z" /></svg>
+					<div class="vid_fake_uplding_part">
+						<h3 class="fak_vid_title"></h3>
+						<div class="progress">
+							<div class="progress_bar_parent">
+								<div class="bar upload-progress-bar progress-bar active"></div> 
+							</div>
+							<span class="percent">0%</span>
+							<div class="clear"></div>
+						</div>
+					</div>
+				</div>
+				<div class="text-center pt_prcs_vdo"></div>
+				<form action="" method="POST" id="upload-video" class="hidden">
+					<input type="file" name="video" accept="video/*" class="upload-video-file">
+				</form>
+				<hr>
+				<form action="" class="upld_vid_form form-horizontal vp_forms" method="POST">
+					<div class="select_radio_btn">
+						<label>
+							<input type="radio" name="privacy" value="0" checked>
+							<div class="sr_btn_lab_innr">
+								<div class="sr_btn_img">
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17.9,17.39C17.64,16.59 16.89,16 16,16H15V13A1,1 0 0,0 14,12H8V10H10A1,1 0 0,0 11,9V7H13A2,2 0 0,0 15,5V4.59C17.93,5.77 20,8.64 20,12C20,14.08 19.2,15.97 17.9,17.39M11,19.93C7.05,19.44 4,16.08 4,12C4,11.38 4.08,10.78 4.21,10.21L9,15V16A2,2 0 0,0 11,18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg>
+								</div>
+								<span>{{LANG public}}</span>
+							</div>
+						</label>
+						<label>
+							<input type="radio" name="privacy" value="1">
+							<div class="sr_btn_lab_innr">
+								<div class="sr_btn_img">
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z" /></svg>
+								</div>
+								<span>{{LANG private}}</span>
+							</div>
+						</label>
+						<label>
+							<input type="radio" name="privacy" value="2">
+							<div class="sr_btn_lab_innr">
+								<div class="sr_btn_img">
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M3,13V11H15V13H3M3,6H21V8H3V6M3,18V16H9V18H3M22,22H14V18H15V17A3,3 0 0,1 18,14A3,3 0 0,1 21,17V18H22V22M18,16A1,1 0 0,0 17,17V18H19V17A1,1 0 0,0 18,16Z" /></svg>
+								</div>
+								<span>{{LANG unlisted}}</span>
+							</div>
+						</label>
+					</div>
+					<div class="row upload-ffmpeg-mode hidden" id="upload-form">
+						<div class="col-md-2"></div>
+						<div class="col-md-8">
+							<?php if (PT_IsAdmin() && $pt->config->movies_videos == 'on') { ?>
+								<div class="pp_mat_input">
+									<select name="is_movie" id="is_movie" class="pp_select_has_label" onchange="ShowForm(this)">
+										<option value="0">{{LANG no}}</option>
+										<option value="1">{{LANG yes}}</option>
+									</select>
+									<label for="is_movie">{{LANG is_movie}}</label>
+								</div>
+								<div id="movie_fields" style="display: none;">
+									<div class="vp_media_file vp_media_file_preview vp_media_file_preview_large">
+										<span class="btn btn-file" onclick="$('#movie_thumbnail').trigger('click'); return false;">
+											<span>
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16.5,6V17.5A4,4 0 0,1 12.5,21.5A4,4 0 0,1 8.5,17.5V5A2.5,2.5 0 0,1 11,2.5A2.5,2.5 0 0,1 13.5,5V15.5A1,1 0 0,1 12.5,16.5A1,1 0 0,1 11.5,15.5V6H10V15.5A2.5,2.5 0 0,0 12.5,18A2.5,2.5 0 0,0 15,15.5V5A4,4 0 0,0 11,1A4,4 0 0,0 7,5V17.5A5.5,5.5 0 0,0 12.5,23A5.5,5.5 0 0,0 18,17.5V6H16.5Z" /></svg>
+												<div class="vp_med_fi_prev_info">
+													<b>{{LANG thumbnail}}</b>
+													<p>jpg, png, gif</p>
+												</div>
+												<div id="productimage-holder"></div>
+											</span>
+										</span>
+										<input id="movie_thumbnail" name="movie_thumbnail" type="file" class="hidden" accept="image/*">
+									</div>
+									<div class="pp_mat_input">
+										<input type="text" name="movie_title" id="movie_title" placeholder="{{LANG movie_title}}">
+										<label for="movie_title">{{LANG movie_title}}</label>
+									</div>
+									<div class="pp_mat_input">
+										<textarea name="movie_description" id="description" placeholder="{{LANG description}}" rows="5"></textarea>
+										<label for="description">{{LANG description}}</label>
+									</div>
+									<div class="pp_mat_input">
+										<input type="text" name="stars" id="stars" placeholder="{{LANG stars}}">
+										<label for="stars">{{LANG stars}}</label>
+									</div>
+									<div class="pp_mat_input">
+										<input type="text" name="producer" id="producer" placeholder="{{LANG producer}}">
+										<label for="producer">{{LANG producer}}</label>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="pp_mat_input">
+												<input type="number" name="release" id="release" placeholder="{{LANG release}}" min="1910" max="<?php echo date('Y') ?>">
+												<label for="release">{{LANG release}}</label>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="pp_mat_input">
+												<select class="pp_select_has_label" id="country" name="country">
+													<?php foreach ($countries_name as $key => $value) : ?>
+														<option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+													<?php endforeach; ?>
+												</select>
+												<label for="country">{{LANG country}}</label>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="pp_mat_input">
+												<select class="pp_select_has_label" id="quality" name="quality">
+													<option value="CAMRip">CAMRip</option>
+													<option value="TS">TS</option>
+													<option value="VHSRip">VHSRip</option>
+													<option value="WP">WP</option>
+													<option value="SCR (VHSScr)">SCR (VHSScr)</option>
+													<option value="DVDScr">DVDScr</option>
+													<option value="TC">TC</option>
+													<option value="LDRip">LDRip</option>
+													<option value="TVRip">TVRip</option>
+													<option value="SATRip">SATRip</option>
+													<option value="DVBRip">DVBRip</option>
+													<option value="DTVRip">DTVRip</option>
+													<option value="DVD">DVD</option>
+													<option value="HDRip">HDRip</option>
+													<option value="WEB-DL">WEB-DL</option>
+													<option value="HD-TV">HD-TV</option>
+													<option value="HD DVD">HD DVD</option>
+												</select>
+												<label for="quality">{{LANG quality}}</label>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="pp_mat_input">
+												<select class="pp_select_has_label" id="category" name="category">
+													<?php foreach ($pt->movies_categories as $cat_id => $category): ?>
+														<option value="<?php echo $cat_id;?>"><?php echo $category;?></option>
+													<?php endforeach; ?>
+												</select>
+												<label for="category">{{LANG category}}</label>
+											</div>
+										</div>
+									</div>
+									<div class="pp_mat_input">
+										<input type="number" id="rating" name="rating" placeholder="{{LANG rating}}" min="1" max="10" step="1">
+										<label for="rating">{{LANG rating}} {{LANG rating_btween}}</label>
+									</div>
+									<?php if ((($pt->config->usr_v_mon == 'on' && $pt->config->user_mon_approve == 'off') || ($pt->config->usr_v_mon == 'on' && $pt->config->user_mon_approve == 'on' && $pt->user->monetization == '1')) && $pt->config->sell_videos_system == 'on') { ?>
+									<div class="pp_mat_input">
+										<input type="text" id="buy_price" name="buy_price" placeholder="{{LANG set_p_v}}" >
+										<label for="buy_price">{{LANG set_p_v}}</label>
+									</div>
+									<?php } ?>
+								</div>
+							<?php } ?>
+							<div id="video_fields">
+								<div class="pp_mat_input">
+									<input type="text" name="title" id="title" placeholder="{{LANG video_title}}">
+									<label for="title">{{LANG video_title}}</label>
+									<span class="help-block">{{LANG video_title_help}}</span>
+								</div>
+								<div class="pp_mat_input">
+									<textarea name="description" id="description" placeholder="{{LANG video_descritpion}}" rows="5"></textarea>
+									<label for="description">{{LANG video_descritpion}}</label>
+								</div>
+								<div class="row">
+									<div class="<?php if (empty($pt->sub_categories_array["'1'"])) { ?>col-md-12<?php } else {?>col-md-6<?php } ?>">
+										<div class="pp_mat_input">
+											<select name="category_id" id="category_id" class="pp_select_has_label">
+												<?php foreach($pt->categories as $key => $category) {?>
+													<option value="<?php echo $key?>"><?php echo $category?></option>
+												<?php } ?>
+											</select>
+											<label for="category_id">{{LANG category}}</label>
+										</div>
+									</div>
+									<?php if (!empty($pt->sub_categories_array["'1'"])) { ?>
+									<div class="col-md-6" id="sub_category_div">
+										<div class="pp_mat_input">
+											<select name="sub_category_id" id="sub_category_id" class="pp_select_has_label">
+												<?php echo $pt->sub_categories_array["'1'"]; ?>
+											</select>
+											<label for="sub_category_id">{{LANG sub_category}}</label>
+										</div>
+									</div>
+									<?php } ?>
+								</div>
+								<div class="row">
+									<div class="<?php if ($pt->config->geo_blocking == 'on') { ?>col-md-6<?php } else {?>col-md-12<?php } ?>">
+										<div class="pp_mat_input">
+											<select name="age_restriction" id="age_restriction" class="pp_select_has_label">
+												<option value="1" selected>{{LANG all_ages}}</option>
+												<option value="2">{{LANG only_18}}</option>
+											</select>
+											<label for="age_restriction">{{LANG age_restriction}}</label>
+										</div>
+									</div>
+									<?php if ($pt->config->geo_blocking == 'on') { ?>
+									<div class="col-md-6 vid_upld_vdo_geo">
+										<div class="pp_mat_input">
+											<select class="form-control selectpicker show-menu-arrow show-tick" multiple name="continents-list[]" data-live-search="true" title="{{LANG geo_blocking}}" data-actions-box="true">
+												<?php foreach ($pt->continents as $key => $name): ?>
+													<option value="<?php echo($name); ?>"><?php echo($name); ?></option>
+												<?php endforeach; ?>
+											</select>
+										</div>
+									</div>
+									<?php } ?>
+								</div>
+								<?php if (($pt->config->sell_videos_system == 'on' && $pt->config->who_sell == 'pro_users' && ($pt->user->is_pro || $pt->user->admin)) || ($pt->config->sell_videos_system == 'on' && $pt->config->who_sell == 'users') ) { ?>
+								<?php if ((($pt->config->usr_v_mon == 'on' && $pt->config->user_mon_approve == 'off') || ($pt->config->usr_v_mon == 'on' && $pt->config->user_mon_approve == 'on' && $pt->user->monetization == '1'))) { ?>
+									<div class="pp_mat_input">
+										<input id="set_p_v" name="set_p_v" type="text" placeholder="{{LANG set_p_v}}">
+										<label for="set_p_v">{{LANG set_p_v}}</label>
+										<span class="help-block"><?php if($pt->config->admin_com_sell_videos > 0){ ?>{{LANG p_m_than_}} {{CURRENCY}}<?php echo($pt->config->com_type == 0 ? $pt->config->admin_com_sell_videos : 0) ?> <?php }?></span>
+									</div>
+								<?php } ?>
+								<?php } ?>
+								<div class="pp_mat_input">
+									<input id="mySingleFieldTags" name="tags" type="text" placeholder="{{LANG tags}}">
+									<label for="tags">{{LANG tags}}</label>
+								</div>
+								<?php if ((($pt->config->usr_v_mon == 'on' && $pt->config->user_mon_approve == 'off') || ($pt->config->usr_v_mon == 'on' && $pt->config->user_mon_approve == 'on' && $pt->user->monetization == '1')) && $pt->user->video_mon == '1') { ?>
+									<div class="pp_mat_input">
+										<select name="monetization" id="monetization" class="pp_select_has_label">
+											<option value="1">{{LANG enable}}</option>
+											<option value="0">{{LANG disable}}</option>
+										</select>
+										<label for="monetization">{{LANG monetization}}</label>
+									</div>
+								<?php } ?>
+								<div class="vp_fmpg_thumbs hidden" id="video-thumnails">
+									<label for="thumbnail">{{LANG thumbnail}}</label>  
+									<div class="fluid">
+										<div class="carousel slide" id="choose-thumnail-cr" data-interval="false">
+											<div class="carousel-inner">
+												<div class="item active"></div>
+											</div>
+											<div class="vp_fmpg_thumbs_control">
+												<a class="btn btn-default prev" href="#choose-thumnail-cr" data-slide="prev"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z" /></svg></a>
+												<a class="btn btn-default next" href="#choose-thumnail-cr"  data-slide="next"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" /></svg></a>
+											</div>
+										</div>
+										<span class="help-block">{{LANG video_thumbs}}</span>
+									</div>
+								</div>
+							</div>
+							<div class="vp_forms_sbm_btn text-center">
+								<button type="submit" class="btn btn_primary" id="submit-btn" disabled><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M2,21L23,12L2,3V10L17,12L2,14V21Z" /></svg> {{LANG publish}}</button>
+							</div>
+							<input type="hidden" name="video-location" id="video-location" value="">
+							<input type="hidden" name="video-thumnail" id="video-thumnail" value="">
+						</div>
+						<div class="col-md-2"></div>
+					</div>
+				</form>
+				<div class="clear"></div>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+	<form action="" id="thumbnail-form" method="POST">
+		<input id="thumbnail" name="thumbnail" type="file" style="visibility: hidden;" accept="image/*">
+	</form>
+	<div class="col-md-1"></div>
+</div>
+
+<script>
+<?php if (PT_IsAdmin()) { ?>
+function ShowForm(self) {
+   if ($(self).val() == 1 && $("#video_fields").is(":visible") == true) {
+      $("#video_fields").hide();
+      $("#movie_fields").show();
+   }
+   else if($(self).val() == 0 && $("#movie_fields").is(":visible") == true){
+      $("#video_fields").show();
+      $("#movie_fields").hide();
+   }
+}
+$(document).ready(function() {
+  $("#movie_thumbnail").on('change', function() {
+  //Get count of selected files
+  var product_countFiles = $(this)[0].files.length;
+  var product_imgPath = $(this)[0].value;
+  var extn = product_imgPath.substring(product_imgPath.lastIndexOf('.') + 1).toLowerCase();
+  var product_image_holder = $("#productimage-holder");
+  product_image_holder.empty();
+  if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+    if (typeof(FileReader) != "undefined") {
+    //loop for each file selected for uploaded.
+    for (var i = 0; i < product_countFiles; i++) 
+    {
+      var product_reader = new FileReader();
+      product_reader.onload = function(e) {
+        $("<img />", {
+                    "src": e.target.result,
+                    "class": "thumb-image"
+                  }).appendTo(product_image_holder);
+                }
+                product_image_holder.show();
+                product_reader.readAsDataURL($(this)[0].files[i]);
+              }
+            } else {
+              product_image_holder.html("<p>This browser does not support FileReader.</p>");
+            }
+         }
+  });
+});
+<?php } ?>
+$('.selectpicker').selectpicker({});
+<?php 
+$js_array = json_encode($pt->sub_categories_array);
+echo "var sub_categories_array = ". $js_array . ";\n";
+?>
+$(document).on('change', '#category_id', function(event) {
+   event.preventDefault();
+   id = $(this).val();
+   if (typeof(sub_categories_array["'"+id+"'"]) == 'undefined') {
+    $('#sub_category_div').hide();
+    $('#sub_category_id').html('');
+   }
+   else{
+    $('#sub_category_div').show();
+    $('#sub_category_id').html(sub_categories_array["'"+id+"'"]);
+  }
+   
+});
+
+var video_thumb = Array();
+$(document).on('click', '.carousel-inner', function(event) {
+   $('#thumbnail').trigger('click');
+});
+$('#thumbnail').change(function(event) {
+   $.ajax({
+        type: 'POST',
+        url: "{{LINK aj/upload-thumbnail}}?hash=" + $('.main_session').val() ,
+        data: new FormData($("#thumbnail-form")[0]),
+        processData: false, 
+        contentType: false, 
+        success: function(data) {
+            $('.carousel-inner').append('<div class="item"><img src="' + data.thumbnail + '"></div>');
+            video_thumb.push(data.thumbnail);
+            $('#video-thumnail').val(data.thumbnail);
+            $(".carousel-inner").find('.item').removeClass('active');
+            $(".carousel-inner").find('.item:last').addClass('active');
+        }
+    });
+});
+$(function () {
+
+   var video_drop_block = $("[data-block='video-drop-zone']");
+
+   if (typeof(window.FileReader)){
+      video_drop_block[0].ondragover = function() {
+         video_drop_block.addClass('hover');
+         return false;
+      };
+          
+      video_drop_block[0].ondragleave = function() {
+         video_drop_block.removeClass('hover');
+         return false;
+      };
+
+      video_drop_block[0].ondrop = function(event) {
+
+         event.preventDefault();
+         video_drop_block.removeClass('hover');
+         var file = event.dataTransfer.files;
+         $('#upload-video').find('input').prop('files', file);
+         $('#upload-video').submit();
+      };
+   }
+
+	$("#mySingleFieldTags").tagit({
+      allowSpaces: true
+   });
+	var bar         = $('.bar');
+   var percent     = $('.percent');
+   var prcsvdo		= $('.pt_prcs_vdo');
+   var is_uploaded = false;
+   
+
+	$('#upload-video').submit(function(event) {
+      var file_size = $(".upload-video-file").prop('files')[0].size;
+      if (file_size > "{{CONFIG max_upload}}") {
+         swal({
+            title: '{{LANG error}}',
+            text:  "{{LANG file_is_too_big}} <?php echo pt_size_format($pt->config->max_upload); ?>",
+            type: 'error',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK',
+            buttonsStyling: true,
+            confirmButtonClass: 'btn btn-success',
+         }).then(function(){
+            swal.close();
+            $('.upload-video-file').val('');
+         },
+         function() {
+            swal.close();
+            $('.upload-video-file').val('');
+         });
+         return false;
+      }
+      else{
+		 var filename = $('.upload-video-file').val().split('\\').pop();
+		 <?php if ($pt->user->admin == 1) { ?>$('.upload_msg').addClass('hidden');<?php } ?>
+		 $('.upload').slideUp(150);
+		 $('.fak_vid_title').text(filename);
+         $('#upload-form').removeClass('hidden');
+      }
+   });
+
+   $('#choose-thumnail-cr').bind('slid.bs.carousel', function (e) {
+      console.log(video_thumb);
+      var vsthumb = video_thumb[$(this).find('.active').index()];
+      console.log(vsthumb);
+      $("#video-thumnail").val(vsthumb);
+   });
+
+   $('#upload-video').ajaxForm({
+      url: '{{LINK aj/upload-video-ffmpeg}}?hash=' + $('.main_session').val(),
+      dataType:'json',
+      beforeSend: function() {
+         $('.vid_fake_uplding').removeClass('hidden');
+         var percentVal = '0%';
+         bar.width(percentVal);
+         percent.html(percentVal);
+      },
+      uploadProgress: function(event, position, total, percentComplete) {
+         var percentVal = percentComplete + '%';
+         bar.width(percentVal);
+         percent.html(percentVal);
+
+         if (percentComplete == 100) {
+            prcsvdo.html('<svg width="30" height="10" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg" fill="#000"><circle cx="15" cy="15" r="15"><animate attributeName="r" from="15" to="15" begin="0s" dur="0.8s" values="15;9;15" calcMode="linear" repeatCount="indefinite" /><animate attributeName="fill-opacity" from="1" to="1" begin="0s" dur="0.8s" values="1;.5;1" calcMode="linear" repeatCount="indefinite" /></circle><circle cx="60" cy="15" r="9" fill-opacity="0.3"><animate attributeName="r" from="9" to="9" begin="0s" dur="0.8s" values="9;15;9" calcMode="linear" repeatCount="indefinite" /><animate attributeName="fill-opacity" from="0.5" to="0.5" begin="0s" dur="0.8s" values=".5;1;.5" calcMode="linear" repeatCount="indefinite" /></circle><circle cx="105" cy="15" r="15"><animate attributeName="r" from="15" to="15" begin="0s" dur="0.8s" values="15;9;15" calcMode="linear" repeatCount="indefinite" /><animate attributeName="fill-opacity" from="1" to="1" begin="0s" dur="0.8s" values="1;.5;1" calcMode="linear" repeatCount="indefinite" /></circle></svg> {{LANG porcessing_video}}');
+         }
+      },
+      success: function(data) {
+	    	percentVal = '0%';
+	    	bar.width(percentVal);
+         $('.vid_fake_uplding').addClass('hidden');   
+         
+         if (data.status == 200) {
+         	$('#video-location').val(data.file_path);
+         	Snackbar.show({text: '<img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nMjAnIGhlaWdodD0nMjAnIHZpZXdCb3g9JzAgMCAyMCAyMCcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJz4KCTxnPgoJCTxwYXRoIGQ9J00tMi0yaDI0djI0SC0yeicgZmlsbD0nbm9uZScvPgoJCTxwYXRoIGQ9J00xMCAwQzQuNDggMCAwIDQuNDggMCAxMHM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTUuNTIgMCAxMCAwek04IDE1bC01LTUgMS40MS0xLjQxTDggMTIuMTdsNy41OS03LjU5TDE3IDZsLTkgOXonIGZpbGw9JyMyNkJDNEUnLz4KCTwvZz4KPC9zdmc+Cg=="/> {{LANG successfully_uplaoded}}',pos: 'bottom-center',showAction: false});
+         	$('#submit-btn').attr('disabled', false);
+         	$('.upload-video-file').val('');
+			$('#title').val(data.file_name);
+      <?php if (PT_IsAdmin()) { ?>
+         $('#movie_title').val(data.file_name);
+         <?php } ?>
+            $("#video-thumnails").removeClass('hidden');
+
+            var i       = 0;
+            var url     = '{img}';
+            video_thumb = data.images;
+
+            $('.carousel-inner').html('');
+            $.each(video_thumb, function( index, value ) {
+                $('.carousel-inner').append('<div class="item"><img src="' + value + '"></div>');
+                i++;
+            });
+            $(".carousel-inner").find('.item:first-child').addClass('active');
+            $("#video-thumnail").val(video_thumb[0]);
+            $('.carousel').carousel({
+              interval: false
+            });
+         }
+         else if(data.status == 401){
+            swal({
+               title: '{{LANG oops}}!',
+               text: "{{LANG upload_limit_reached}}!",
+               type: 'info',
+               showCancelButton: true,
+               confirmButtonColor: '#3085d6',
+               cancelButtonColor: '#d33',
+               confirmButtonText: '{{LANG upgrade_now}}',
+               cancelButtonText: '{{LANG cancel}}',
+               confirmButtonClass: 'btn btn-success margin-right',
+               cancelButtonClass: 'btn',
+               buttonsStyling: false
+            }).then(function(){
+               window.location.href = '{{LINK go_pro}}';
+            },
+            function() {
+               window.location.href = '{{LINK }}';
+            });
+         }
+         else if(data.status == 402){
+            swal({
+               title: '{{LANG error}}',
+               text: data.message,
+               type: 'error',
+               confirmButtonColor: '#3085d6',
+               cancelButtonColor: '#d33',
+               confirmButtonText: 'OK',
+               buttonsStyling: true,
+               confirmButtonClass: 'btn btn-success',
+            }).then(function(){
+               swal.close();
+               $('.upload-video-file').val('');
+            },
+            function() {
+               swal.close();
+               $('.upload-video-file').val('');
+            });
+         }
+         else {
+         	Snackbar.show({backgroundColor: '#e22e40',text: '<div>'+ data.error +'</div>',pos: 'bottom-center',showAction: false});
+         }
+	    }
+	});
+
+	$('form.upld_vid_form').ajaxForm({
+      url: '{{LINK aj/ffmpeg-submit}}?hash=' + $('.main_session').val(),
+      beforeSend: function() {
+         $('#submit-btn').attr('disabled', true);
+         $('#submit-btn').val("{{LANG please_wait}}");
+      },
+      success: function(data) {
+	    	if (data.status == 200) {
+	    		window.location.href = data.link;
+	    	} 
+         else if(data.status == 402){
+            swal({
+               title: '{{LANG error}}',
+               text: data.message,
+               type: 'error',
+               confirmButtonColor: '#3085d6',
+               cancelButtonColor: '#d33',
+               confirmButtonText: 'OK',
+               buttonsStyling: true,
+               confirmButtonClass: 'btn btn-success',
+            }).then(function(){
+               window.location.href = '{{LINK upload-video}}';
+            },
+            function() {
+               window.location.href = '{{LINK }}';
+            });
+         }
+         else {
+	    		$('#submit-btn').attr('disabled', false);
+	    	    $('#submit-btn').val('{{LANG publish}}');
+	    		Snackbar.show({text: '<div>'+ data.message +'</div>',pos: 'bottom-center',showAction: false});
+	    	}
+      }
+	});
+
+	$('.upload-video-file').on('change', function() {
+   	$('#upload-video').submit();
+	});
+});
+
+function PT_OpenUploadForm() {
+	$('#upload-video').find('input').trigger('click');
+}
+
+jQuery(function($) {
+   $(document).ready(function() {
+      $( '.upload' ).on('click', function(e) {
+         $( '.upload-video-file' ).trigger("click");
+      });
+   });
+});
+</script>

@@ -1,0 +1,81 @@
+<li class="dropdown hide-from-mobile profile-nav pull-left">
+	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+		<img class="header-image" src="{{ME avatar}}" alt="{{ME name}} avatar" />
+	</a>
+	<ul class="dropdown-menu ani-acc-menu" role="menu">
+		<li>
+			<div class="vp_acc_menu_hd">
+				<a class="hd_btn logot" href="{{LINK logout}}" title="{{LANG log_out}}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16.56,5.44L15.11,6.89C16.84,7.94 18,9.83 18,12A6,6 0 0,1 12,18A6,6 0 0,1 6,12C6,9.83 7.16,7.94 8.88,6.88L7.44,5.44C5.36,6.88 4,9.28 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12C20,9.28 18.64,6.88 16.56,5.44M13,3H11V13H13" /></svg></a>
+				<a class="hd_btn sett" href="{{LINK settings}}" data-load="?link1=settings" title="{{LANG settings}}"><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24"><path fill="currentColor" d="M13 5H22V7H13zM2 7L9 7 9 9 11 9 11 3 9 3 9 5 2 5zM9 17H22V19H9zM19 11H22V13H19zM17 15L17 9.012 15 9.012 15 11 2 11 2 13 15 13 15 15zM7 21L7 15 5 15 5 17 2 17 2 19 5 19 5 21z" /></svg></a>
+				<div class="avatar"><a href="{{ME url}}" data-load="?link1=timeline&id={{ME username}}"><img src="{{ME avatar}}" alt="{{ME name}} avatar" /></a></div>
+				<b><a href="{{ME url}}" data-load="?link1=timeline&id={{ME username}}">{{ME name}}</a></b>
+				<p><a href="{{ME url}}" data-load="?link1=timeline&id={{ME username}}">@{{ME username}}</a></p>
+			</div>
+		</li>
+		<?php if ($pt->config->go_pro == 'on' && !PT_IsUpgraded()): ?>
+			<li class="divider"></li>
+			<li>
+				<a href="{{LINK go_pro}}" data-load="?link1=go_pro">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7,2V13H10V22L17,10H13L17,2H7Z" /></svg> {{LANG go_pro}}
+				</a>
+			</li>
+		<?php endif; ?>
+		<li class="divider"></li>
+		<li class="vp_msg_vid_mnu">
+			<a href="{{LINK messages}}" data-load="?link1=messages">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20,20H7A2,2 0 0,1 5,18V8.94L2.23,5.64C2.09,5.47 2,5.24 2,5A1,1 0 0,1 3,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20M8.5,7A0.5,0.5 0 0,0 8,7.5V8.5A0.5,0.5 0 0,0 8.5,9H18.5A0.5,0.5 0 0,0 19,8.5V7.5A0.5,0.5 0 0,0 18.5,7H8.5M8.5,11A0.5,0.5 0 0,0 8,11.5V12.5A0.5,0.5 0 0,0 8.5,13H18.5A0.5,0.5 0 0,0 19,12.5V11.5A0.5,0.5 0 0,0 18.5,11H8.5M8.5,15A0.5,0.5 0 0,0 8,15.5V16.5A0.5,0.5 0 0,0 8.5,17H13.5A0.5,0.5 0 0,0 14,16.5V15.5A0.5,0.5 0 0,0 13.5,15H8.5Z" /></svg> {{LANG messages}}
+			</a>
+		</li>
+		<li>
+			<a href="{{LINK dashboard}}" data-load="?link1=dashboard">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17,10.5V7A1,1 0 0,0 16,6H4A1,1 0 0,0 3,7V17A1,1 0 0,0 4,18H16A1,1 0 0,0 17,17V13.5L21,17.5V6.5L17,10.5Z" /></svg> {{LANG video_studio}}
+			</a>
+		</li>
+		<li class="divider"></li>
+		<li>
+			<a href="{{LINK subscriptions}}" data-load="?link1=subscriptions">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19 10H5c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2v-8C21 10.897 20.103 10 19 10zM5 6H19V8H5zM7 2H17V4H7z" /></svg> {{LANG subscriptions}}
+			</a>
+		</li>
+		<?php if ($pt->config->sell_videos_system == 'on') {  ?>
+			<li>
+				<a href="{{LINK paid-videos}}" data-load="?link1=paid-videos">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M3,10 L3,17 L12,17 L12,19 L2.81818182,19 C1.81402773,19 1,18.1045695 1,17 L1,5 C1,3.8954305 1.81402773,3 2.81818182,3 L21.1818182,3 C22.1859723,3 23,3.8954305 23,5 L23,12 L21,12 L21,10 L3,10 Z M3,8 L21,8 L21,5 L3,5 L3,8 Z M18.5857864,17 L14,17 L14,15 L18.5857864,15 L17.2928932,13.7071068 L18.7071068,12.2928932 L22.4142136,16 L18.7071068,19.7071068 L17.2928932,18.2928932 L18.5857864,17 Z"/></svg> {{LANG purchased}}
+				</a>
+			</li>
+		<?php } ?>
+		<?php if ($pt->config->all_create_articles == 'on') { ?>
+			<li>
+				<a href="{{LINK my_articles}}" data-load="?link1=my_articles">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20,11H4V8H20M20,15H13V13H20M20,19H13V17H20M11,19H4V13H11M20.33,4.67L18.67,3L17,4.67L15.33,3L13.67,4.67L12,3L10.33,4.67L8.67,3L7,4.67L5.33,3L3.67,4.67L2,3V19A2,2 0 0,0 4,21H20A2,2 0 0,0 22,19V3L20.33,4.67Z" /></svg> {{LANG my_articles}}
+				</a>
+			</li>
+		<?php } ?>
+		<li>
+			<a href="{{ME url}}?page=play-lists" data-load="?link1=timeline&id={{ME username}}&page=play-lists">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19,9H2V11H19V9M19,5H2V7H19V5M2,15H15V13H2V15M17,13V19L22,16L17,13Z" /></svg> {{LANG play_lists}}
+			</a>
+		</li>
+		<?php if ($pt->config->user_ads == 'on'): ?>
+			<li>
+				<a href="{{LINK ads}}" data-load="?link1=ads"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,8H4A2,2 0 0,0 2,10V14A2,2 0 0,0 4,16H5V20A1,1 0 0,0 6,21H8A1,1 0 0,0 9,20V16H12L17,20V4L12,8M21.5,12C21.5,13.71 20.54,15.26 19,16V8C20.53,8.75 21.5,10.3 21.5,12Z" /></svg> {{LANG ads}}</a>
+			</li>
+		<?php endif; ?>
+		<?php if (PT_IsAdmin()) { ?>
+			<li class="divider"></li>
+			<li>
+				<a href="{{LINK admin-cp/}}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M3,3H11V7.34L16.66,1.69L22.31,7.34L16.66,13H21V21H13V13H16.66L11,7.34V11H3V3M3,13H11V21H3V13Z" /></svg> Admin Panel</a>
+			</li> 
+		<?php } ?>
+		<?php if ($pt->config->night_mode == 'both' || $pt->config->night_mode == 'night_default'): ?>
+		<li class="divider"></li>
+			<div class="toggle-mode">
+				<div class="vp_check">
+					<input type="checkbox" {{MODE}} id="toggle-mode">
+					<label>{{LANG night_mode}}</label>
+				</div>
+			</div>
+		<?php endif; ?>
+		<span class="headtoppoint"></span>
+	</ul>
+</li>

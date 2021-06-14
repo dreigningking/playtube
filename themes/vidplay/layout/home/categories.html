@@ -1,0 +1,37 @@
+<div class="last_hr">
+	<div class="content pt_shadow yp_trans">
+		<div class="home-page-categories">
+			<div class="title">
+				<h4>
+					<a href="<?php echo (!empty($pt->subscriptions)) ? "{{LINK subscriptions}}" : "{{LINK videos/category/{{CATEGORY_ONE_ID}}}}" ?>" data-load="<?php echo (!empty($pt->subscriptions)) ? '?link1=subscriptions' : '?link1=videos&page=category&id={{CATEGORY_ONE_ID}}' ?>">
+						<div style="background:#<?php echo (!empty($pt->subscriptions)) ? "4caf50" : "1350F3" ?>"><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24"><path fill="currentColor" d="<?php echo (!empty($pt->subscriptions)) ? "M19 10H5c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2v-8C21 10.897 20.103 10 19 10zM5 6H19V8H5zM7 2H17V4H7z" : "M17,10.5V7A1,1 0 0,0 16,6H4A1,1 0 0,0 3,7V17A1,1 0 0,0 4,18H16A1,1 0 0,0 17,17V13.5L21,17.5V6.5L17,10.5Z" ?>" /></svg></div> {{CATEGORY_ONE_NAME}} 
+						<span class="view_more_link" title="{{LANG explore_more}}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" /></svg></span>
+					</a>
+				</h4>
+			</div>
+			<div class="videos">
+				<div class="row cus_slider">
+					<?php 
+						foreach ($pt->cat_videos as $key => $video) {
+							$video = PT_GetVideoByID($video, 0, 0, 0);
+							echo PT_LoadPage('home/list', array(
+								'ID' => $video->id,
+								'TITLE' => $video->title,
+								'VIEWS' => $video->views,
+								'VIEWS_NUM' => number_format($video->views),
+								'USER_DATA' => $video->owner,
+								'THUMBNAIL' => $video->thumbnail,
+								'URL' => $video->url,
+								'TIME' => $video->time_ago,
+								'DURATION' => $video->duration,
+                                'VIDEO_ID_' => PT_Slug($video->title, $video->video_id),
+						        'GIF' => $video->gif
+							));
+						}
+					?>
+				</div>
+			</div>
+		</div>
+		<div class="clear"></div>
+	</div>
+</div>

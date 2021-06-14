@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html id="html" <?php if($pt->language == "english") { ?>lang="en"<?php } ?><?php if($pt->language == "arabic") { ?>lang="ar"<?php } ?><?php if($pt->language == "dutch") { ?>lang="nl"<?php } ?><?php if($pt->language == "french") { ?>lang="fr"<?php } ?><?php if($pt->language == "german") { ?>lang="de"<?php } ?><?php if($pt->language == "italian") { ?>lang="it"<?php } ?><?php if($pt->language == "portuguese") { ?>lang="pt"<?php } ?><?php if($pt->language == "russian") { ?>lang="ru"<?php } ?><?php if($pt->language == "spanish") { ?>lang="es"<?php } ?><?php if($pt->language == "turkish") { ?>lang="tr"<?php } ?>>
+<head>
+	<meta charset="UTF-8">
+	<title>{{CONTAINER_TITLE}}</title>
+	<meta name="title" content="{{CONTAINER_TITLE}}">
+	<meta name="description" content="{{CONTAINER_DESC}}">
+	<meta name="keywords" content="{{CONTAINER_KEYWORDS}}">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta property="fb:app_id" content="1643990952546825" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="theme-color" content="#1350F3" />
+	<?php if (!empty($pt->config->dailymotion_id)) { ?>
+      <meta name="dailymotion-domain-verification" content="{{CONFIG dailymotion_id}}" />
+    <?php } ?>
+    {{OG_METATAGS}}
+    <link rel="shortcut icon" type="image/png" href="{{CONFIG theme_url}}/img/icon.png"/>
+    <link rel="stylesheet" href="{{CONFIG theme_url}}/css/jquery-ui.min.css">
+    <link rel="stylesheet" href="{{CONFIG theme_url}}/css/jquery.tagit.css">
+    <!--<link rel="stylesheet" href="{{CONFIG theme_url}}/css/twemoji-awesome.css">-->
+	<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css">
+    <link rel="stylesheet" href="{{CONFIG theme_url}}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{CONFIG theme_url}}/js/lib/sweetalert2/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="{{CONFIG theme_url}}/css/style.css">
+	<link rel="stylesheet" href="{{CONFIG theme_url}}/css/theme-style.css" id="style-css">
+	<link rel="stylesheet" href="{{CONFIG theme_url}}/css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <?php if ($pt->mode == 'night' || $pt->config->night_mode == 'night'): ?>
+    <link rel="stylesheet" href="{{CONFIG theme_url}}/css/night-mode.css" class="night-mode-css">      
+    <?php endif; ?>  
+
+    <link rel="stylesheet" href="{{CONFIG theme_url}}/css/custom.style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto:400,500" rel="stylesheet">
+    <script src="{{CONFIG theme_url}}/js/jquery-3.min.js"></script>
+    <script src="{{CONFIG theme_url}}/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="{{CONFIG theme_url}}/js/jquery.form.min.js"></script>
+    <script type="text/javascript" src="{{CONFIG theme_url}}/js/tag-it.min.js"></script>
+
+    <script src="{{CONFIG theme_url}}/js/lib/sweetalert2/dist/sweetalert2.min.js"></script>
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    
+	<?php if ($pt->language_type == 'rtl') { ?>
+    <link rel="stylesheet" href="{{CONFIG theme_url}}/css/bootsrap-rtl.min.css">
+    <link rel="stylesheet" href="{{CONFIG theme_url}}/css/rtl.style.css">
+    <?php } ?>
+
+    <script src="{{CONFIG theme_url}}/js/Fingerprintjs2/fingerprint2.js"></script>
+
+    <?php if ($pt->config->checkout_payment == 'yes') { ?>
+        <script type="text/javascript" src="https://www.2checkout.com/checkout/api/2co.min.js"></script>
+      <?php } ?>
+
+    <!-- <script src="{{CONFIG theme_url}}/js/highcharts/highcharts.js"></script>
+    <script src="{{CONFIG theme_url}}/js/highcharts/exporting.js"></script> -->
+
+    <script src= "https://player.twitch.tv/js/embed/v1.js"></script>
+    
+    <?php if ($pt->page == 'login' && $pt->config->recaptcha == 'on') { ?>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <?php } ?>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <?php if (!empty($pt->config->google)) { ?>
+     <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', '{{CONFIG google}}', 'auto');
+      ga('send', 'pageview');
+    </script> 
+    <?php } ?>
+    <script>
+        <?php if (IS_LOGGED == true && $pt->config->server == 'nodejs') {?>
+           const socket = io('{{CONFIG hostname}}:{{CONFIG server_port}}');
+           socket.on('connect_error', function (error) {
+              console.log(error);
+           });
+           setTimeout(function () {
+             getNotifications();
+           }, 500);
+           function getNotifications() {
+               socket.emit('get notifications and messages');
+               setTimeout(function () {
+                 getNotifications();
+               }, 500);
+           }
+           socket.on('get notifications results', function (data) {
+              if (data.status == 200) {
+                 if (data.messages > 0) {
+                    var default_messages = $('body').attr('data-messages');
+
+                    if (!default_messages) {
+                       $('body').attr('data-messages', data.messages);
+                    }
+
+                    var default_messages = $('body').attr('data-messages');
+
+                    if (default_messages != data.messages) {
+                       $('#message-sound')[0].play();
+                       
+                    }
+
+                    $('body').attr('data-messages', data.messages);
+                    $('#new-messages').html('<b>' + data.messages + '</b>');
+                 } else {
+                    $('#new-messages').html("");
+                 }
+                 if (data.notifications > 0) {
+                    $('#new-notifications').html('<b>' + data.notifications + '</b>');
+                 } else {
+                     $('#new-notifications').html('');
+                 }
+                
+              }
+           });
+        <?php } ?>
+        var site_url = '{{CONFIG site_url}}';
+        function PT_Ajax_Requests_File() {
+          return site_url + '/';
+        }
+        function PT_Page_Loading_File() {
+          return site_url + '/page_loading.php';
+        }
+        function OpenShareWindow(url, windowName) {
+           newwindow = window.open(url, windowName, 'height=600,width=800');
+           if (window.focus) {
+              newwindow.focus();
+           }
+           return false;
+        }
+        function getCookie(name) {
+          var value = "; " + document.cookie;
+          var parts = value.split("; " + name + "=");
+          if (parts.length == 2) return parts.pop().split(";").shift();
+        }
+    </script>
+
+    <script src="{{CONFIG theme_url}}/js/header.js"></script>
+
+</head>
+<script type="text/javascript">
+  $(document).on('click', 'a[data-load]', function(event) {
+    $('#bar_loading').show();
+      event.preventDefault();
+      var url = $(this).attr('data-load');
+	  if ($('video').length > 0) {
+        $('video')[0].pause();
+      }
+      $.ajax({
+        url: PT_Page_Loading_File()+url,
+        type: 'GET',
+        dataType: 'html'
+      })
+      .done(function(data_html) {
+        if ($(data_html).filter('#json-data').length > 0) {
+			if (typeof(ads_) != 'undefined') {
+              clearInterval(ads_);
+            }
+			
+            data = JSON.parse($(data_html).filter('#json-data').val());
+
+            (data.page == 'home') ? $('#home_menu_').addClass('active') : $('#home_menu_').removeClass('active');
+            (data.page == 'history') ? $('#history_menu_').addClass('active') : $('#history_menu_').removeClass('active');
+            (data.page == 'articles') ? $('#articles_menu_').addClass('active') : $('#articles_menu_').removeClass('active');
+            (data.page == 'latest') ? $('#latest_menu_').addClass('active') : $('#latest_menu_').removeClass('active');
+            (data.page == 'trending') ? $('#trending_menu_').addClass('active') : $('#trending_menu_').removeClass('active');
+            (data.page == 'paid-videos') ? $('#paid_videos_').addClass('active') : $('#paid_videos_').removeClass('active');
+            (data.page == 'top') ? $('#top_menu_').addClass('active') : $('#top_menu_').removeClass('active');
+			(data.page == 'movies') ? $('#movies_menu_').addClass('active') : $('#movies_menu_').removeClass('active');
+            (data.page == 'popular_channels') ? $('#popular_channels_menu_').addClass('active') : $('#popular_channels_menu_').removeClass('active');
+
+            window.history.pushState({state:'new'},'', data.url);
+            $('#container_content').html(data_html);
+            $('meta[name=title]').attr('content', data.title);
+            $('meta[name=description]').attr('content', data.description);
+            $('meta[name=keywords]').attr('content', data.keyword);
+            $('title').text(data.title);
+			
+			
+            var main_container_class = 'main-content ';
+            (data.page != 'login') ? main_container_class += ' container ' : main_container_class += ' welcome-page ';
+			
+			
+			
+            (data.page == 'home') ? main_container_class += ' home_full_cont ' : main_container_class += ' ';
+			(data.page == 'timeline') ? main_container_class += ' profile_full_cont ' : main_container_class += ' ';
+            (data.page == 'watch') ? main_container_class += ' watch_full_cont ' : main_container_class += ' ';
+            (data.page == 'messages') ? main_container_class += ' message_full_cont ' : main_container_class += ' ';
+            $('#main-container').attr('class',main_container_class);
+
+
+            (data.page == 'messages') ? $('#header_ad_').attr('class','hidden') : $('#header_ad_').attr('class','ads-placment');
+            (data.page == 'messages') ? $('#footer_ad_').attr('class','hidden') : $('#footer_ad_').attr('class','ads-placment');
+			(data.page == 'messages') ? $('footer').attr('class','hidden') : $('footer').attr('class','pt_footer');
+          }
+          else{
+            window.location.href = site_url+'/login';
+          }
+
+      })
+      .fail(function() {
+        if (typeof(getCookie('user_id')) == 'undefined') {
+          window.location.href = site_url+'/login';
+        }
+        else{
+          window.location.href = site_url+'/404';
+        }
+        
+      })
+      .always(function() {
+        window.scrollTo(0,0);
+        $('#bar_loading').delay(300).fadeOut(300);
+        $(".video-player").hover(
+            function(e){
+              $('.watermark').css('display', 'block');
+             }, 
+            function(e){
+              setTimeout(function () {
+                if ($('.video-player:hover').length == 0) {
+                  $('.watermark').css('display', 'none');
+                }
+              }, 1000);
+             } 
+        );
+      });
+  });
+  function load_more_sub() {
+    var id = $('.subscribers_').last().attr('data_subscriber_id');
+    var user_id = '{{ME id}}';
+    $.post(PT_Ajax_Requests_File()+'aj/user/get_more_subscribers_', {id: id,user_id:user_id}, function(data, textStatus, xhr) {
+      if (data.status == 200) {
+        if (data.html != '') {
+          $('.user_subscribers_').append(data.html);
+        }
+        else{
+          $('#user_subscribers__load').text('{{LANG no_more_s_to_show}}');
+        }
+        
+      }
+      
+    });
+  }
+</script>
+<body itemscope itemtype="http://schema.org/Organization" id="pt-body" class="side_open">
+	<?php if ($pt->config->pop_up_18 == 'on') { ?>
+	<div id="pop_up_18" class="modal fade matdialog et_plus" data-backdrop="static" data-keyboard="false"> 
+		<div class="modal-dialog">
+			<div class="modal-content">     
+				<div class="modal-body">
+					<svg height="120" viewBox="0 0 512 512" width="120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientUnits="userSpaceOnUse" x1="256" x2="256" y1="0" y2="512"><stop offset="0" stop-color="#2af598"/><stop offset="1" stop-color="#009efd"/></linearGradient><path d="m118 350v-148h-27v-40h67v188zm106.464844-112.371094c-7.175782-7.4375-12.464844-16.890625-12.464844-28.605468 0-22.753907 14.710938-47.070313 56-47.070313s56 24.316406 56 47.070313c0 11.59375-5.183594 20.976562-12.25 28.378906 23.394531 15.117187 35.25 32.65625 35.25 52.1875 0 33.28125-27.046875 60.363281-60.289062 60.363281h-37.421876c-33.242187 0-60.289062-27.082031-60.289062-60.363281 0-19.214844 11.929688-36.679688 35.464844-51.960938zm82.535156 51.960938c0-8.214844-17.808594-20.828125-36.242188-28.851563l-2.757812.894531-2.441406-.792968c-4.824219 2.15625-10.828125 5.101562-16.742188 8.71875-15.644531 9.558594-19.816406 17.085937-19.816406 20.03125 0 11.226562 9.101562 20.363281 20.289062 20.363281h37.421876c11.1875 0 20.289062-9.136719 20.289062-20.363281zm-54.988281-81.226563c1.625 2.855469 8.675781 7.503907 15.964843 10.800781 7.390626-3.335937 14.386719-7.945312 16.011719-10.800781-.097656-2.746093-.824219-3.222656-1.46875-3.648437-.984375-.648438-4.941406-2.761719-14.519531-2.761719s-13.535156 2.113281-14.519531 2.761719c-.644531.425781-1.371094.902344-1.46875 3.648437zm3.988281 263.636719c-119.101562 0-216-96.898438-216-216s96.898438-216 216-216c82.234375 0 153.875 46.199219 190.351562 114h44.582032c-12.648438-29.117188-30.789063-55.894531-53.914063-79.019531-48.351562-48.351563-112.640625-74.980469-181.019531-74.980469s-132.667969 26.628906-181.019531 74.980469c-48.351563 48.351562-74.980469 112.640625-74.980469 181.019531s26.628906 132.667969 74.980469 181.019531c48.351562 48.351563 112.640625 74.980469 181.019531 74.980469s132.667969-26.628906 181.019531-74.980469c18.824219-18.820312 34.335938-40.066406 46.285157-63.019531h-46.476563c-38.605469 58.964844-105.238281 98-180.828125 98zm206-228v-50h-40v50h-50v40h50v50h40v-50h50v-40zm0 0" fill="url(#a)"/></svg>
+					<h4>{{LANG age_block_extra}}</h4> 
+					<p>{{LANG age_block_modal}}</p>		  
+				</div> 
+				<div class="modal-footer">  
+					<button class="btn btn-success matbtn" id="pop_up_18_yes">{{LANG yes}}</button>  
+					<button class="btn matbtn" id="pop_up_18_no">{{LANG no}}</button>  
+				</div>
+			</div>          
+		</div>
+	</div>
+	<?php } ?>
+	
+	<a href="" id="link_redirect_to_page" aria-label="Load" data-load=""></a>
+	<div id="bar_loading"></div>
+	<?php if ($pt->page == 'upload-video-api'): ?>
+		<style>.wo_about_wrapper_parent {top: 0 !important;}</style>
+	<?php endif; ?>
+	<input type="hidden" class="main_session" value="<?php echo PT_CreateMainSession();?>">
+	<?php if ($pt->page != 'upload-video-api'): ?>
+		<header class="navbar-fixed-top">
+			{{HEADER_LAYOUT}}
+			<div class="clear"></div>
+		</header>
+	<?php endif; ?>
+
+	<div class="yp_side_menu <?php if ($pt->page != 'login') { ?>has_side_menu<?php } ?>">
+		<div id="main-container" class="<?php echo ($pt->page != 'login') ? 'container' : 'welcome-page';?> <?php echo ($pt->page == 'home') ? 'home_full_cont' : '';?> <?php echo ($pt->page == 'watch') ? 'watch_full_cont' : '';?> <?php echo ($pt->page == 'timeline') ? 'profile_full_cont' : '';?> <?php echo ($pt->page == 'messages') ? 'message_full_cont' : '';?> main-content" {{IS_LOGGED}}>
+			<div class="<?php echo ($pt->page == 'messages') ? 'hidden' : 'ads-placment';?>" id="header_ad_">{{HEADER_AD}}</div>
+			<div class="announcement-renderer">
+				{{ANNOUNCEMENT}}
+			</div>
+			<div id="container_content">
+				{{CONTAINER_CONTENT}}
+			</div>
+			<input type="hidden" id="main-url" value="{{MAIN_URL}}">
+			<div class="<?php echo ($pt->page == 'messages') ? 'hidden' : 'ads-placment';?>" id="footer_ad_">{{FOOTER_AD}}</div>
+		</div>
+		<?php if ($pt->page != 'upload-video-api' && $pt->page != 'messages'): ?>
+			<footer class="pt_footer">
+				{{FOOTER_LAYOUT}}
+			</footer>
+		<?php endif; ?>
+	</div>
+	<?php if ($pt->page == 'login') {?>
+	<style>header.navbar-fixed-top, header.navbar-fixed-top > nav.navbar {left: 0px;right: 0;transition: none;top: 0 !important;}body{padding-bottom: 0;}</style>
+	<?php } else { ?>
+		<div class="yp_side_drawer">
+			<div>
+				<ul class="sections menu_links">
+					<li class="<?php echo ($pt->page == 'home') ? 'active': '';?>" id="home_menu_"> 
+						<a href="{{LINK }}" data-load="?link1=home">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17.8913288,10 L11.8900003,3.99867157 L5.88867192,10 L5.89001465,10 L5.89001465,20 L17.8900146,20 L17.8900146,10 L17.8913288,10 Z M19.8900146,11.9986859 L19.8900146,20 C19.8900146,21.1045695 18.9945841,22 17.8900146,22 L5.89001465,22 C4.78544515,22 3.89001465,21.1045695 3.89001465,20 L3.89001465,11.9986573 L2.41319817,13.4754737 L1,12.0622756 L10.4769858,2.5852898 C11.2573722,1.8049034 12.5226285,1.8049034 13.3030149,2.5852898 L22.7800007,12.0622756 L21.3668025,13.4754737 L19.8900146,11.9986859 Z"/></svg> {{LANG home}}
+						</a>
+					</li>
+					<?php if (IS_LOGGED == true && $pt->config->history_system == 'on') { ?>
+						<li class="<?php echo ($pt->page == 'history') ? 'active': '';?> vp_hide_side_links" id="history_menu_">
+							<a href="{{LINK history}}" data-load="?link1=history">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M5.11409306,6 L8,6 L8,8 L2,8 L2,1.99121094 L4,1.99121094 L4,4.25644966 C6.23707736,1.91055844 8.78662625,1 12,1 C18.0751322,1 23,5.92486775 23,12 C23,18.0751322 18.0751322,23 12,23 C5.92486775,23 1,18.0751322 1,12 L3,12 C3,16.9705627 7.02943725,21 12,21 C16.9705627,21 21,16.9705627 21,12 C21,7.02943725 16.9705627,3 12,3 C9.1592152,3 7.04465569,3.7913744 5.11409306,6 Z M13,11 L17,11 L17,13 L11,13 L11,6 L13,6 L13,11 Z"/></svg> {{LANG history}}
+							</a>
+						</li>
+					<?php } ?>
+					<?php if ($pt->config->article_system == 'on'): ?>
+						<li class="<?php echo ($pt->page == 'articles') ? 'active': '';?> vp_hide_side_links" id="articles_menu_">
+							<a href="{{LINK articles}}" data-load="?link1=articles"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19,21 L5,21 C3.34314575,21 2,19.6568542 2,18 L2,3 L16,3 L18,3 L18,8 L22,8 L22,9 L22,18 C22,19.6568542 20.6568542,21 19,21 Z M16.1707057,19 C16.0601542,18.6872211 16,18.3506354 16,18 L16,5 L4,5 L4,18 C4,18.5522847 4.44771525,19 5,19 L16.1707057,19 Z M18,10 L18,18 C18,18.5522847 18.4477153,19 19,19 C19.5522847,19 20,18.5522847 20,18 L20,10 L18,10 Z M10,7 L10,11 L6,11 L6,7 L10,7 Z M14,8 L14,10 L11,10 L11,8 L14,8 Z M14,12 L14,14 L6,14 L6,12 L14,12 Z M14,15 L14,17 L6,17 L6,15 L14,15 Z"/></svg> {{LANG articles}}</a>
+						</li>
+					<?php endif ?>
+					<li class="<?php echo ($pt->page == 'latest') ? 'active': '';?> vp_hide_side_links" id="latest_menu_">
+						<a href="{{LINK videos/latest}}" data-load="?link1=videos&page=latest"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17,8.38196601 L23,5.38196601 L23,18.618034 L17,15.618034 L17,17 C17,18.1045695 16.1045695,19 15,19 L3,19 C1.8954305,19 1,18.1045695 1,17 L1,7 C1,5.8954305 1.8954305,5 3,5 L15,5 C16.1045695,5 17,5.8954305 17,7 L17,8.38196601 Z M17,10.618034 L17,13.381966 L21,15.381966 L21,8.61803399 L17,10.618034 Z M3,7 L3,17 L15,17 L15,7 L3,7 Z"/></svg> {{LANG latest_videos}}</a>
+					</li>
+					<li class="<?php echo ($pt->page == 'trending') ? 'active': '';?>" id="trending_menu_">
+						<a href="{{LINK videos/trending}}" data-load="?link1=videos&page=trending"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11.1758045,11.5299649 C11.7222481,10.7630248 11.6612694,9.95529555 11.2823626,8.50234466 C10.5329929,5.62882187 10.8313891,4.05382867 13.4147321,2.18916004 L14.6756139,1.27904986 L14.9805807,2.80388386 C15.3046861,4.42441075 15.8369398,5.42670671 17.2035766,7.35464078 C17.2578735,7.43122022 17.2578735,7.43122022 17.3124108,7.50814226 C19.2809754,10.2854144 20,11.9596204 20,15 C20,18.6883517 16.2713564,22 12,22 C7.72840879,22 4,18.6888043 4,15 C4,14.9310531 4.00007066,14.9331427 3.98838852,14.6284506 C3.89803284,12.2718054 4.33380946,10.4273676 6.09706666,8.43586022 C6.46961415,8.0150872 6.8930834,7.61067534 7.36962714,7.22370749 L8.42161802,6.36945926 L8.9276612,7.62657706 C9.30157948,8.55546878 9.73969716,9.28566491 10.2346078,9.82150804 C10.6537848,10.2753538 10.9647401,10.8460665 11.1758045,11.5299649 Z M7.59448531,9.76165711 C6.23711779,11.2947332 5.91440928,12.6606068 5.98692012,14.5518252 C6.00041903,14.9039019 6,14.8915108 6,15 C6,17.5278878 8.78360021,20 12,20 C15.2161368,20 18,17.527472 18,15 C18,12.4582072 17.4317321,11.1350292 15.6807305,8.66469725 C15.6264803,8.58818014 15.6264803,8.58818014 15.5719336,8.51124844 C14.5085442,7.0111098 13.8746802,5.96758691 13.4553336,4.8005211 C12.7704786,5.62117775 12.8107447,6.43738988 13.2176374,7.99765534 C13.9670071,10.8711781 13.6686109,12.4461713 11.0852679,14.31084 L9.61227259,15.3740546 L9.50184911,13.5607848 C9.43129723,12.4022487 9.16906461,11.6155508 8.76539217,11.178492 C8.36656566,10.7466798 8.00646835,10.2411426 7.68355027,9.66278925 C7.65342985,9.69565638 7.62374254,9.72861259 7.59448531,9.76165711 Z"/></svg> {{LANG trending}}</a>
+					</li>
+					<li class="<?php echo ($pt->page == 'top') ? 'active': '';?>" id="top_menu_">
+						<a href="{{LINK videos/top}}" data-load="?link1=videos&page=top"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M13 6h2v11h-2zM17 3h2v14h-2zM9 9h2v8H9zM5 12h2v5H5zM4 19h16v2H4z" /></svg> {{LANG top_videos}}</a>
+					</li>
+					<?php if ($pt->config->movies_videos == 'on') { ?>
+						<li class="<?php echo ($pt->page == 'movies') ? 'active': '';?>" id="movies_menu_">
+							<a href="{{LINK movies}}" data-load="?link1=movies"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M5.76,10H20V18H4V6.47M22,4H18L20,8H17L15,4H13L15,8H12L10,4H8L10,8H7L5,4H4A2,2 0 0,0 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V4Z"/></svg> {{LANG movies}}</a>
+						</li>
+					<?php } ?>
+					<?php if ( $pt->config->popular_channels == 'on') { ?>
+						<li class="<?php echo ($pt->page == 'popular_channels') ? 'active': '';?> vp_hide_side_links" id="popular_channels_menu_">
+							<a href="{{LINK popular_channels}}" data-load="?link1=popular_channels">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,2.5L8.42,8.06L2,9.74L6.2,14.88L5.82,21.5L12,19.09L18.18,21.5L17.8,14.88L22,9.74L15.58,8.06L12,2.5M9.38,10.5C10,10.5 10.5,11 10.5,11.63A1.12,1.12 0 0,1 9.38,12.75C8.75,12.75 8.25,12.25 8.25,11.63C8.25,11 8.75,10.5 9.38,10.5M14.63,10.5C15.25,10.5 15.75,11 15.75,11.63A1.12,1.12 0 0,1 14.63,12.75C14,12.75 13.5,12.25 13.5,11.63C13.5,11 14,10.5 14.63,10.5M9,15H15C14.5,16.21 13.31,17 12,17C10.69,17 9.5,16.21 9,15Z"/></svg> {{LANG popular_channels}}
+							</a>
+						</li>
+					<?php } ?>
+				</ul>
+				<?php if (!empty($pt->subscribers_) && IS_LOGGED == true) { ?>
+					<h3 class="vid_hide_mobii_menu">{{LANG subscriptions}}</h3>
+					<ul class="sections vid_hide_mobii_menu">
+						<li class="user_subscribers_">
+							<?php 
+								foreach ($pt->subscribers_ as $key => $user_) {
+								$user_subscribers_ = PT_UserData($user_->user_id); 
+								if (!empty($user_subscribers_)) {
+							?>
+								<div data_subscriber_id="<?php echo($user_->id) ?>" class="subscribers_"><a  href="<?php echo($user_subscribers_->url) ?>" data-load="?link1=timeline&id=<?php echo($user_subscribers_->username) ?>"><img class="header-image subscribers_img_" src="<?php echo($user_subscribers_->avatar) ?>" alt="{{ME name}} avatar" /><?php echo ($user_subscribers_->name) ?></a></div>
+							<?php } } ?>
+						</li>
+						<li><a href="javascript:void(0)" onclick="load_more_sub()" id="user_subscribers__load">{{LANG show_more}}</a></li>
+					</ul>
+				<?php } ?>
+				<h3 class="vp_hide_side_links">{{LANG categories}}</h3>
+				<ul class="sections vp_hide_side_links">
+					<?php foreach($pt->categories as $key => $category) { if (1) { ?>
+						<li><a class="category" href="{{LINK videos/category/<?php echo $key?>}}" data-load="?link1=videos&page=category&id=<?php echo $key?>"><?php echo $category?></a></li>
+					<?php } }?>
+				</ul>
+			</div>
+		</div>
+	<?php } ?>
+	<!-- JS FILES -->
+    <?php if ($pt->page == 'watch') {?>
+    <div id="fb-root"></div>
+    <script>
+      
+      (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.10&appId=1755264744788554";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <?php } ?>
+    {{EXTRA_JS}}
+	<script type="text/javascript" src="{{CONFIG theme_url}}/js/script.js"></script>
+    <script type="text/javascript" src="{{CONFIG theme_url}}/js/bootstrap.min.js"></script>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script src="{{CONFIG theme_url}}/js/footer.js"></script>
+    <link rel="" ="">
+    <script>
+		var didScroll;
+		var lastScrollTop = 0;
+		var delta = 5;
+		var navbarHeight = $('header.navbar-fixed-top').outerHeight();
+
+		$(window).scroll(function(event){
+			didScroll = true;
+		});
+
+		setInterval(function() {
+			if (didScroll) {
+				hasScrolled();
+				didScroll = false;
+			}
+		}, 250);
+
+		function hasScrolled() {
+			var st = $(this).scrollTop();
+			if(Math.abs(lastScrollTop - st) <= delta)
+				return;
+			if (st > lastScrollTop && st > navbarHeight){
+				$('header.navbar-fixed-top').removeClass('nav-down').addClass('nav_up');
+			} else {
+				if(st + $(window).height() < $(document).height()) {
+					$('header.navbar-fixed-top').removeClass('nav_up').addClass('nav-down');
+				}
+			}
+			lastScrollTop = st;
+		};
+	
+		$(window).on("popstate", function (e) {
+			location.reload();
+		});
+		
+		$(document).ready(function() {
+			$("img[data-src]").unveil(200, function() {
+				$(this).on('load', function() {
+					this.style.opacity = 1;
+				});
+			});
+		});
+
+    $(document).ready(function(){
+        $('.share-video a').click(function (e) {
+            e.preventDefault();
+        });
+        $('.dropdown-toggle').dropdown()
+
+        $("#toggle-mode").change(function(event) {
+            var mode = 'day';
+
+            if ($(this).prop( "checked" ) === true) {
+              mode = 'night';
+              $('<link>',{
+                rel:'stylesheet',
+                href:'{{CONFIG theme_url}}/css/night-mode.css',
+                class:'night-mode-css'
+              }).insertAfter('link#style-css');
+              $('.logo-img img').attr('src', '{{CONFIG theme_url}}/img/logo-light.png');
+            }
+            else{
+              $(".night-mode-css").remove();
+              $('.logo-img img').attr('src', '{{CONFIG theme_url}}/img/logo.png');
+            }
+
+
+            $.post('{{LINK }}', {mode: mode}, function(data, textStatus, xhr) { /* pass */ });
+        });
+
+        $("li.toggle-mobile-mode").click(function(event) {
+            var mode = $(this).attr('data-mode');
+
+            $.post('{{LINK }}', {mode: mode}, function(data, textStatus, xhr) {
+              location.reload();
+            });
+        });
+    });
+   </script>
+	<?php if (IS_LOGGED == true) { ?>
+	<audio id="message-sound" class="sound-controls" preload="auto">
+		<source src="{{CONFIG theme_url}}/mp3/unconvinced.mp3" type="audio/mpeg">
+		<source src="{{CONFIG theme_url}}/mp3/unconvinced.ogg" type="audio/ogg">
+	</audio>
+	<?php } ?> 
+	<?php if (empty($_COOKIE['r']) || !in_array(base64_decode($_COOKIE['r']), $pt->continents)) { ?>
+	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+      <script async src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+      <script>
+      window.addEventListener("load", function(){
+      window.cookieconsent.initialise({
+        "palette": {
+		  <?php if ($pt->config->night_mode == 'night_default') { ?>
+		  "popup": {
+            "background": "#212121",
+            "text": "#eee"
+          },
+		  <?php } else {?> 
+		  "popup": {
+            "background": "#edeff5",
+            "text": "#333"
+          },
+		  <?php }?> 
+          "button": {
+            "background": "#1350F3",
+            "text": "#fff"
+          }
+        },
+        "theme": "classic",
+        "position": "right-bottom",
+        "content": {
+          "message": "<img src='{{CONFIG theme_url}}/img/cookie.svg' alt='cookies'/> {{LANG cookie_message}}",
+          "dismiss": "{{LANG cookie_dismiss}}",
+          "link": "{{LANG cookie_link}}",
+          "href": "{{LINK terms/privacy-policy}}"
+        }
+      })});
+      </script>
+	  <?php } ?>
+	  
+	  <?php if ($pt->page != 'login') { ?><div class="sidenav-overlay" onclick="javascript:$('body').removeClass('side_open');"></div><?php } ?>
+	  
+	  <script>
+		<?php if ($pt->config->pop_up_18 == 'on') { ?>
+		$(document).on('click', '#pop_up_18_yes', function(event) {
+        event.preventDefault();
+        $.post('{{LINK aj/main/yes_18}}?hash=' + $('.main_session').val(), function(data, textStatus, xhr) {
+          $('#pop_up_18').modal('hide');
+        });
+      });
+
+      $(document).on('click', '#pop_up_18_no', function(event) {
+        event.preventDefault();
+        $.post('{{LINK aj/main/no_18}}?hash=' + $('.main_session').val(), function(data, textStatus, xhr) {
+          if (data.status == 200) {
+            $('#pop_up_18').modal('hide');
+            window.location.href = data.url
+          }
+        });
+      });
+	   <?php } ?>
+
+      <?php if (empty($_COOKIE['pop_up_18']) && !IS_LOGGED && $pt->page != 'age_block' && $pt->page != 'login' && $pt->config->pop_up_18 == 'on') { ?>
+        $('#pop_up_18').modal('show');
+      <?php } ?>
+		
+		
+		
+    function setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        var expires = "expires="+d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+
+    function getCookie(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+    <?php if (empty($_COOKIE['r']) || !in_array(base64_decode($_COOKIE['r']), $pt->continents)) { ?>
+      $.ajax({
+        url: 'https://extreme-ip-lookup.com/json/',
+        type: 'GET',
+        dataType: 'json'
+      })
+      .done(function(data) {
+        if (data.status == 'success') {
+          setCookie('r', window.btoa(data.continent), 1);
+          <?php if ($pt->page == 'watch') { ?>
+            $('#redirect_to_video_page').click();
+          <?php } ?>
+        }
+        else{
+          setCookie('r', window.btoa('string'), 1);
+          <?php if ($pt->page == 'watch') { ?>
+            $('#redirect_to_video_page').click();
+          <?php } ?>
+        }
+      })
+      .fail(function() {
+        setCookie('r', window.btoa('string'), 1);
+        <?php if ($pt->page == 'watch') { ?>
+          $('#redirect_to_video_page').click();
+        <?php } ?>
+      })
+      .always(function() {
+      });
+
+          // $.get('https://extreme-ip-lookup.com/json/', function(data) {
+          //   if (data.status == 'success') {
+          //     setCookie('r', window.btoa(data.continent), 1);
+          //     <?php if ($pt->page == 'watch') { ?>
+          //       $('#redirect_to_video_page').click();
+          //     <?php } ?>
+          //   }
+          //   else{
+          //     setCookie('r', window.btoa('string'), 1);
+          //     <?php if ($pt->page == 'watch') { ?>
+          //       $('#redirect_to_video_page').click();
+          //     <?php } ?>
+          //   }
+          // });
+        <?php } ?>
+	</script>
+  <?php 
+      if (empty($_SESSION['finger']) && $pt->page != 'watch') {
+      ?>
+      <script>
+         var fingerprintReport = function () {
+            Fingerprint2.get(function(components) {
+              var murmur = Fingerprint2.x64hash128(components.map(function (pair) { return pair.value }).join(), 31)
+              $.post('{{LINK aj/views}}?hash=' + $('.main_session').val()+'&type_=set', {finger: murmur}, function(data, textStatus, xhr) {
+              });
+            })
+         }
+         fingerprintReport();
+      </script>
+    <?php } ?>
+	
+	<script type="text/javascript">
+      var myTimeout;
+
+      function show_gif(self,gif) {
+        if (gif && gif != '') {
+          myTimeout = setTimeout(function() {
+              $(self).append('<img src="'+gif+'">');
+          }, 1000);
+        }
+      }
+
+      function hide_gif(self) {
+        $(self).find('img').remove();
+        clearTimeout(myTimeout);
+      }
+      function block_user(user_id,self,redirect = true) {
+        $.post('{{LINK aj/user/block}}?hash=' + $('.main_session').val(), {user_id: user_id}, function(data, textStatus, xhr) {
+          if (redirect == true) {
+            location.reload();
+          }
+          else{
+            $(self).find('span').text(data.message);
+          }
+        });
+      }
+    </script>
+    <div id="pay-go-pro" class="modal fade matdialog"> 
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content payment_box">     
+				<div class="modal-header">  
+					<h3 class="modal-title">{{LANG choose_payment_method}}</h3>  
+				</div> 
+				<div class="modal-body">
+					<div class="payment_method"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="matbtn btn btn-default" data-dismiss="modal">{{LANG cancel}}</button>
+				</div>
+			</div>          
+		</div>
+		<input id="wallet_amount" type="hidden">
+	</div>
+	<?php if (empty($_COOKIE['lang_modal']) && !IS_LOGGED && $pt->page != 'login' && $pt->config->lang_modal == 'on') { ?>
+		<div id="select-language" class="modal matdialog lang_select_modal" data-backdrop="static" data-keyboard="false">
+			<div class="modal-dialog modal-sm">
+				<div class="modal-content">
+					<div class="modal-body" id="pt_language_modal">
+						<div class="modal-header">
+							<h3 class="modal-title">{{LANG language}}</h3>
+						</div>
+						<div class="modal-body">
+							<ul class="lang_modal"><?php echo $pt->langs; ?></ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+		$('#select-language').modal('show');
+		setCookie('lang_modal','1', 10);
+		</script>
+	<?php } ?>
+</body>
+</html>

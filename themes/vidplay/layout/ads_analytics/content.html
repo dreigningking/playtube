@@ -1,0 +1,149 @@
+<script src="{{CONFIG theme_url}}/js/highcharts/highcharts.js"></script>
+<script src="{{CONFIG theme_url}}/js/highcharts/exporting.js"></script>
+<div class="vp_stats">
+	<div class="vp_stat_head">
+		<h2>{{LANG ads_analytics}}</h2>
+		<select id="type" name="type" class="form-control">
+			<option value="today" <?php echo ($pt->cat_type == 'today') ? 'selected': '';?>>{{LANG today}}</option>
+			<option value="this_week" <?php echo ($pt->cat_type == 'this_week') ? 'selected': '';?>>{{LANG this_week}}</option>
+			<option value="this_month" <?php echo ($pt->cat_type == 'this_month') ? 'selected': '';?>>{{LANG this_month}}</option>
+			<option value="this_year" <?php echo ($pt->cat_type == 'this_year') ? 'selected': '';?>>{{LANG this_year}}</option>
+		</select>
+	</div>
+	<div class="row">
+		<div class="col-md-3"></div>
+		<div class="col-md-3">
+			<div class="vp_stat_single small_size">
+				<span class="blue"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,2C6.486,2,2,6.486,2,12s4.486,10,10,10s10-4.486,10-10S17.514,2,12,2z M13,16.915V18h-2v-1.08 C8.661,16.553,8,14.918,8,14h2c0.011,0.143,0.159,1,2,1c1.38,0,2-0.585,2-1c0-0.324,0-1-2-1c-3.48,0-4-1.88-4-3 c0-1.288,1.029-2.584,3-2.915V6.012h2v1.109c1.734,0.41,2.4,1.853,2.4,2.879h-1l-1,0.018C13.386,9.638,13.185,9,12,9 c-1.299,0-2,0.516-2,1c0,0.374,0,1,2,1c3.48,0,4,1.88,4,3C16,15.288,14.971,16.584,13,16.915z"/></svg></span>
+				<b>{{CURRENCY}}{{TOTAL_SPENT}}</b>
+				<p>{{LANG spent}}</p>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="vp_stat_single small_size">
+				<span class="green"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11.975,22H12c3.859,0,7-3.14,7-7V9c0-3.841-3.127-6.974-6.981-7C12.013,2,12.006,2,12,2c-0.002,0-0.016,0-0.018,0 c-0.009,0-0.016,0-0.023,0C8.119,2.022,5,5.157,5,9v6C5,18.86,8.129,22,11.975,22z M11,6h2v6h-2V6z"/></svg></span>
+				<b>{{TOTAL_RESULT}}</b>
+				<p>{{TEXT_RESULT}}</p>
+			</div>
+		</div>
+		<div class="col-md-3"></div>
+	</div>
+	<div id="chart-container"></div>
+</div>
+
+<script>
+	$("select#type").change(function(){
+        var type = $('#type').val();
+        window.location.href = site_url+"/ads/analytics/{{ID}}?type="+type;
+    });
+
+   $(function () {
+    Highcharts.setOptions({
+      colors: ['#6abd46', '#ce3d3d', '#f2b92b', '#6abd46']
+    });
+    $('#chart-container').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: '<?php echo($pt->chart_title); ?> (Based on UTC timezone)'
+        },
+        xAxis: {
+            <?php if ($pt->cat_type == 'today') { ?>
+                categories: [
+                    '00 AM',
+                    '1 AM',
+                    '2 AM',
+                    '3 AM',
+                    '4 AM',
+                    '5 AM',
+                    '6 AM',
+                    '7 AM',
+                    '8 AM',
+                    '9 AM',
+                    '10 AM',
+                    '11 AM',
+                    '12 PM',
+                    '1 PM',
+                    '2 PM',
+                    '3 PM',
+                    '4 PM',
+                    '5 PM',
+                    '6 PM',
+                    '7 PM',
+                    '8 PM',
+                    '9 PM',
+                    '10 PM',
+                    '11 PM'
+                ]
+            <?php }elseif ($pt->cat_type == 'this_week') { ?>
+                categories: [
+                    'Saturday',
+                    'Sunday',
+                    'Monday',
+                    'Tuesday',
+                    'Wednesday',
+                    'Thursday',
+                    'Friday'
+                ]
+            <?php }elseif ($pt->cat_type == 'this_month') { ?>
+                <?php if ($pt->month_days == 31) { ?>
+                    categories: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
+                <?php }elseif ($pt->month_days == 30) { ?>
+                    categories: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
+                <?php }elseif ($pt->month_days == 29) { ?>
+                    categories: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]
+                <?php }elseif ($pt->month_days == 28) {  ?>
+                    categories: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28]
+                <?php } ?>
+            <?php }elseif ($pt->cat_type == 'this_year') { ?>
+                categories: [
+                    'Jan',
+                    'Feb',
+                    'Mar',
+                    'Apr',
+                    'May',
+                    'Jun',
+                    'Jul',
+                    'Aug',
+                    'Sep',
+                    'Oct',
+                    'Nov',
+                    'Dec'
+                ]
+            <?php } ?>,
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: '<?php echo $pt->chart_text;?>'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px;color:#fff;">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:#fff;padding:0">{series.name}: </td>' +
+                '<td style="padding:0;color:#fff;"><b>{point.y}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true,
+            backgroundColor: '#444'
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [{
+            name: '{{LANG spent}}',
+            data: [<?php echo $pt->array;?>]
+
+	        }, {
+            name: '{{TEXT_RESULT}}',
+            data: [<?php echo $pt->click_array;?>]
+
+	        }]
+    });
+});
+</script>

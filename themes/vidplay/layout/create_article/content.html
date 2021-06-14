@@ -1,0 +1,165 @@
+<div class="content pt_shadow">
+	<div class="progress hidden">
+        <div class="progress_bar_parent">
+			<div class="bar upload-progress-bar progress-bar active"></div> 
+		</div>
+		<span class="percent">0%</span>
+		<div class="clear"></div>
+       </div>
+	<div class="text-center pt_prcs_vdo"></div>
+
+	<form action="" class="form-horizontal row vp_forms" id="create_article_form" method="POST">
+		<div class="col-md-2"></div>
+		<div class="col-md-8">
+			<h2 class="user_sttng_panel_hd">{{LANG create_new_article}}</h2>
+			<div class="pp_mat_input">
+				<input type="text" name="title" id="title" placeholder="{{LANG title}}">
+				<label for="title">{{LANG title}}</label>
+			</div>
+			<div class="pp_mat_input">
+				<textarea name="description" id="desc" placeholder="{{LANG description}}" rows="4"></textarea>
+				<label for="desc">{{LANG description}}</label>
+			</div>
+			<div class="pp_mat_input vid_article_main_textara">
+				<textarea name="text" id="text" placeholder="{{LANG the_article}}"></textarea>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="vp_media_file vp_media_file_preview">
+						<span class="btn btn-file" onclick="$('#thumbnail').trigger('click'); return false;">
+							<span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16.5,6V17.5A4,4 0 0,1 12.5,21.5A4,4 0 0,1 8.5,17.5V5A2.5,2.5 0 0,1 11,2.5A2.5,2.5 0 0,1 13.5,5V15.5A1,1 0 0,1 12.5,16.5A1,1 0 0,1 11.5,15.5V6H10V15.5A2.5,2.5 0 0,0 12.5,18A2.5,2.5 0 0,0 15,15.5V5A4,4 0 0,0 11,1A4,4 0 0,0 7,5V17.5A5.5,5.5 0 0,0 12.5,23A5.5,5.5 0 0,0 18,17.5V6H16.5Z" /></svg><div id="productimage-holder"></div></span>
+							<div>
+								<b>{{LANG thumbnail}}</b>
+								<p>jpg, png, gif</p>
+							</div>
+						</span>
+						<input id="thumbnail" name="image" type="file" class="hidden" accept="image/*">
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="pp_mat_input">
+						<select name="category" id="category" class="pp_select_has_label">
+							<?php foreach($pt->categories as $key => $category) {?>
+								<option value="<?php echo $key?>"><?php echo $category?></option>
+							<?php } ?>
+						</select>
+						<label for="category">{{LANG category}}</label>  
+					</div>
+					<div class="pp_mat_input">
+						<input id="mySingleFieldTags" name="tags" type="text" placeholder="{{LANG tags}}">
+						<label for="tags">{{LANG tags}}</label>  
+					</div>
+				</div>
+			</div>
+			<div class="vp_forms_sbm_btn text-center">
+				<button type="submit" class="btn btn_primary" id="submit-btn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M2,21L23,12L2,3V10L17,12L2,14V21Z" /></svg> {{LANG publish}}</button>
+			</div>
+		</div>
+		<div class="col-md-2"></div>
+	</form>
+</div>
+
+<link rel="stylesheet" href="{{CONFIG theme_url}}/css/trumbowyg.min.css">
+<script src="{{CONFIG theme_url}}/js/trumbowyg.min.js"></script>
+
+<script>
+$.trumbowyg.svgPath = '{{CONFIG theme_url}}/css/trumbowyg.icons.svg';
+$('#text').trumbowyg({
+	btns: [
+		['undo', 'redo'], // Only supported in Blink browsers
+		['formatting'],
+		['strong', 'em', 'del'],
+		['superscript', 'subscript'],
+		['link'],
+		['insertImage'],
+		['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+		['unorderedList', 'orderedList'],
+		['horizontalRule'],
+		['removeformat'],
+		['fullscreen']
+	]
+});
+
+//$('.selectpicker').selectpicker({});
+
+$(document).ready(function() {
+	$("#thumbnail").on('change', function() {
+	//Get count of selected files
+	var product_countFiles = $(this)[0].files.length;
+	var product_imgPath = $(this)[0].value;
+	var extn = product_imgPath.substring(product_imgPath.lastIndexOf('.') + 1).toLowerCase();
+	var product_image_holder = $("#productimage-holder");
+	product_image_holder.empty();
+	if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+		if (typeof(FileReader) != "undefined") {
+		//loop for each file selected for uploaded.
+		for (var i = 0; i < product_countFiles; i++) 
+		{
+			var product_reader = new FileReader();
+			product_reader.onload = function(e) {
+				$("<img />", {
+                    "src": e.target.result,
+                    "class": "thumb-image"
+                  }).appendTo(product_image_holder);
+                }
+                product_image_holder.show();
+                product_reader.readAsDataURL($(this)[0].files[i]);
+              }
+            } else {
+              alert('This browser does not support FileReader.');
+            }
+         }
+	});
+});
+
+$(function () {
+	var bar         = $('.bar');
+    var percent     = $('.percent');
+    var prcsvdo      = $('.pt_prcs_vdo');
+	$("#mySingleFieldTags").tagit({
+		allowSpaces: true
+	});
+
+	$('#create_article_form').ajaxForm({
+	    url: '{{LINK aj/articles/new-article}}?hash=' + $('.main_session').val(),
+	    beforeSend: function() {
+	    	$('#submit-btn').attr('disabled', true);
+	    	$('#submit-btn').text("{{LANG please_wait}}");
+			$('.progress').removeClass('hidden');
+            var percentVal = '0%';
+            bar.width(percentVal);
+            percent.html(percentVal);
+	    },
+		uploadProgress: function(event, position, total, percentComplete) {
+             if(percentComplete > 50) {
+                percent.addClass('white');
+             }
+            var percentVal = percentComplete + '%';
+            bar.width(percentVal);
+            percent.html(percentVal);
+
+            if (percentComplete == 100) {
+               prcsvdo.html('<svg width="30" height="10" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg" fill="#000"><circle cx="15" cy="15" r="15"><animate attributeName="r" from="15" to="15" begin="0s" dur="0.8s" values="15;9;15" calcMode="linear" repeatCount="indefinite" /><animate attributeName="fill-opacity" from="1" to="1" begin="0s" dur="0.8s" values="1;.5;1" calcMode="linear" repeatCount="indefinite" /></circle><circle cx="60" cy="15" r="9" fill-opacity="0.3"><animate attributeName="r" from="9" to="9" begin="0s" dur="0.8s" values="9;15;9" calcMode="linear" repeatCount="indefinite" /><animate attributeName="fill-opacity" from="0.5" to="0.5" begin="0s" dur="0.8s" values=".5;1;.5" calcMode="linear" repeatCount="indefinite" /></circle><circle cx="105" cy="15" r="15"><animate attributeName="r" from="15" to="15" begin="0s" dur="0.8s" values="15;9;15" calcMode="linear" repeatCount="indefinite" /><animate attributeName="fill-opacity" from="1" to="1" begin="0s" dur="0.8s" values="1;.5;1" calcMode="linear" repeatCount="indefinite" /></circle></svg> {{LANG porcessing_image}}');
+               $('.progress').find('.bar').removeClass('upload-progress-bar');
+            }
+        },
+	    success: function(data) {
+			percentVal = '0%';
+            bar.width(percentVal);
+            $('.progress').addClass('hidden');
+			prcsvdo.addClass('hidden');
+	    	if (data.status == 200) {
+	    		Snackbar.show({text: "<div>{{LANG reviewed_article}}</div>",pos: 'bottom-center',showAction: false});
+	    		setTimeout(function () {
+	    			window.location.href = data.link;
+	    		},3000)
+	    	} 
+	        else {
+	    		$('#submit-btn').attr('disabled', false);
+	    	    $('#submit-btn').text('{{LANG publish}}');
+				Snackbar.show({text: '<div>'+ data.message +'</div>',pos: 'bottom-center',showAction: false});
+	    	}
+	    }
+	});
+});
+</script>

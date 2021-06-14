@@ -1,0 +1,214 @@
+<?php if ($pt->config->user_mon_approve == 'on' && $pt->is_mon == 0 && $pt->settings->monetization == 0) { ?>
+    <form class="form-horizontal user_sttng_panel monetization-request-form pt_shadow row vp_forms verifiacation-request-form" id="monetization-request-form" method="POST">
+		<div class="col-md-1"></div>
+		<div class="col-md-10">
+			<h2 class="user_sttng_panel_hd">{{LANG monetization}}</h2>
+			<div class="alert alert-info">Enable monetization on your account and start selling videos, get paid from ads, and more.</div>
+			<div class="setting-delete-alert"></div>
+            <div class="monetization-request-alert"></div>
+			
+			<div class="pp_mat_input">
+				<input type="text" name="name" id="name" placeholder="{{LANG name}}">
+				<label for="name">{{LANG name}}</label>
+			</div>
+			<div class="pp_mat_input">
+				<textarea name="message" rows="5" id="additional_details" placeholder="{{LANG additional_details}}"></textarea>
+				<label for="additional_details">{{LANG additional_details}}</label>
+			</div>
+            <hr>
+			<div class="fluid">
+		        <div class="upload-files" onclick="$('#personal_photo').trigger('click');">
+	        		<div class="col-md-4 no-padding-both">
+	        			<div class="image-renderer" id="user_photo">
+		        			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9.715,12c1.151,0,2-0.849,2-2s-0.849-2-2-2s-2,0.849-2,2S8.563,12,9.715,12z"/><path fill="currentColor" d="M20,4H4C2.897,4,2,4.897,2,6v12c0,1.103,0.897,2,2,2h16c1.103,0,2-0.897,2-2V6C22,4.897,21.103,4,20,4z M4,18V6h16 l0.001,12H4z"/><path fill="currentColor" d="M14 9H18V11H14zM15 13H18V15H15zM9.715 12.75C7.676 12.75 6 14.162 6 15.536V16h7.43v-.464C13.43 14.162 11.754 12.75 9.715 12.75z"/></svg>
+	        			</div>
+	        			<div class="clear"></div>
+	        		</div>
+	        		<div class="col-md-8">
+	        			<h4>{{LANG personal_photo}}</h4>
+		        		<div><button class="btn btn_primary" type="button">{{LANG choose_file}}</button></div>
+	        		</div>
+		        </div>
+	        </div>
+			<div class="fluid">
+		        <div class="upload-files" onclick="$('#id_photo_input').trigger('click');">
+	        		<div class="col-md-4 no-padding-both">
+	        			<div class="image-renderer" id="id_photo">
+		        			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9.715,12c1.151,0,2-0.849,2-2s-0.849-2-2-2s-2,0.849-2,2S8.563,12,9.715,12z"/><path fill="currentColor" d="M20,4H4C2.897,4,2,4.897,2,6v12c0,1.103,0.897,2,2,2h16c1.103,0,2-0.897,2-2V6C22,4.897,21.103,4,20,4z M4,18V6h16 l0.001,12H4z"/><path fill="currentColor" d="M14 9H18V11H14zM15 13H18V15H15zM9.715 12.75C7.676 12.75 6 14.162 6 15.536V16h7.43v-.464C13.43 14.162 11.754 12.75 9.715 12.75z"/></svg>
+	        			</div>
+	        			<div class="clear"></div>
+	        		</div>
+	        		<div class="col-md-8">
+	        			<h4>{{LANG passport_id}}</h4>
+		        		<div><button class="btn btn_primary" type="button">{{LANG choose_file}}</button></div>
+	        		</div>
+		        </div>
+	        </div>
+			
+			<div class="vp_forms_sbm_btn text-center">
+				<button class="btn btn_primary" id="submit" name="submit"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M2,21L23,12L2,3V10L17,12L2,14V21Z" /></svg> {{LANG submit_request}}</button>
+			</div>
+			
+            <input type="hidden" name="hash_id" value="<?php echo PT_CreateSession()?>">
+            <input type="hidden" name="user_id" value="{{USER id}}">
+            <input type="file" name="personal_photo" id="personal_photo" class="hidden" accept="image/*">
+            <input type="file" name="id_photo" id="id_photo_input" class="hidden" accept="image/*">
+            <!-- Button (Double) -->
+            <div class="clear"></div>
+		</div>
+		<div class="col-md-1"></div>
+    </form>
+
+    <script type="text/javascript">
+        $(function () {
+           $('#personal_photo').on('change', function(event) {
+              readURL(this,'#user_photo');
+           });
+           $('#id_photo_input').on('change', function(event) {
+              readURL(this,'#id_photo');
+           });
+
+           $('#monetization-request-form').ajaxForm({
+                url: '{{LINK aj/main/monetization}}?hash=' + $('.main_session').val(),
+                dataType:'json',
+                beforeSend: function() {
+                    $('#monetization-request-form').find('button#submit').text('{{LANG please_wait}}');
+                    $('#monetization-request-form').find('button#submit').attr('disabled', 'true');
+                },
+                success: function(data) {   
+                    scrollToTop();  
+                    if (data.status == 200) {
+                        $('.monetization-request-alert').html('<div class="alert alert-success bg-success"><i class="fa fa-check"></i> '+data.message+'</div>');
+                        $('#monetization-request-form').resetForm();
+
+                        PT_Delay(function(){
+                            location.reload();
+                        },1500);
+                    }
+                    else{
+                       $('.monetization-request-alert').html('<div class="alert alert-danger bg-danger"> <i class="fa fa-info-circle"></i> '+data.message+'</div>');  
+                    }
+                    $('#monetization-request-form').find('button#submit').html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M2,21L23,12L2,3V10L17,12L2,14V21Z" /></svg> {{LANG submit_request}}');
+                    $('#monetization-request-form').find('button#submit').removeAttr('disabled');
+                }
+            });
+       });
+    </script>
+<?php }elseif ($pt->config->user_mon_approve == 'on' && $pt->is_mon > 0 && $pt->settings->monetization == 0) { ?>
+    <div class="user-setting-panel pt_shadow">
+        <div class="empty_state">
+			<span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13 17H17V14L22 18.5L17 23V20H13V17M20 4H4A2 2 0 0 0 2 6V18A2 2 0 0 0 4 20H11.35A5.8 5.8 0 0 1 11 18A6 6 0 0 1 22 14.69V6A2 2 0 0 0 20 4M20 8L12 13L4 8V6L12 11L20 6Z" /></svg></span>
+			<p>{{LANG verif_request_received}}</p>
+		</div>
+    </div>
+<?php } else{ ?>
+<form class="user_sttng_panel pt_shadow vp_forms" id="general-settings" method="POST">
+	<div class="setting-general-alert"></div>
+	<h2 class="user_sttng_panel_hd">{{LANG monetization}}</h2>
+	<div class="empty_state vp_sett_2fa">
+		<svg height="512pt" viewBox="0 0 512 512" width="512pt" xmlns="http://www.w3.org/2000/svg"><path d="m512 272v60l-20.699219 25.199219h-115.203125l-14.097656-25.199219v-60l35.699219-32.699219c-1.5-1.5 17.101562 0 39.300781 2.097657 29.699219 3 65.699219 7.199218 65.699219 7.199218zm0 0" fill="#ff9f00"/><path d="m512 272v60l-20.699219 25.199219h-54.300781v-115.800781c29.699219 3 65.699219 7.199218 65.699219 7.199218zm0 0" fill="#ff7816"/><path d="m451 15v60c0 8.398438-6.597656 15-15 15s-15-6.601562-15-15v-23.699219l-154.5 155.199219c-2.699219 3-6.601562 4.5-10.5 4.5s-7.800781-1.5-10.5-4.5l-49.5-49.199219-109.5 109.199219c-2.699219 3-6.601562 4.5-10.5 4.5s-7.800781-1.5-10.5-4.5c-6-5.699219-6-15.300781 0-21l120-120c5.699219-6 15.300781-6 21 0l49.5 49.199219 143.699219-144.699219h-23.699219c-8.402344 0-15-6.601562-15-15 0-8.402344 6.597656-15 15-15h60c8.402344 0 15 6.597656 15 15zm0 0" fill="#e63950"/><g fill="#ff9f00"><path d="m150 407v45s-54.300781 28.199219-57.300781 28.199219c-1.199219 0-9 .300781-17.699219.601562-12.597656 0-27.300781.296875-27.300781.296875l-47.699219-29.097656v-45c0-8.402344 6.597656-15 15-15h120c8.402344 0 15 6.597656 15 15zm0 0"/><path d="m331 392v60l-22.5 31.800781h-94.800781l-32.699219-31.800781v-60l26.398438-15.902344h96.300781zm0 0"/><path d="m512 392v60l-16.800781 23.398438h-104.101563l-29.097656-23.398438v-60l19.800781-18.601562h105zm0 0"/></g><path d="m451 15v60c0 8.398438-6.597656 15-15 15s-15-6.601562-15-15v-23.699219l-154.5 155.199219c-2.699219 3-6.601562 4.5-10.5 4.5v-36.300781l143.699219-144.699219h-23.699219c-8.402344 0-15-6.601562-15-15 0-8.402344 6.597656-15 15-15h60c8.402344 0 15 6.597656 15 15zm0 0" fill="#cc2e43"/><path d="m331 392v60l-22.5 31.800781h-52.5v-107.703125h47.699219zm0 0" fill="#ff7816"/><path d="m486.800781 373.398438 25.199219 18.601562v60l-16.800781 23.398438h-58.199219v-102zm0 0" fill="#ff7816"/><path d="m150 407v45s-54.300781 28.199219-57.300781 28.199219c-1.199219 0-9 .300781-17.699219.601562v-88.800781h60c8.402344 0 15 6.597656 15 15zm0 0" fill="#ff7816"/><path d="m512 452v45c0 8.398438-6.597656 15-15 15h-120c-8.402344 0-15-6.601562-15-15v-45zm0 0" fill="#ffd400"/><path d="m331 452v45c0 8.398438-6.597656 15-15 15h-120c-8.402344 0-15-6.601562-15-15v-45zm0 0" fill="#ffd400"/><path d="m150 452v45c0 8.398438-6.597656 15-15 15h-120c-8.402344 0-15-6.601562-15-15v-45zm0 0" fill="#ffd400"/><path d="m256 452h75v45c0 8.398438-6.597656 15-15 15h-60zm0 0" fill="#fdbf00"/><path d="m437 452h75v45c0 8.398438-6.597656 15-15 15h-60zm0 0" fill="#fdbf00"/><path d="m150 452v45c0 8.398438-6.597656 15-15 15h-60v-60zm0 0" fill="#fdbf00"/><path d="m362 332h150v60h-150zm0 0" fill="#ffd400"/><path d="m331 347v45h-150v-45c0-8.402344 6.597656-15 15-15h120c8.402344 0 15 6.597656 15 15zm0 0" fill="#ffd400"/><path d="m331 347v45h-75v-60h60c8.402344 0 15 6.597656 15 15zm0 0" fill="#fdbf00"/><path d="m437 332h75v60h-75zm0 0" fill="#fdbf00"/><path d="m512 212v60h-150v-60c0-8.402344 6.597656-15 15-15h120c8.402344 0 15 6.597656 15 15zm0 0" fill="#ffd400"/><path d="m512 212v60h-75v-75h60c8.402344 0 15 6.597656 15 15zm0 0" fill="#fdbf00"/></svg>
+		<p>{{LANG earn_mon}}</p>
+	</div>
+	<div class="row sof_n_margn">
+		<div class="col-md-3"></div>
+		<div class="col-md-6">
+			<div class="toggle-mode">
+				<div class="vp_check">
+					<input type="checkbox" <?php echo ($pt->settings->video_mon == '1') ? 'checked': '';?> id="toggle-video-monetization">
+					<label>{{LANG monetization}}</label>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="col-md-3"></div>
+	</div>
+	<div class="clear"></div>
+	<hr>
+	
+	<?php if ($pt->config->payed_subscribers == 'on') { ?>
+		<div class="row sof_n_margn">
+			<div class="col-md-2"></div>
+			<div class="col-md-8">
+				<div class="pp_mat_input subscriber_price">
+					<input type="text" name="subscriber_price" id="subscriber_price" placeholder="{{LANG subscriber_price}}" value="{{USER subscriber_price}}">
+					<label for="subscriber_price">{{LANG subscriber_price}}</label>
+				</div>
+			</div>
+			<div class="col-md-2"></div>
+		</div>
+	<?php } ?>
+	
+	<input type="hidden" name="hash_id" value="<?php echo PT_CreateSession()?>">
+	<input type="hidden" name="user_id" value="{{USER id}}">
+	
+	<?php if ($pt->config->payed_subscribers == 'on') { ?>
+		<div class="vp_forms_sbm_btn text-center">
+			<button class="btn btn_primary" id="submit" name="submit"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z" /></svg> {{LANG save}}</button>
+		</div>
+    <?php } ?>
+</form>
+
+<script>
+    jQuery(document).ready(function($) {
+        $("#toggle-video-monetization").change(function(event) {
+            let hash_id = $('.main_session').val();
+            let url     = "{{LINK aj/user/video-monetization}}?hash=" + hash_id;
+            $.post(url,{user_id:'<?php echo($pt->settings->id);?>'}, function(data, textStatus, xhr) { /* pass */});
+        });
+
+        var form = $('form#monetization-settings');
+        form.ajaxForm({
+            url: '{{LINK aj/user/request-withdrawal}}?hash=' + $('.main_session').val(),
+            dataType:'json',
+            beforeSend: function() {
+                form.find('button').text("{{LANG please_wait}}");
+            },
+            success: function(data) {
+                scrollToTop();
+                if (data.status == 200) {
+                    $('.monetization-settings-alert').html('<div class="alert alert-success bg-success">' + data.message + '</div>');
+                    $('.alert-success').fadeIn('fast', function() {
+                        $(this).delay(2500).slideUp(500, function() {
+                            $(this).remove();
+                        });
+                    });
+                } 
+                else if (data.status == 400) {
+                    $('.monetization-settings-alert').html('<div class="alert alert-danger bg-danger">' + data.message + '</div>');
+                    $('.alert-danger').fadeIn(300);
+                }
+                form.find('button').html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> {{LANG submit_withdrawal_request}}');
+            }
+        });
+		<?php if ($pt->config->payed_subscribers == 'on') { ?>
+        var form = $('form#general-settings');
+
+        form.ajaxForm({
+            url: '{{LINK aj/user/change_price}}?hash=' + $('.main_session').val(),
+            beforeSend: function() {
+                form.find('button').text("{{LANG please_wait}}");
+                // FL_progressIconLoader(form.find('button'));
+            },
+            success: function(data) {
+                scrollToTop();
+                if (data.status == 200) {
+                    $('.setting-general-alert').html('<div class="alert alert-success">' + data.message + '</div>');
+                    $('.alert-success').fadeIn('fast', function() {
+                        $(this).delay(2500).slideUp(500, function() {
+                            $(this).remove();
+                        });
+                    });
+                } else if (data.errors) {
+                    var errors = data.errors.join("<br>");
+                    $('.setting-general-alert').html('<div class="alert alert-danger">' + errors + '</div>');
+                    $('.alert-danger').fadeIn(300);
+                }
+                form.find('button').html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z" /></svg> {{LANG save}}');
+                // FL_progressIconLoader(form.find('button'));
+            }
+        });
+        <?php } ?>
+    });
+
+</script>
+<?php } ?>

@@ -1,0 +1,248 @@
+<link rel="stylesheet" href="{{CONFIG theme_url}}/css/bootstrap-select.min.css">
+<script src="{{CONFIG theme_url}}/js/bootstrap-select.min.js"></script>
+
+<div class="wo_about_wrapper_parent">
+	<div class="wo_about_wrapper"></div>
+</div>
+<div class="pt_page_margin">
+	<div class="mat_header"></div>
+	<div class="row">
+		<div class="col-md-7s custom_width_import">
+			<div class="content pt_shadow">
+				<div class="col-md-12 pt_import_vdo">
+					<div class="col-md-12" id="fetch-form">
+						<form action="" class="form-horizontal" method="POST">
+							<div class="vp_imp_vid_main_title"><h2>{{LANG import_new_video}}</h2><div class="btn btn_primary btn_primary_rev" onclick="show_imp_btn()">{{LANG video_url}}</div></div>
+							<div class="vp_imp_url_combo">
+								<div class="pp_mat_input">
+									<input type="text" name="url" id="url" placeholder="{{LANG video_url}}" required autofocus>
+									<label for="url">{{LANG video_url}}</label>
+									<span class="help-block">{{LANG url_desc}}, <?php echo ($pt->config->facebook_import == 'on') ? 'Facebook, ': '';?>mp4<?php echo ($pt->config->ok_import == 'on') ? ',ok.ru': '';?></span>
+								</div>
+								<div class="vp_forms_sbm_btn text-center">
+									<button type="button" class="btn btn_primary fetch-url"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17,13L12,18L7,13H10V9H14V13M19.35,10.03C18.67,6.59 15.64,4 12,4C9.11,4 6.6,5.64 5.35,8.03C2.34,8.36 0,10.9 0,14A6,6 0 0,0 6,20H19A5,5 0 0,0 24,15C24,12.36 21.95,10.22 19.35,10.03Z"></path></svg> {{LANG fetch_Video}}</button>
+								</div>
+							</div>
+							<div class="clear"></div>
+						</form>
+					</div>
+					<div class="col-md-12 import-form-content hidden">
+						<div id="import-form">
+							<form action="" class="form-horizontal vp_forms" method="POST" id="submit-imported-video">
+								<div class="thumbnail-preview edit-thumb thumbnail-preview-renderer">
+									<img src="" alt="Picture">
+								</div>
+								<div class="pp_mat_input">
+									<input type="text" name="title" id="title" placeholder="{{LANG video_title}}">
+									<label for="title">{{LANG video_title}}</label>
+									<span class="help-block">{{LANG video_title_help}}</span>
+								</div>
+								<div class="pp_mat_input">
+									<textarea name="description" id="description" rows="7" placeholder="{{LANG video_descritpion}}"></textarea>
+									<label for="description">{{LANG video_descritpion}}</label>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="pp_mat_input">
+											<select name="category_id" id="category_id" class="pp_select_has_label">
+												<?php foreach($pt->categories as $key => $category) {?>
+													<option value="<?php echo $key?>"><?php echo $category?></option>
+												<?php } ?>
+											</select>
+											<label for="category_id">{{LANG category}}</label>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="pp_mat_input">
+											<select name="sub_category_id" id="sub_category_id" class="pp_select_has_label">
+												<?php echo $pt->sub_categories_array["'1'"]; ?>
+											</select>
+											<label for="sub_category_id">{{LANG sub_category}}</label>
+										</div>
+									</div>
+								</div>
+								<?php if ($pt->config->geo_blocking == 'on') { ?>
+								<div class="pp_mat_input">
+									<select class="form-control selectpicker show-menu-arrow show-tick" multiple name="continents-list[]" data-live-search="true" title="{{LANG geo_blocking}}" data-actions-box="true">
+										<?php foreach ($pt->continents as $key => $name): ?>
+											<option value="<?php echo($name); ?>"><span><?php echo($name); ?></span></option>
+										<?php endforeach; ?>
+									</select>
+								</div>
+								<?php } ?>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="pp_mat_input">
+											<select name="privacy" id="privacy" class="pp_select_has_label">
+												<option value="0">{{LANG public}}</option>
+												<option value="1">{{LANG private}}</option>
+												<option value="2">{{LANG unlisted}}</option>
+											</select>
+											<label for="privacy">{{LANG privacy}}</label>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="pp_mat_input">
+											<select name="age_restriction" id="age_restriction" class="pp_select_has_label">
+												<option value="1" selected>{{LANG all_ages}}</option>
+												<option value="2">{{LANG only_18}}</option>
+											</select>
+											<label for="age_restriction">{{LANG age_restriction}}</label>
+										</div>
+									</div>
+								</div>
+								<div class="pp_mat_input">
+									<input type="text" name="tags" id="mySingleFieldTags" placeholder="{{LANG tags}}">
+									<label for="mySingleFieldTags">{{LANG tags}}</label>
+								</div>
+								<div class="pp_mat_input hidden" id="duration_format">
+									<input type="text" name="duration" id="duration" placeholder="{{LANG duration}}" class="duration">
+									<label for="duration">{{LANG duration}}</label>
+									<span class="help-block">ex 03:30</span>
+								</div>
+								<?php if ((($pt->config->usr_v_mon == 'on' && $pt->config->user_mon_approve == 'off') || ($pt->config->usr_v_mon == 'on' && $pt->config->user_mon_approve == 'on' && $pt->user->monetization == '1')) && $pt->user->video_mon == '1') { ?>
+									<div class="pp_mat_input">
+										<select name="monetization" id="monetization" class="pp_select_has_label">
+											<option value="1">{{LANG enable}}</option>
+											<option value="0">{{LANG disable}}</option>
+										</select>
+										<label for="monetization">{{LANG monetization}}</label>
+									</div>
+								<?php } ?>
+
+								<input type="hidden" name="thumbnail-image" class="thumbnail">
+								<input type="hidden" name="video-type" class="type">
+								<input type="hidden" name="video-id" class="video-id">
+								<input type="hidden" name="twitch_type" class="twitch_type">
+								<!-- <input type="hidden" name="duration" class="duration"> -->
+								<input id="thumbnail" name="thumbnail" type="file" accept="image/*" class="hidden">
+								<div class="vp_forms_sbm_btn text-center">
+									<button type="submit" class="btn btn_primary submit-url"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M2,21L23,12L2,3V10L17,12L2,14V21Z" /></svg> {{LANG publish}}</button>
+								</div>
+								<div class="clear"></div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+function show_imp_btn() {
+	$('.vp_imp_url_combo').slideToggle(250);
+}
+
+$('.selectpicker').selectpicker({});
+<?php 
+$js_array = json_encode($pt->sub_categories_array);
+echo "var sub_categories_array = ". $js_array . ";\n";
+?>
+$(document).on('change', '#category_id', function(event) {
+   event.preventDefault();
+   id = $(this).val();
+   $('#sub_category_id').html(sub_categories_array["'"+id+"'"]);
+});
+
+
+$(function () {
+   $('.edit-thumb').on('click', function(event) {
+      $('#thumbnail').trigger('click');
+   });
+
+   $('#thumbnail').on('change', function(event) {
+      readURL(this);
+   });
+
+   $('#submit-imported-video').ajaxForm({
+       url: '{{LINK aj/submit-imported-video}}?hash=' + $('.main_session').val(),
+       beforeSend: function() {
+         $('.submit-url').attr('disabled', true);
+         $('.submit-url').text("{{LANG please_wait}}");
+       },
+       success: function(data) {
+         if (data.status == 200) {
+            window.location.href = data.link;
+         } 
+         else {
+            $('.submit-url').attr('disabled', false);
+             $('.submit-url').html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> {{LANG publish}}');
+			Snackbar.show({text: '<div>'+ data.message +'</div>',pos: 'bottom-center',showAction: false});
+         }
+       }
+   });
+   //$('#description').keyup(function(event) {
+      //str = $(this).val().replace(/(?:\r\n|\r|\n)/g, '<br />');
+     // $('.video-description p').html(str);
+   //});
+   //$('#title').keyup(function(event) {
+    //  $('.video-title p').html($(this).val());
+   //});
+   $('#mySingleFieldTags').tagit({
+      allowSpaces: true
+   });
+	$('.fetch-url').on('click', function () {
+		$(this).text("{{LANG please_wait}}").prop("disabled", true);
+		$.post('{{CONFIG site_url}}/aj/fetch-video', {link: $('#url').val()}, function(data, textStatus, xhr) {
+			$('.fetch-url').html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17,13L12,18L7,13H10V9H14V13M19.35,10.03C18.67,6.59 15.64,4 12,4C9.11,4 6.6,5.64 5.35,8.03C2.34,8.36 0,10.9 0,14A6,6 0 0,0 6,20H19A5,5 0 0,0 24,15C24,12.36 21.95,10.22 19.35,10.03Z"></path></svg> {{LANG fetch_Video}}').prop("disabled", false);
+			if (data.status == 200) {
+				if ($("#mySingleFieldTags").val()) {
+					$(".tagit-choice").remove();
+				}
+				$('.vp_imp_vid_main_title').addClass('vp_import_finished');
+				$('.vp_imp_url_combo').slideUp(150);
+				$('.alert-danger').empty();
+				$('#title').val(data.title);
+				$('.video-title p').html(data.title);
+				$('#description').val(data.description);
+				$('.video-description p').html(data.description_br);
+				$('#mySingleFieldTags').val(data.tags);
+				$('.duration').val(data.duration);
+				if (data.type == 'mp4') {
+					$('#duration_format').removeClass('hidden');
+				}
+				else{
+					$('#duration_format').addClass('hidden');
+				}
+				var partsOfStr = data.tags.split(',');
+				for (i = 0; i < partsOfStr.length; i++) {
+					$('#mySingleFieldTags').tagit("createTag", partsOfStr[i]);
+				}
+				$('.thumbnail').val(data.thumbnail);
+				$('.thumbnail-preview img').attr('src', data.full_thumb);
+				$('.video-id').val(data.video_id);
+				$('.twitch_type').val(data.twitch_type);
+				$('.type').val(data.type);
+				$('.import-form-content').removeClass('hidden');
+			} 
+
+         else if(data.status == 401){
+            swal({
+               title: '{{LANG oops}}!',
+               text: "{{LANG import_limit_reached}}!",
+               type: 'info',
+               showCancelButton: true,
+               confirmButtonColor: '#3085d6',
+               cancelButtonColor: '#d33',
+               confirmButtonText: '{{LANG upgrade_now}}',
+               cancelButtonText: '{{LANG cancel}}',
+               confirmButtonClass: 'btn btn-success margin-right',
+               cancelButtonClass: 'btn',
+               buttonsStyling: false
+            }).then(function(){
+               window.location.href = '{{LINK go_pro}}';
+            },
+            function() {
+               window.location.href = '{{LINK }}';
+            });
+            
+         }
+         else {
+				Snackbar.show({text: '<div>'+ data.message +'</div>',pos: 'bottom-center',showAction: false});
+			}
+		},dataType = 'json');
+	});
+});
+</script>

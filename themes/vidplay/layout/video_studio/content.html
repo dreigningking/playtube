@@ -1,0 +1,83 @@
+<div class="vp_dash_links">
+	<?php if (!empty($_GET['videos_type']) && $_GET['videos_type'] == 'movies' && $pt->config->movies_videos == 'on') { ?>
+		<h4><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M18,9H16V7H18M18,13H16V11H18M18,17H16V15H18M8,9H6V7H8M8,13H6V11H8M8,17H6V15H8M18,3V5H16V3H8V5H6V3H4V21H6V19H8V21H16V19H18V21H20V3H18Z" /></svg> {{LANG movies}}</h4>
+	<?php } else { ?>
+		<h4><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17,10.5V7A1,1 0 0,0 16,6H4A1,1 0 0,0 3,7V17A1,1 0 0,0 4,18H16A1,1 0 0,0 17,17V13.5L21,17.5V6.5L17,10.5Z" /></svg> {{LANG videos}}</h4>
+	<?php } ?>
+	<ul>
+		<li><a href="{{LINK dashboard}}" data-load="?link1=dashboard">{{LANG dashboard}}</a></li>
+		<li <?php if (empty($_GET['videos_type']) || $_GET['videos_type'] != 'movies') { echo 'class="active"'; } ?>><a href="{{LINK video_studio}}" data-load="?link1=video_studio">{{LANG videos}}</a></li>
+		<li><a href="{{LINK comments}}" data-load="?link1=comments">{{LANG comments}}</a></li>
+		<?php if ($pt->config->usr_v_mon == 'on' || $pt->config->sell_videos_system == 'on' || $pt->config->payed_subscribers == 'on') { ?>
+			<li><a href="{{LINK transactions}}" data-load="?link1=transactions">{{LANG earnings}}</a></li>
+		<?php } ?>
+		<?php if ($pt->config->movies_videos == 'on' && PT_IsAdmin()) { ?>
+			<li <?php if (!empty($_GET['videos_type']) && $_GET['videos_type'] == 'movies') { echo 'class="active"'; } ?>>
+				<a href="{{LINK video_studio?videos_type=movies}}" data-load="?link1=video_studio&videos_type=movies">{{LANG movies}}</a>
+			</li>
+		<?php } ?>
+	</ul>
+</div>
+
+<div class="content pt_shadow">
+	<div class="vp_vid_stud_hd">
+		<h4><?php if (!empty($_GET['videos_type']) && $_GET['videos_type'] == 'movies' && $pt->config->movies_videos == 'on') { ?>{{LANG manage}} {{LANG movies}}<?php } else { ?>{{LANG manage_my_videos}}<?php } ?>
+			<div class="pull-right dropdown vp_vid_stud_fltrs <?php echo (empty($_POST['type'])) ? '': 'block'?>">
+				<span class="dropdown-toggle" data-toggle="dropdown" role="button" title="{{LANG sort_by}}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M6,13H18V11H6M3,6V8H21V6M10,18H14V16H10V18Z" /></svg></span>
+				<div class="vp_pulse_cont"><div class="vp_pulse"></div></div>
+				<div class="dropdown-menu dropdown-menu-right vid_stud_filtr">
+					<form class="search_filter_form" method="POST" action="">
+						<div class="dropdown-item">
+							<label for="_views_">
+								<input type="radio" name="type" id="_views_" value="views" <?php echo (!empty($_POST['type']) && $_POST['type'] == 'views') ? 'checked': ''?>>
+								<span>{{LANG views}}</span>
+							</label>
+						</div>
+						<div class="dropdown-item">
+							<label for="_likes_">
+								<input type="radio" name="type" id="_likes_" value="likes" <?php echo (!empty($_POST['type']) && $_POST['type'] == 'likes') ? 'checked': ''?>>
+								<span>{{LANG likes}}</span>
+							</label>
+						</div>
+						<div class="dropdown-item">
+							<label for="_dislikes_">
+								<input type="radio" name="type" id="_dislikes_" value="dislikes" <?php echo (!empty($_POST['type']) && $_POST['type'] == 'dislikes') ? 'checked': ''?>>
+								<span>{{LANG dislikes}}</span>
+							</label>
+						</div>
+						<div class="dropdown-item">
+							<label for="_comments_">
+								<input type="radio" name="type" id="_comments_" value="comments" <?php echo (!empty($_POST['type']) && $_POST['type'] == 'comments') ? 'checked': ''?>>
+								<span>{{LANG comments}}</span>
+							</label>
+						</div>
+					</form>
+				</div>
+			</div>
+		</h4>
+	</div>
+		
+	<div class="vp_vid_stud_my_vids">
+		<ul class="list-unstyled head_table">
+			<li class="stud_table-video">{{LANG video}}</li>
+			<li class="stud_table-time">{{LANG time}}</li>
+			<li class="stud_table-views text-right">{{LANG views}}</li>
+			<li class="stud_table-likes text-right">{{LANG likes}}</li>
+			<li class="stud_table-dislikes text-right">{{LANG dislikes}}</li>
+			<li class="stud_table-comments text-right">{{LANG comments}}</li>
+		</ul>
+		<div class="author-list vp_vid_stud_vids">{{VIDEOS}}</div>
+	</div>
+	<?php if (count($pt->videos) > 0) { ?>
+		<button class="watch-video-show-more desc load-more vp_load_more" data-type="video_studio" <?php if (!empty($_POST['type'])) { ?>sort-type="<?php echo($_POST['type']); ?>" <?php } ?>>
+			<span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"></path></svg></span> {{LANG show_more}}
+		</button>
+	<?php } ?>
+	<div class="clear"></div>
+</div>
+
+<script type="text/javascript">
+$(".vid_stud_filtr input[type=radio]").change(function(){
+	$('form.search_filter_form').submit();
+});
+</script>

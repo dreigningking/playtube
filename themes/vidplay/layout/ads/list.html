@@ -1,0 +1,30 @@
+<tr data-ads-list="{{ID}}">
+	<td width="12%">
+		<div>
+			<input type="checkbox" {{ACTIVE}} class="tgl tgl-ios" id="ad_switch_{{ID}}" onclick="PT_ToggleAdsStatus('{{ID}}');">
+			<label class="tgl-btn" for="ad_switch_{{ID}}"></label>
+		</div>
+	</td>
+	<td width="12%">
+		<i class="material-icons ad-category">{{TYPE}}</i>
+	</td>
+	<td width="31%">{{NAME}}</td>
+	<td width="15%">
+		<span class="results">
+			<strong>{{RESULTS}}</strong>
+		</span>
+		<span class="results">{{PR_METHOD}}</span>
+	</td>
+	<td width="15%">
+		<span class="spends">{{CURRENCY}}{{SPENT}}</span>
+	</td>
+	<td width="15%">
+		<span class="action" onclick="PT_DeleteAd('{{ID}}');"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg></span>
+		<span class="action">
+			<a href="{{LINK ads/edit/{{ID}}}}" data-load="?link1=edit_ads&id={{ID}}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" /></svg></a>
+		</span>
+		<span class="action">
+			<a href="{{LINK ads/analytics/{{ID}}}}" data-load="?link1=ads_analytics&id={{ID}}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17,17H15V13H17M13,17H11V7H13M9,17H7V10H9M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3Z" /></svg></a>
+		</span>
+	</td>
+</tr>

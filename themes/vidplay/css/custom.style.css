@@ -1,0 +1,9 @@
+/* 
+
+Add here your custom css styles Example: p { text-align: center; color: red; } 
+
+*/
+.video-options .btn_opts.scam_btn.active span#scambutton { background: #ff0000 !important; fill: #ffd8d5; }
+.video-options .btn_opts.legit_btn.active span#legitbutton { background: #12ac1e !important; fill: #cfffd1; }
+
+/* div#scam-bar.btn.btn_opts.scam_btn.active span{background: #ff0000 !important;} */

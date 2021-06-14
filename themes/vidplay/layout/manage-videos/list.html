@@ -1,0 +1,24 @@
+<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" id="video-{{ID}}">
+	<div class="video-list video-wrapper vp_vid_list" data-id="{{ID}}">
+		<div class="video-list-image">
+			<a href="{{URL}}" data-load="?link1=watch&id={{VIDEO_ID_}}">
+				<img data-src="{{THUMBNAIL}}" alt="{{TITLE}}">
+				<div class="play_hover_btn">
+					<svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="#1350F3"><path d="M10,16.5V7.5L16,12M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"></path></svg>
+				</div>
+			</a>
+		</div>
+		<div class="pt_vid_fixed_height vp_vid_foot">
+			<div class="video-list-title">
+				<a href="{{URL}}" data-load="?link1=watch&id={{VIDEO_ID_}}"><h4 title="{{TITLE}}">{{TITLE}}</h4></a>
+			</div>
+			<div class="video-list-by">
+				<div class="vp_vid_bottm"><span><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24"><path fill="currentColor" d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z" /></svg> {{VIEWS}} {{LANG views}}</span> <span class="vp_vid_time">{{TIME}}</span></div>
+			</div>
+			<div class="video-actions">
+				<a href="{{LINK edit-video/{{ID}}}}" data-load="?link1=edit-video&id=category&id={{ID}}" title="{{LANG edit_video}}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" /></svg> {{LANG edit}}</a> 
+				<a href="javascript:void(0);" onclick="PT_DeleteVideo({{ID}}, 'manage-page')" title="{{LANG delete_videos}}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg> {{LANG delete}}</a> 
+			</div>
+		</div>
+	</div>
+</div>

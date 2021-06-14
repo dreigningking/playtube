@@ -1,0 +1,24 @@
+<div class="wo_about_wrapper_parent">
+	<div class="wo_about_wrapper"></div>
+</div>
+<div class="pt_page_margin">
+	<div class="mat_header">
+		<h1>{{LANG privacy_policy}}</h1>
+	</div>
+	<div class="row">
+		<div class="col-md-3">
+			<div class="terms_sidebar pt_shadow">
+				<ul>
+					<li><a href="{{LINK terms/about-us}}" data-load="?link1=terms&type=about-us">{{LANG about_us}}</a></li>
+					<li><a href="{{LINK terms/terms}}" data-load="?link1=terms&type=terms">{{LANG terms_of_use}}</a></li>
+					<li class="active"><a href="{{LINK terms/privacy-policy}}" data-load="?link1=terms&type=privacy-policy">{{LANG privacy_policy}}</a></li>
+					<hr>
+					<li><a href="{{LINK contact-us}}" data-load="?link1=contact">{{LANG contact_us}}</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-md-9">
+			<div class="termsofuse pt_shadow"><?php echo htmlspecialchars_decode($pt->terms['privacy_policy']);?></div>
+		</div>
+	</div>
+</div>

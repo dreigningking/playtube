@@ -1,0 +1,11 @@
+<div class="pp_mat_input">
+	<?php $options = @explode(',', $pt->field->options); ?>
+	<select id="csb<?php echo $pt->field->fid;?>" name="<?php echo $pt->field->fid;?>" class="pp_select_has_label">
+		<?php foreach ($options as $key => $value): ?>  
+			<?php $selected = (($key + 1) == $pt->fid) ? 'selected' : ''; ?>
+			<option value="<?php echo $key + 1;?>" <?php echo $selected;?>><?php echo $value;?></option>    
+		<?php endforeach; ?>
+	</select>
+	<label for="csb<?php echo $pt->field->fid;?>">{{NAME}}</label>
+	<span class="help-block">{{DESC}}</span>
+</div>

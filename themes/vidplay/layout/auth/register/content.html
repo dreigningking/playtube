@@ -1,0 +1,74 @@
+<div class="vp_auth_page vp_rgstr_pg">
+	<div class="login_page">
+		<div class="login-page">
+			<div class="login-form">
+				<h4>{{LANG sign_up}}</h4>
+				<p>{{LANG lets_get_started}}</p>
+				<form action="{{LINK register}}" method="POST">
+					<div class="errors form-group">{{ERRORS}}</div>
+					<div class="errors success form-group">{{SUCCESS}}</div>
+					<div class="pp_mat_input">
+						<input type="text" name="username" id="username" placeholder="{{LANG username}}" required value="{{USERNAME}}" autofocus>
+						<label for="username">{{LANG username}}</label>
+					</div>
+					<div class="pp_mat_input">
+						<input type="email" name="email" id="email" placeholder="{{LANG email_address}}" required value="{{EMAIL}}">
+						<label for="email">{{LANG email_address}}</label>
+					</div>
+					<div class="pp_mat_input">
+						<input type="password" name="password" id="password" placeholder="{{LANG password}}" required>
+						<label for="password">{{LANG password}}</label>
+					</div>
+					<div class="pp_mat_input">
+						<input type="password" name="c_password"  id="c_password" placeholder="{{LANG confirm_password}}" required>
+						<label for="c_password">{{LANG confirm_password}}</label>
+					</div>
+					<div class="pp_mat_input">
+						<select name="gender" id="gender" required>
+							<option value="male">{{LANG male}}</option>
+							<option value="female">{{LANG female}}</option>
+						</select>
+					</div>
+					{{CUSTOM_FIELDS}}
+					<div class="terms">
+						<label for="accept_terms">
+							<input type="checkbox" name="accept_terms" id="accept_terms">{{LANG terms_agreement}}
+							<a href="{{LINK terms/terms}}">{{LANG terms_of_use}}</a> & <a href="{{LINK terms/privacy-policy}}">{{LANG privacy_policy}}</a>
+						</label>
+						<div class="clear"></div>
+					</div>
+					<div class="recaptcha">{{RECAPTCHA}}</div>
+					<button type="submit" class="btn btn_primary button">{{LANG sign_up}} <svg width="38" height="38" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg" stroke="#fff"> <g fill="none" fill-rule="evenodd"> <g transform="translate(1 1)" stroke-width="2"> <circle stroke-opacity=".5" cx="18" cy="18" r="18"/> <path d="M36 18c0-9.94-8.06-18-18-18"> <animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="1s" repeatCount="indefinite"/> </path> </g> </g> </svg></button>
+					<input type="hidden" id="checked" value="off" name="terms">
+				</form>
+			</div>    
+		</div>
+	</div>
+	<div class="login_aside">
+		<div class="vp_auth_circle-1"></div>
+		<div class="vp_auth_circle-2"></div>
+		<div class="vp_auth_circle-3"></div>
+		<div class="login_aside_innr">
+			<h2>{{LANG welcome_back}}</h2>
+			<p>{{LANG upload}}, {{LANG subscriptions}}, {{LANG manage_videos}}.</p>
+			<a class="btn" href="{{LINK login}}">{{LANG login_}}</a>
+		</div>
+	</div>
+</div>
+
+<script>
+$(function() {
+	$("#accept_terms").change(function() {
+	    if(this.checked) {
+	        $('#checked').val('on');
+	    } else {
+	    	$('#checked').val('off');
+	    }
+	});
+	$('.button').on('click', function () {
+		if ($('#username').val() && $('#password').val() && $('#email').val() && $('#gender').val() && $('#c_password').val()) {
+			$(this).addClass("btn_loading");
+		}
+	});
+});
+</script>

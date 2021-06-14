@@ -1,0 +1,1180 @@
+<script>
+function PT_Subscribe(user_id, type) {
+  if (!user_id || !type) { return false; }
+  if (!$('#main-container').attr('data-logged') && $('#main-url').val()) {
+      window.location.href = PT_Ajax_Requests_File() + 'login?to=' + $('#main-url').val();
+      return false;
+  }
+  var subscribe_button = $('.subscribe-id-' + user_id);
+  if (type == 'subscribe') {
+    subscribe_button.removeClass('btn-subscribe').addClass('btn-subscribed');
+    subscribe_button.html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check"><polyline points="20 6 9 17 4 12"></polyline></svg> {{LANG subscribed}}');
+    subscribe_button.attr('onclick', 'PT_Subscribe(' + user_id + ', "subscribed")');
+	$.post('{{LINK aj/subscribe}}', {user_id: user_id});
+  } else {
+    var html = "<small>{{LANG unsubscribe_from_channel}}</small>";
+    swal({
+      title: "",
+      type: "",
+      html:html,
+      showCancelButton: true,
+      cancelButtonText: "{{LANG no}}",
+      customClass: 'sweetalert-lg pt_add_to_list_vid',
+      confirmButtonText:'{{LANG yes}}'
+    }).then(function(){
+        subscribe_button.removeClass('btn-subscribed').addClass('btn-subscribe');
+        subscribe_button.html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> {{LANG subscribe}}');
+        subscribe_button.attr('onclick', 'PT_Subscribe(' + user_id + ', "subscribe")');
+        $.post('{{LINK aj/subscribe}}', {user_id: user_id});
+
+      },function(){
+    });
+  }
+}
+
+function PT_Reply(comm_id, name,reply_id) {
+  if (!comm_id) { return false;}
+  var logged = $('#main-container').attr('data-logged');
+  var name   = (name) ? "@"+name+": " : '';
+  if(!logged){
+    window.location.href = "{{LINK login?to=<?php echo $pt->actual_link;?>}}";
+    return false;
+  }
+  else{
+    var reply_form = $('#comm-reply-' + comm_id);
+
+    reply_form.removeClass('hidden').find('input').val(name).focus().scrollTo();
+
+    if (reply_id) {
+      reply_form.attr('data-reply-id',reply_id); 
+    }
+    
+  }
+}
+
+$(function () {
+  $(document).on('click','.load-more' , function(event) {
+    event.preventDefault();
+    var $type = $(this).attr('data-type');
+    var keyword = '';
+    if ($(this).attr('data-keyword')) {
+      keyword = $(this).attr('data-keyword');
+    }
+    var last_id = $('.video-wrapper:last').attr('data-id');
+    if ($(this).attr('data-category')) {
+      var $category_id = $(this).attr('data-category');
+      sub_category = $(this).attr('data-sub-category-id');
+      $type = 'category?c_id=' + $category_id + '&sub_category='+sub_category;
+    }
+    views = 0;
+    if ($('.video-wrapper:last').attr('data-views')) {
+      var views = $('.video-wrapper:last').attr('data-views');
+      $type = $type + '?views=' + views;
+    }
+    tr_id = 0;
+    if ($('.video-wrapper:last').attr('data-tr')) {
+      var tr_id = $('.video-wrapper:last').attr('data-tr');
+      $type = $type + '?tr_id=' + tr_id;
+    }
+    user_id = 0;
+    if ($('#profile-id').val()) {
+      var user_id = $('#profile-id').val();
+    }
+    
+    data1 = {};
+    if ($type == 'top') {
+      for (var i = 0; i < $('.video-wrapper').length; i++) {
+        if ($($('.video-wrapper')[i]).attr('data-views') == views) {
+          data1[i] = $($('.video-wrapper')[i]).attr('data-views');
+        }
+      }
+    }
+    else{
+      if (views) {
+        var asdf = $('div[data-views=' + views + ']').each(function(index, el) {
+          data1[index] = $(this).attr('data-id')
+        });
+      }
+    }
+    date = '';
+    category = '';
+    if ($(this).attr('data-type') == 'search') {
+      date = $(this).attr('data-by-date');
+      category = $(this).attr('data-by-category');
+    }
+    if ($(this).attr('data-type') == 'video_comment') {
+      $type = 'video_comment';
+      last_id = $('.comment_info:last').attr('data-comment-id');
+    }
+
+    video_studio_ids = [];
+    video_studio_type = '';
+
+    if ($(this).attr('data-type') == 'video_studio') {
+      for (var i = 0; i < $('.video-wrapper').length; i++) {
+          video_studio_ids.push($($('.video-wrapper')[i]).attr('data-id'));
+      }
+      video_studio_type = $(this).attr('sort-type');
+    }
+
+    var channels_ids = [];
+    var sort_type = '';
+    var sort_by = '';
+
+    if ($(this).attr('data-type') == 'popular_channels') {
+      channels_ids = [];
+      last_id = $('.channels_list:last').attr('data-channel-views');
+      for (var i = 0; i < $('.channels_list').length; i++) {
+        if ($($('.channels_list')[i]).attr('data-channel-views') == last_id) {
+          channels_ids.push($($('.channels_list')[i]).attr('data-channel-id'));
+        }
+      }
+      sort_by = $(this).attr('data-sort-by');
+      sort_type = $(this).attr('data-sort-type');
+    }
+
+    $('.load-more').text("{{LANG please_wait}}");
+    $.post('{{LINK aj/load-more/' + $type + '}}', {last_id: last_id, ids: data1, keyword:keyword, user_id: user_id,date:date,category:category,video_studio_ids:video_studio_ids,video_studio_type:video_studio_type,channels_ids:channels_ids,sort_type:sort_type,sort_by:sort_by}, function(data, textStatus, xhr) {
+       if (data.status == 200) {
+          if ($type == 'subscriptions' || $type == 'history' || $type == 'saved_videos' || $type == 'liked_videos' || $type == 'my_videos' || $type == 'video_studio' || $type == 'search' || $type == 'popular_channels') {
+            if ($('#video_studio_ids').length > 0) {
+              $('#video_studio_ids').attr('value',data.video_ids_);
+              $('#video_studio_ids').attr('data_by_id',data.by_ids);
+            }
+             $('.author-list').append(data.videos);
+          } else {
+            if ($type == 'video_comment') {
+              $('#comments_container').append(data.comments);
+            }else{
+              $('.videos-latest-list').append(data.videos);
+            }
+          }
+		  $("img[data-src]").unveil(200, function() {
+			$(this).on('load', function() {
+				this.style.opacity = 1;
+			});
+		  });
+          $('.load-more').html('<span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"></path></svg></span> {{LANG show_more}}');
+       } else {
+          if ($type == 'video_comment') {
+            $('.load-more').text("{{LANG no_more_comments}}");
+          }else if($type == 'popular_channels'){
+            $('.load-more').text("{{LANG no_more_channels_to_show}}");
+          }else{
+            $('.load-more').text("{{LANG no_more_videos_to_show}}");
+          }
+       }
+       scrolled = 0;
+    });
+  });
+});
+
+
+function PT_LoadPost(category, self){
+  if (!self) { return false;}
+
+  var last_id = ($('.article-wrapper').length > 0) ? $('.article-wrapper:last').attr('data-id') : 0;
+  if (last_id && last_id > 0) {
+    $.post('{{LINK aj/load-more/articles}}', {last_id: last_id,cat:category}, function(data, textStatus, xhr) {
+       if (data.status == 200) {
+          $('.articles-container').append(data.posts);
+          $(self).text("{{LANG show_more}}");
+       }
+       else {
+          $(self).text("{{LANG no_more_articles}}");
+       }
+    });
+  }
+}
+
+function PT_DeleteVideo(id, type) {
+  if (!id) {
+    return false;
+  }
+  if (!confirm("{{LANG delete_video_confirmation}}")) {
+    return false;
+  }
+  if (type == 'edit-page') {
+    $('.btn-delete').attr('disabled', true);
+    $('.btn-delete').val("{{LANG please_wait}}");
+  } else if (type == 'manage-page') {
+    $('#video-' + id).slideUp('200', function () {
+      $(this).remove();
+    });
+  }
+  $.post('{{LINK aj/delete-video}}', {id: id}, function(data, textStatus, xhr) {
+    if (data.status == 200) {
+      if (type == 'edit-page') {
+        window.location.href = '{{LINK video_studio}}';
+      } 
+    }
+  });
+}
+
+function PT_DeleteHistory(id) {
+  if (!id) {
+    return false;
+  }
+  $('#video-' + id).fadeOut('200', function () {
+    $(this).remove();
+  });
+  $.post('{{LINK aj/delete-history}}', {id: id});
+  Snackbar.show({text: '<div><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nMjAnIGhlaWdodD0nMjAnIHZpZXdCb3g9JzAgMCAyMCAyMCcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJz4KCTxnPgoJCTxwYXRoIGQ9J00tMi0yaDI0djI0SC0yeicgZmlsbD0nbm9uZScvPgoJCTxwYXRoIGQ9J00xMCAwQzQuNDggMCAwIDQuNDggMCAxMHM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTUuNTIgMCAxMCAwek04IDE1bC01LTUgMS40MS0xLjQxTDggMTIuMTdsNy41OS03LjU5TDE3IDZsLTkgOXonIGZpbGw9JyMyNkJDNEUnLz4KCTwvZz4KPC9zdmc+Cg=="/> {{LANG removed_history}}</div>',pos: 'bottom-center',showAction: false});
+}
+
+function PT_DeleteSaved(id) {
+  if (!id) {
+    return false;
+  }
+  $('#video-' + id).slideUp('200', function () {
+    $(this).remove();
+  });
+  $.post('{{LINK aj/delete-saved}}', {id: id});
+}
+
+function PT_AddToList(video_id){
+  if (!video_id) {
+    return false;
+  }
+
+  var name = '';
+  var desc = '';
+  var id   = video_id;
+
+  $.ajax({
+    url: '{{LINK aj/lists}}',
+    type: 'GET',
+    dataType: 'json',
+    data: {type: 'list',a:'add',id:id},
+  })
+  .done(function(data) {
+    if (data.status == 200) {
+      swal({
+        title: "",
+        type: "",
+        html:data.html,
+        showCancelButton: true,
+        cancelButtonText: "{{LANG close}}",
+        customClass: 'sweetalert-lg',
+        confirmButtonText:'{{LANG create_new}}'
+      }).then(function(){
+          PT_NewList();
+        },function(){
+      });
+    }
+    else{
+      swal(
+        'Error!',
+        'Something went wrong.Please try again later!',
+        'error'
+      );
+    }
+  })
+  .fail(function() {
+    console.log("error");
+  })
+  .always(function() {
+    console.log("complete");
+  });
+}
+
+function PT_ReportVideo(video_id,self){
+  if (!video_id || !self) { return false;}
+
+    var message = "";
+    self = $(self);
+    if (self.attr('data-rep') == 1) {
+      swal({
+        title: '',
+		html: '<form class="create-new-list"><h4 class="vp_modal_title"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M14.4,6L14,4H5V21H7V14H12.6L13,16H20V6H14.4Z" /></svg></span> {{LANG report_zs_video}}</h4><p class="report-message-label">{{LANG write_vr_summary}}</p><div class="form-group"><textarea id="report-message" rows="3" class="form-control" placeholder="{{LANG message}}.."></textarea></div></form>',
+        showCancelButton: true,
+        confirmButtonText: '{{LANG submit}}',
+        cancelButtonText: '{{LANG cancel}}',
+        customClass:'report-video-popup',
+        animation: false,
+        preConfirm: function(name){
+          return new Promise(function(resolve,reject){
+              message = $('#report-message').val();
+              if (message.length < 1) {
+                swal.showValidationError(
+                  '{{LANG please_check_details}}'
+                );
+                reject();
+              }
+              else{
+                resolve();
+              }
+          });
+        },
+        allowOutsideClick: false
+      }).then(function(){
+        $.ajax({
+          url: '{{LINK aj/report/video/report}}',
+          type: 'POST',
+          dataType: 'json',
+          data: {id: video_id,text:message},
+        })
+        .done(function(data) {
+          if (data.status == 200) {
+            swal({
+              title: '{{LANG thank_u}}',
+              html: '{{LANG we_received_ur_rep}}'
+            });
+            self.html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg> {{LANG cancel_report}}');
+            self.attr('data-rep', '0');
+            self.addClass('active');
+          }
+          else if(data.status == 304){
+            self.html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M14.4,6L14,4H5V21H7V14H12.6L13,16H20V6H14.4Z" /></svg> {{LANG report_zs_video}}');
+            self.attr('data-rep', '1');
+            self.removeClass('active');
+			Snackbar.show({text: '{{LANG report_canceled}}',pos: 'bottom-center',showAction: false});
+          }
+        });
+      });
+    }
+    else{
+      $.ajax({
+        url: '{{LINK aj/report/video/cancel}}',
+        type: 'POST',
+        dataType: 'json',
+        data: {id: video_id},
+      })
+      .done(function(data) {
+        if(data.status == 304){
+          self.html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M14.4,6L14,4H5V21H7V14H12.6L13,16H20V6H14.4Z" /></svg> {{LANG report_zs_video}}');
+          self.attr('data-rep', '1');
+          self.removeClass('active');
+		  Snackbar.show({text: '{{LANG report_canceled}}',pos: 'bottom-center',showAction: false});
+        }
+      });
+    }  
+}
+
+function PT_ReportCopyVideo(video_id,self){
+  if (!video_id || !self) { return false;}
+  var text1 = "{{LANG confirm_1_text}}";
+  var text2 = "{{LANG confirm_2_text}}";
+  var error = "{{LANG confirm_check_text}}";
+  swal({
+        title: '',
+		html: '<form class="create-new-list"><h4 class="vp_modal_title"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M10.08,10.86C10.13,10.53 10.24,10.24 10.38,10C10.5,9.74 10.72,9.53 10.97,9.37C11.21,9.22 11.5,9.15 11.88,9.14C12.11,9.15 12.32,9.19 12.5,9.27C12.71,9.36 12.89,9.5 13.03,9.63C13.17,9.78 13.28,9.96 13.37,10.16C13.46,10.36 13.5,10.58 13.5,10.8H15.3C15.28,10.33 15.19,9.9 15,9.5C14.85,9.12 14.62,8.78 14.32,8.5C14,8.22 13.66,8 13.24,7.84C12.82,7.68 12.36,7.61 11.85,7.61C11.2,7.61 10.63,7.72 10.15,7.95C9.67,8.18 9.27,8.5 8.95,8.87C8.63,9.26 8.39,9.71 8.24,10.23C8.09,10.75 8,11.29 8,11.87V12.14C8,12.72 8.08,13.26 8.23,13.78C8.38,14.3 8.62,14.75 8.94,15.13C9.26,15.5 9.66,15.82 10.14,16.04C10.62,16.26 11.19,16.38 11.84,16.38C12.31,16.38 12.75,16.3 13.16,16.15C13.57,16 13.93,15.79 14.24,15.5C14.55,15.25 14.8,14.94 15,14.58C15.16,14.22 15.27,13.84 15.28,13.43H13.5C13.5,13.64 13.43,13.83 13.34,14C13.25,14.19 13.13,14.34 13,14.47C12.83,14.6 12.66,14.7 12.46,14.77C12.27,14.84 12.07,14.86 11.86,14.87C11.5,14.86 11.2,14.79 10.97,14.64C10.72,14.5 10.5,14.27 10.38,14C10.24,13.77 10.13,13.47 10.08,13.14C10.03,12.81 10,12.47 10,12.14V11.87C10,11.5 10.03,11.19 10.08,10.86M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20Z" /></svg></span> {{LANG create_notice}}</h4><p class="report-message-label">{{LANG describe_notice}}</p><div class="form-group"><textarea id="report-message-copy" rows="3" class="form-control" placeholder="{{LANG message}}.."></textarea></div><div class="custom-control custom-radio checkbox checkbox-primary"><input type="checkbox" id="confirm_1" name="confirm_1" class="custom-control-input"><label class="custom-control-label" for="confirm_1">'+text1+'</label></div><div class="custom-control custom-radio checkbox checkbox-primary"><input type="checkbox" id="confirm_2" name="confirm_2" class="custom-control-input"><label class="custom-control-label" for="confirm_2">'+text2+'</label></div></form>',
+        showCancelButton: true,
+        confirmButtonText: '{{LANG submit}}',
+        cancelButtonText: '{{LANG cancel}}',
+        customClass:'report-video-popup pt_rep_copy_vid',
+        animation: false,
+        preConfirm: function(name){
+          return new Promise(function(resolve,reject){
+              message = $('#report-message-copy').val();
+              if (message.length < 1) {
+                swal.showValidationError(
+                  '{{LANG please_check_details}}'
+                );
+                reject();
+              }
+              else{
+                if ($('#confirm_1').is(':not(:checked)')) {
+                  swal.showValidationError(
+                    error
+                  );
+                  reject();
+                }
+                else{
+                  if ($('#confirm_2').is(':not(:checked)')) {
+                    swal.showValidationError(
+                      error
+                    );
+                    reject();
+                  }
+                  else{
+                    resolve();
+                  }
+                }
+              }
+          });
+        },
+        allowOutsideClick: false
+      }).then(function(){
+        $.ajax({
+          url: '{{LINK aj/main/copy_report}}?hash=' + $('.main_session').val(),
+          type: 'POST',
+          dataType: 'json',
+          data: {id: video_id,text:message},
+        })
+        .done(function(data) {
+          if (data.status == 200) {
+            swal({
+              title: '{{LANG thank_u}}',
+              html: '{{LANG we_received_ur_rep}}'
+            });
+          }
+          else if(data.status == 304){
+            self.html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M10.08,10.86C10.13,10.53 10.24,10.24 10.38,10C10.5,9.74 10.72,9.53 10.97,9.37C11.21,9.22 11.5,9.15 11.88,9.14C12.11,9.15 12.32,9.19 12.5,9.27C12.71,9.36 12.89,9.5 13.03,9.63C13.17,9.78 13.28,9.96 13.37,10.16C13.46,10.36 13.5,10.58 13.5,10.8H15.3C15.28,10.33 15.19,9.9 15,9.5C14.85,9.12 14.62,8.78 14.32,8.5C14,8.22 13.66,8 13.24,7.84C12.82,7.68 12.36,7.61 11.85,7.61C11.2,7.61 10.63,7.72 10.15,7.95C9.67,8.18 9.27,8.5 8.95,8.87C8.63,9.26 8.39,9.71 8.24,10.23C8.09,10.75 8,11.29 8,11.87V12.14C8,12.72 8.08,13.26 8.23,13.78C8.38,14.3 8.62,14.75 8.94,15.13C9.26,15.5 9.66,15.82 10.14,16.04C10.62,16.26 11.19,16.38 11.84,16.38C12.31,16.38 12.75,16.3 13.16,16.15C13.57,16 13.93,15.79 14.24,15.5C14.55,15.25 14.8,14.94 15,14.58C15.16,14.22 15.27,13.84 15.28,13.43H13.5C13.5,13.64 13.43,13.83 13.34,14C13.25,14.19 13.13,14.34 13,14.47C12.83,14.6 12.66,14.7 12.46,14.77C12.27,14.84 12.07,14.86 11.86,14.87C11.5,14.86 11.2,14.79 10.97,14.64C10.72,14.5 10.5,14.27 10.38,14C10.24,13.77 10.13,13.47 10.08,13.14C10.03,12.81 10,12.47 10,12.14V11.87C10,11.5 10.03,11.19 10.08,10.86M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20Z" /></svg> {{LANG report_copyright}}');
+            self.attr('data-rep', '1');
+            self.removeClass('active');
+            notif({
+              msg: "{{LANG report_canceled}}",
+              type: "default",
+              fade:0,
+              timeout:1500
+            });
+          }
+        });
+      });
+}
+
+function PT_PLVToggle(id,self){
+  if (!id || !self) {
+    return false;
+  }
+  var self = $(self);
+  var list = self.attr('id');
+  $.ajax({
+    url: '{{LINK aj/lists}}',
+    type: 'GET',
+    dataType: 'json',
+    data: {type: 'list',a:'tg',id:id,list:list},
+  })
+  .done(function(data) {
+    if (data.status == 200 && data.code == 1) {
+      self.addClass('active');
+	  Snackbar.show({text: "{{LANG added_to}} " + data.name,pos: 'bottom-center',showAction: false});
+    }
+
+    else if(data.status == 200 && data.code == 0){
+      self.removeClass('active');
+	  Snackbar.show({text: "{{LANG removed_from}} " + data.name,pos: 'bottom-center',showAction: false});
+    }
+
+    else{
+      swal(
+        'Error!',
+        'Something went wrong.Please try again later!',
+        'error'
+      );
+    }
+  })
+  .fail(function() {
+    console.log("error");
+  })  
+}
+
+function PT_WLToggle(id,self){
+  if (!id || !self) {
+    return false;
+  }
+  var self = $(self);
+  $.ajax({
+    url: '{{LINK aj/lists}}',
+    type: 'GET',
+    dataType: 'json',
+    data: {type: 'list',a:'wl-tg',id:id},
+  })
+  .done(function(data) {
+    if (data.status == 200 && data.code == 1) {
+      self.addClass('active');
+	  Snackbar.show({text: "{{LANG added_to}} \"{{LANG watch_later}}\"",pos: 'bottom-center',showAction: false});
+    }
+    else if(data.status == 200 && data.code == 0){
+      self.removeClass('active');
+	  Snackbar.show({text: "{{LANG removed_from}} \"{{LANG watch_later}}\"",pos: 'bottom-center',showAction: false});
+    }
+
+    else{
+      swal(
+        'Error!',
+        'Something went wrong.Please try again later!',
+        'error'
+      );
+    }
+  })
+  .fail(function() {
+    console.log("error");
+  })  
+}
+
+function PT_NewList(){
+  swal({
+    title: '',
+    type: "",
+    html:'<form class="form create-new-list"><h4 class="vp_modal_title"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M2,16H10V14H2M18,14V10H16V14H12V16H16V20H18V16H22V14M14,6H2V8H14M14,10H2V12H14V10Z" /></svg></span> {{LANG create_new_pl}}</h4><div class="sa-create-list-alert"></div><div class="form-group"><input type="text" class="form-control" placeholder="{{LANG pl_name}} 0 / 30"></div><div class="form-group"><select class="form-control"><option value="1" selected="selected">{{LANG privacy}}</option><option value="1">{{LANG public}}</option><option value="0">{{LANG private}}</option></select></div><div class="form-group"><textarea name="" id="" rows="3" class="form-control" placeholder="{{LANG description}}.."></textarea></div></form>',
+    showCancelButton: true,
+    allowOutsideClick:false,
+    confirmButtonText:'{{LANG create}}',
+    cancelButtonText:'{{LANG cancel}}',
+    preConfirm: function (email) {
+    return new Promise(function (resolve, reject) {
+        name     = $(".create-new-list").find('input').val();
+        desc     = $(".create-new-list").find('textarea').val();
+        privacy  = $(".create-new-list").find('select').val();
+        setTimeout(function() {
+          if (name == '') {
+            reject('{{LANG pl_name_required}}');
+          }
+          else if(privacy < 0 || privacy > 1){
+            reject('{{LANG please_check_details}}');
+          }
+          else {
+            resolve();
+          }
+        }, 100)
+      })
+    }
+  }).then(function(){
+    if (!name){ return;}
+    $.ajax({
+      url: '{{LINK aj/lists?type=list&a=new}}',
+      type: 'POST',
+      dataType: 'json',
+      data: {name:name,desc:desc,pr:privacy},
+    })
+    .done(function(data) {
+      if (data.status == 200) {
+        swal({
+          title:name,
+          text:"{{LANG pl_сreated}}",
+          type:'success'
+        });
+
+        PT_Delay(function(){
+          swal.close();
+        },2000);
+      }
+      else if(data.status == 200){
+        swal(
+          'Error!',
+          'Something went wrong.Please try again later!',
+          'error'
+        );
+      }
+    })
+    .fail(function() {
+      swal.close();
+      console.log("error");
+    })
+  },
+  function(){
+    //Error
+  })
+}
+
+function PT_EditList(id){
+  if (!id) {
+    return false;
+  }
+  $.ajax({
+    url: '{{LINK aj/lists}}',
+    type: 'GET',
+    dataType: 'json',
+    data: {type: 'list',a:'edit',id:id},
+  })
+  .done(function(data) {
+    if (data.status == 200) {
+      swal({
+        title: '',
+        type: "",
+        html:data.html,
+        showCancelButton: true,
+        allowOutsideClick:false,
+        confirmButtonText:'{{LANG save}}',
+        cancelButtonText:'{{LANG cancel}}',
+        preConfirm: function (email) {
+        return new Promise(function (resolve, reject) {
+            name     = $(".edit-list-form").find('input').val();
+            desc     = $(".edit-list-form").find('textarea').val();
+            privacy  = $(".edit-list-form").find('select').val();
+            setTimeout(function() {
+              if (name == '') {
+                reject('{{LANG pl_name_required.}}');
+              }
+              else if(privacy < 0 || privacy > 1){
+                reject('{{LANG please_check_details}}');
+              }
+              else {
+                resolve();
+              }
+            }, 100)
+          })
+        }
+      }).then(function(){
+        if (!name){ return;}
+        $.ajax({
+          url: '{{LINK aj/lists?type=list&a=update}}',
+          type: 'POST',
+          dataType: 'json',
+          data: {name:name,desc:desc,pr:privacy,id:id},
+        })
+        .done(function(data) {
+          if (data.status == 200) {
+            swal({
+              title:name,
+              text:"{{LANG pl_saved}}",
+              type:'success'
+            });
+
+            PT_Delay(function(){
+              swal.close();
+            },2000);
+          }
+          else if(data.status == 200){
+            swal(
+              'Error!',
+              'Something went wrong.Please try again later!',
+              'error'
+            );
+          }
+        })
+        .fail(function() {
+          swal.close();
+          console.log("error");
+        })
+      },
+      function(){
+        //Error
+      })
+    }
+  })
+  .fail(function() {
+    console.log("error");
+  })
+}
+
+function PT_DeleteList(id){
+  if (!id) { return false;}
+  swal({
+    title: '{{LANG confirmation}}',
+    text: "{{LANG confirm_delist}}",
+    type: 'warning',
+    showCancelButton: true,
+    confirmButtonText: '{{LANG yes_del}}'
+  }).then(function(){
+    $.ajax({
+      url: '{{LINK aj/lists}}',
+      type: 'GET',
+      dataType: 'json',
+      data: {type: 'list',a:'delist',id:id},
+    })
+    .done(function(data) {
+      if (data.status == 200) {
+        $("[data-playlist='"+id+"']").slideUp(function(){
+          $(this).remove();
+        });
+        
+        swal({
+          title:"{{LANG deleted}}",
+          text:data.name +  " {{LANG was_deleted}}",
+          type:"success"
+        });
+      }
+      else{
+        swal(
+          'Error!',
+          'Something went wrong.Please try again later!',
+          'error'
+        );
+      }
+    })
+    .fail(function() {
+      console.log("error");
+    })
+    
+  })
+}
+
+function PT_DelFromList(list_id,video_id){
+  if (!list_id || !video_id) {
+    return false;
+  }
+
+  $.ajax({
+    url: '{{LINK aj/lists}}',
+    type: 'GET',
+    dataType: 'json',
+    data: {type: 'list',a:'delvid',video_id:video_id,list_id:list_id},
+  })
+  .done(function(data) {
+    if (data.status == 200) {
+      $("[data-video-id='"+video_id+"']").slideUp(function(){
+        $(this).remove();
+      })
+    }
+    else{
+      swal(
+        'Error!',
+        'Something went wrong.Please try again later!',
+        'error'
+      );
+    }
+  })
+  .fail(function() {
+    swal(
+      'Error!',
+      'Something went wrong.Please try again later!',
+      'error'
+    );
+  })
+}
+
+function PT_RemoveFromWL(video_id){
+  if (!video_id) {
+    return false;
+  }
+
+  $.ajax({
+    url: '{{LINK aj/lists}}',
+    type: 'GET',
+    dataType: 'json',
+    data: {type: 'list',a:'delwl',video_id:video_id},
+  })
+  .done(function(data) {
+    if (data.status == 200) {
+      $("[data-video-id='"+video_id+"']").slideUp(function(){
+        $(this).remove();
+      })
+    }
+    else{
+      swal(
+        'Error!',
+        'Something went wrong.Please try again later!',
+        'error'
+      );
+    }
+  })
+  .fail(function() {
+    swal(
+      'Error!',
+      'Something went wrong.Please try again later!',
+      'error'
+    );
+  })
+}
+
+function PT_RVReply(text,comm_id,event,video_id){
+  
+  if (!text || !comm_id || !event || !video_id) {
+    return false;
+  }
+  else if(event.keyCode == 13 && event.shiftKey == 0){
+    var reply_id = 0;
+    if($("#comm-reply-"+comm_id).attr('data-reply-id')){
+      reply_id = $("#comm-reply-"+comm_id).attr('data-reply-id');
+    }
+
+    $.ajax({
+      url: "{{LINK aj/add-reply/video}}",
+      type: 'POST',
+      dataType: 'json',
+      data: {text:text,id:comm_id,video_id:video_id,reply:reply_id},
+    })
+    .done(function(data) {
+      if (data.status == 200) {
+        $("#pt-comment-replies-cont-" + comm_id).append(data.html)
+        $("#comm-reply-"+comm_id).find('input').val('').blur();
+
+      }
+      $("#comment-reply-loading-renderer-"+comm_id).addClass('hidden');
+    })
+    .fail(function() {
+      alert('Sorry, something went wrong: Please try again later ...');
+    })
+  }
+}
+
+function PT_RPReply(text,comm_id,event,post_id){
+  
+  if (!text || !comm_id || !event || !post_id) {
+    return false;
+  }
+  else if(event.keyCode == 13 && event.shiftKey == 0){
+    var reply_id = 0;
+    if($("#comm-reply-"+comm_id).attr('data-reply-id')){
+      reply_id = $("#comm-reply-"+comm_id).attr('data-reply-id');
+    }
+
+    $.ajax({
+      url: "{{LINK aj/add-reply/article}}",
+      type: 'POST',
+      dataType: 'json',
+      data: {text:text,id:comm_id,post_id:post_id,reply:reply_id},
+    })
+    .done(function(data) {
+      if (data.status == 200) {
+        $("#pt-comment-replies-cont-" + comm_id).append(data.html)
+        $("#comm-reply-"+comm_id).find('input').val('').blur();
+      }
+      $("#comment-reply-loading-renderer-"+comm_id).addClass('hidden');
+    })
+    .fail(function() {
+      alert('Sorry, something went wrong: Please try again later ...');
+    })
+  }
+}
+
+function PT_DeleteReply(id) {
+  if (!id) { return false; }
+  if (!confirm('{{LANG delete_confirmation}}')) { return false; }
+  $('#reply-' + id).slideUp('fast');
+  $.post('{{LINK aj/delete-reply}}', {id: id});
+}
+
+function PT_LikeComments(self,type,comment_id){
+  if (!self || (type != 'up' && type != 'down') || !comment_id){
+    return false;
+  }
+
+  else if (!$('#main-container').attr('data-logged') && $('#main-url').val()) {
+    window.location.href = PT_Ajax_Requests_File() + 'login?to=' + $('#main-url').val();
+    return false;
+  }
+
+  var self = $(self);
+  $.ajax({
+    url: '{{LINK aj/comment-like-system/}}' + type,
+    type: 'POST',
+    dataType: 'json',
+    data: {id:comment_id}
+  })
+  .done(function(data) {
+    if (data.status == 200 && type == 'up' && data.type == 'added_like'){
+      self.find('span').text((data.up));
+      $('[data-comment-dislikes="'+comment_id+'"]').find('span').text((data.down));
+      self.find('svg').addClass('active');
+      self.siblings().find('svg').removeClass('active');
+      
+    }
+
+    else if (data.status == 200 && type == 'up' && data.type == 'deleted_like'){
+      self.find('span').text((data.up));
+      $('[data-comment-dislikes="'+comment_id+'"]').find('span').text((data.down));
+      self.find('svg').removeClass('active');
+      self.siblings().find('svg').removeClass('active');
+    }
+
+    else if (data.status == 200 && type == 'down' && data.type == 'added_dislike'){
+      self.find('span').text((data.down));
+      self.find('svg').addClass('active');
+      $('[data-comment-likes="'+comment_id+'"]').find('span').text((data.up));
+      self.siblings().find('svg').removeClass('active');
+    }
+
+    else if (data.status == 200 && type == 'down' && data.type == 'deleted_dislike'){
+      self.find('span').text((data.down));
+      self.find('svg').removeClass('active');
+      $('[data-comment-likes="'+comment_id+'"]').find('span').text((data.up));
+      self.siblings().find('svg').removeClass('active');
+    }
+
+    else{
+      swal(
+         'Error!',
+         'Something went wrong.Please try again later!',
+         'error'
+       );
+    }
+  })
+  .fail(function() {
+    console.log("error");
+  })
+}
+
+function PT_LikeReplies(self,type,reply_id){
+  if (!self || (type != 'up' && type != 'down') || !reply_id){
+    return false;
+  }
+
+  else if (!$('#main-container').attr('data-logged') && $('#main-url').val()) {
+    window.location.href = PT_Ajax_Requests_File() + 'login?to=' + $('#main-url').val();
+    return false;
+  }
+
+  var self = $(self);
+  $.ajax({
+    url: '{{LINK aj/reply-like-system/}}' + type,
+    type: 'POST',
+    dataType: 'json',
+    data: {id:reply_id}
+  })
+  .done(function(data) {
+    if (data.status == 200 && type == 'up' && data.type == 'added_like'){
+      self.find('span').text((data.up));
+      $('[data-reply-dislikes="'+reply_id+'"]').find('span').text((data.down));
+      self.find('svg').addClass('active');
+      self.siblings().find('svg').removeClass('active');
+      
+    }
+
+    else if (data.status == 200 && type == 'up' && data.type == 'deleted_like'){
+      self.find('span').text((data.up));
+      $('[data-reply-dislikes="'+reply_id+'"]').find('span').text((data.down));
+      self.find('svg').removeClass('active');
+      self.siblings().find('svg').removeClass('active');
+    }
+
+    else if (data.status == 200 && type == 'down' && data.type == 'added_dislike'){
+      self.find('span').text((data.down));
+      self.find('svg').addClass('active');
+      $('[data-reply-likes="'+reply_id+'"]').find('span').text((data.up));
+      self.siblings().find('svg').removeClass('active');
+    }
+
+    else if (data.status == 200 && type == 'down' && data.type == 'deleted_dislike'){
+      self.find('span').text((data.down));
+      self.find('svg').removeClass('active');
+      $('[data-reply-likes="'+reply_id+'"]').find('span').text((data.up));
+      self.siblings().find('svg').removeClass('active');
+    }
+
+    else{
+      swal(
+         'Error!',
+         'Something went wrong.Please try again later!',
+         'error'
+       );
+    }
+  })
+  .fail(function() {
+    console.log("error");
+  })
+}
+
+function pt_hide_announcement(id){
+  if (!id) { return false; }
+  $("#announcement-"+id).slideUp('fast',function(){
+    $(this).remove();
+    $.post('{{LINK aj/main/hide-announcement}}', {id: id}, function(data, textStatus, xhr) { /* pass */ });
+  })  
+}
+
+function pay_to_see(video_id,price) {
+  $('.p_t_show_btn_').text("{{LANG please_wait}}");
+  $('.p_t_show_btn_').attr('disabled', 'true');
+  PT_ShowMethods('pay',video_id,price);
+  $('.p_t_show_btn_').text("{{LANG pay}} <?php echo(!empty($pt->config->currency_symbol_array[$pt->config->payment_currency]) ? $pt->config->currency_symbol_array[$pt->config->payment_currency] : '$') ?>"+price);
+  $('.p_t_show_btn_').removeAttr('disabled');
+}
+
+function PT_ShowMethods(type,video_id = 0,price = 0,user_id = 0) {
+  $.post('{{LINK aj/wallet/get_modal}}',{type:type,video_id:video_id,price:price,user_id:user_id}, function(data, textStatus, xhr) {
+    if (data.status == 200) {
+      $('.payment_method').html(data.html);
+      $('#pay-go-pro').modal({
+             show: true
+            });
+    }
+    if (type == 'subscribe') {
+      $('.subscribe-id-'+user_id).find('span').text("{{LANG subscribe}}");
+      $('.subscribe-id-'+user_id).removeAttr('disabled');
+    }
+  });
+}
+
+
+  function PT_PurchasePkg(pkg,self,video_id,price,user_id = 0){
+    if (!pkg || !self) {
+      return false;
+    }
+
+    $(self).text("{{LANG please_wait}}").attr('disabled', 'true');
+    if (pkg == 'pro') {
+      $.ajax({
+        url: '{{LINK aj/go_pro/purchase}}',
+        type: 'POST',
+        dataType: 'json',
+        data: {type: pkg},
+      })
+      .done(function(data) {
+        if (data.status == 200) {
+          $('#pay-go-pro').modal('hide');
+          document.location.href = data.url;
+        }
+        else{
+          swal({
+            title:"{{LANG error}}",
+            text:"{{LANG error_msg}}",
+            type:"error"
+          })
+        }
+      })
+      .fail(function() {
+        console.log("error");
+      });
+    }
+    else if (pkg == 'wallet') {
+        amount = $("#wallet_amount").val();
+
+      $.ajax({
+        url: '{{LINK aj/wallet/replenish}}',
+        type: 'POST',
+        dataType: 'json',
+        data: {amount:amount},
+      })
+      .done(function(data) {
+        if (data.status == 200) {
+          window.location.href = data.url;
+        }
+        else{
+          swal({
+            title:"{{LANG error}}",
+            text:"{{LANG error_msg}}",
+            type:"error"
+          });
+        }
+      })
+      .fail(function() {
+        swal({
+          title:"{{LANG error}}",
+          text:"{{LANG error_msg}}",
+          type:"error"
+        });
+      });
+    }
+    else if (pkg == 'pay') {
+      $.post('{{LINK aj/go_pro/pay_to_see}}', {video_id: video_id}, function(data, textStatus, xhr) {
+         if (data.status == 200) {
+            document.location.href = data.url;
+         }
+         else{
+            swal({
+               title:"{{LANG error}}",
+               text:"{{LANG error_msg}}",
+               type:"error"
+            })
+         }
+         $('.p_t_show_btn_').text("{{LANG pay}} <?php echo(!empty($pt->config->currency_symbol_array[$pt->config->payment_currency]) ? $pt->config->currency_symbol_array[$pt->config->payment_currency] : '$') ?>"+price);
+         $('.p_t_show_btn_').removeAttr('disabled');
+      });
+    }
+    else if (pkg == 'subscribe' && user_id > 0) {
+      $.post('{{LINK aj/go_pro/subscribe}}', {user_id: user_id,type:'paypal'}, function(data, textStatus, xhr) {
+         if (data.status == 200) {
+            document.location.href = data.url;
+         }
+         else{
+            swal({
+               title:"{{LANG error}}",
+               text:"{{LANG error_msg}}",
+               type:"error"
+            })
+         }
+      });
+    }
+  }
+
+  function PT_OpenCheckOut(pkg,self,video_id = 0,price = 0,user_id = 0){
+    if (!pkg || !self) {
+      return false;
+    }
+    if (video_id) {
+      $('#checkout_video_'+video_id).val(video_id);
+    }
+    if (price) {
+      $('#checkout_price_'+video_id).val(price);
+    }
+    $('#checkout_user_id').val(user_id);
+
+    $(self).text("{{LANG please_wait}}").attr('disabled', 'true');
+
+    $("#2checkout_alert").html('');
+    $('#pay-go-pro').modal('hide');
+      $('#2checkout_modal').modal({
+            show: true
+        });
+  }
+
+  function pay_using_wallet(pkg,self,video_id,price,user_id = 0){
+    if (!pkg || !self) {
+      return false;
+    }
+
+    $(self).text("{{LANG please_wait}}").attr('disabled', 'true');
+    if (pkg == 'pro') {
+      $.ajax({
+        url: '{{LINK aj/go_pro/pro_wallet}}',
+        type: 'POST',
+        dataType: 'json',
+        data: {type: pkg},
+      })
+      .done(function(data) {
+        if (data.status == 200) {
+          $('#pay-go-pro').modal('hide');
+          document.location.href = data.url;
+        }
+        else{
+          swal({
+            title:"{{LANG error}}",
+            text:"{{LANG error_msg}}",
+            type:"error"
+          })
+        }
+      })
+      .fail(function() {
+        console.log("error");
+      });
+    }
+    else if (pkg == 'pay') {
+      $.post('{{LINK aj/go_pro/pay_to_see_wallet}}', {video_id: video_id}, function(data, textStatus, xhr) {
+         if (data.status == 200) {
+            document.location.href = data.url;
+         }
+         else{
+            swal({
+               title:"{{LANG error}}",
+               text:"{{LANG error_msg}}",
+               type:"error"
+            })
+         }
+         $('.p_t_show_btn_').text("{{LANG pay}} <?php echo(!empty($pt->config->currency_symbol_array[$pt->config->payment_currency]) ? $pt->config->currency_symbol_array[$pt->config->payment_currency] : '$') ?>"+price);
+         $('.p_t_show_btn_').removeAttr('disabled');
+      });
+    }
+    else if (pkg == 'subscribe' && user_id > 0) {
+      $.post('{{LINK aj/go_pro/subscribe}}', {user_id: user_id,type:'wallet'}, function(data, textStatus, xhr) {
+         if (data.status == 200) {
+            document.location.href = data.url;
+         }
+         else{
+            swal({
+               title:"{{LANG error}}",
+               text:"{{LANG error_msg}}",
+               type:"error"
+            })
+         }
+      });
+
+    }
+  }
+
+  function PT_PaySubscribe(user_id,self,type = '') {
+    if (!user_id || !self) { return false; }
+    var text = $(self).find('span').text();
+    if (type == 'subscribe') {
+      $(self).find('span').text("{{LANG please_wait}}");
+      $(self).attr('disabled', 'true');
+      PT_ShowMethods('subscribe',0,0,user_id);
+    }
+    else{
+      var html = "<small>{{LANG unsubscribe_from_channel}}</small>";
+      swal({
+        title: "",
+        type: "",
+        html:html,
+        showCancelButton: true,
+        cancelButtonText: "{{LANG no}}",
+        customClass: 'sweetalert-lg pt_add_to_list_vid',
+        confirmButtonText:'{{LANG yes}}'
+      }).then(function(){
+          $(self).removeClass('btn-subscribed').addClass('btn-subscribe');
+          $(self).find('span').text("{{LANG subscribe}}");
+          $(self).find('svg').remove();
+          $(self).prepend('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>');
+          $(self).attr('onclick', 'PT_PaySubscribe(' + user_id + ',this,"subscribe")');
+          $.post('{{LINK aj/subscribe}}', {user_id: user_id});
+
+        },function(){
+      });
+    }
+    $(self).removeAttr('disabled');
+    $(self).find('span').text(text);
+  }
+</script>

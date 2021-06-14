@@ -1,0 +1,15 @@
+<div class="container">
+	<div class="content vp_panel">
+		<div class="empty_state">
+			<span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17,10.5V7A1,1 0 0,0 16,6H4A1,1 0 0,0 3,7V17A1,1 0 0,0 4,18H16A1,1 0 0,0 17,17V13.5L21,17.5V6.5L17,10.5Z" /></svg></span>
+			<p>{{LANG no_videos_found_for_now}}</p>
+			<?php if (PT_IsAdmin()): ?>
+				<a class="btn btn_primary" href="{{LINK admin-cp/import-from-youtube}}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"></path></svg> {{LANG import}}</a>
+			<?php endif; ?>
+			<?php if ($pt->config->upload_system == 'on'): ?>
+				<a class="btn btn_primary" href="{{LINK upload-video}}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z"></path></svg> {{LANG upload}}</a>
+			<?php endif; ?>
+		</div>
+		<div class="clear"></div>
+	</div>
+</div>

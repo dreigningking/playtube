@@ -1,0 +1,76 @@
+<div class="articles-content">
+	<div class="subscriptions-list author-list articles-container">
+		<h3 class="recent-articles">
+			{{LANG my_articles}} 
+			<?php if ($pt->config->all_create_articles == 'on') { ?>
+				<a href="{{LINK create_article}}" class="btn btn_primary_rev cret_artcle" data-load="?link1=create_article">{{LANG create_article}} </a><div class="clear"></div>
+			<?php } ?>
+		</h3>
+		<?php if ($pt->posts_count == 0) { ?>
+			<div class="empty_state">
+				<span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19,21 L5,21 C3.34314575,21 2,19.6568542 2,18 L2,3 L16,3 L18,3 L18,8 L22,8 L22,9 L22,18 C22,19.6568542 20.6568542,21 19,21 Z M16.1707057,19 C16.0601542,18.6872211 16,18.3506354 16,18 L16,5 L4,5 L4,18 C4,18.5522847 4.44771525,19 5,19 L16.1707057,19 Z M18,10 L18,18 C18,18.5522847 18.4477153,19 19,19 C19.5522847,19 20,18.5522847 20,18 L20,10 L18,10 Z M10,7 L10,11 L6,11 L6,7 L10,7 Z M14,8 L14,10 L11,10 L11,8 L14,8 Z M14,12 L14,14 L6,14 L6,12 L14,12 Z M14,15 L14,17 L6,17 L6,15 L14,15 Z" /></svg></span>
+				<p>{{LANG no_post_found}}</p>
+				<?php if ($pt->config->all_create_articles == 'on') { ?>
+					<a class="btn btn_primary" href="{{LINK admin-cp/create-article}}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path></svg> {{LANG create}}</a>
+				<?php } ?>
+			</div>
+		<?php } else { ?>
+			{{POSTS}}
+		<?php } ?>
+	</div>
+	<?php if ($pt->total_pages > 1) { ?>
+		<!--<div class="pull-left showing_pages">
+			<?php echo "Showing $pt->page_number out of " . $pt->total_pages; ?>
+		</div>-->
+		<div class="text-center">
+			<nav class="showing_nav movies_pagntn">
+				<a href="{{LINK my_articles?page_id=1}}" class="btn" title='First Page'>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" /></svg>
+				</a>
+				<ul class="pagination">
+					<?php if ($pt->page_number > 1) {  ?>
+						<li>
+							<a href="{{LINK my_articles?page_id=<?php echo($pt->page_number - 1) ?>}}" title='Previous Page'>
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z" /></svg>
+							</a>
+						</li>
+					<?php  } ?>
+					<?php 
+						$nums = 0;
+						$nums_pages = ($pt->page_number > 3) ? ($pt->page_number - 3) : $pt->page_number;
+						for ($i=$nums_pages; $i <= $pt->total_pages; $i++) { 
+							if ($nums < 4) {
+						?>
+							<li class="<?php echo ($pt->page_number == $i) ? 'active' : ''; ?>"><a href="{{LINK my_articles?page_id=<?php echo($i) ?>}}"><?php echo $i ?></a></li>
+					<?php } $nums++; } ?>
+					<?php if ($pt->total_pages > $pt->page_number) { ?>
+						<li>
+							<a href="{{LINK my_articles?page_id=<?php echo($pt->page_number + 1) ?>}}" title="Next Page">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" /></svg>
+							</a>
+						</li>
+					<?php } ?>
+				</ul>
+				<a href="{{LINK my_articles?page_id=<?php echo($pt->total_pages) ?>}}" class="btn" title='Last Page'>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" /></svg>
+				</a>
+			</nav>
+		</div>
+	<?php } ?>
+</div>
+
+<script type="text/javascript">
+function PT_DeleteArticle(id) {
+	if (!id) {
+		return false;
+	}
+	if (!confirm("{{LANG delete_article_text}}")) {
+		return false;
+	}
+	$.post('{{LINK aj/articles/delete-article}}', {id: id}, function(data, textStatus, xhr) {
+		if (data.status == 200) {
+			window.location.href = '{{LINK my_articles}}';
+		}
+	});
+}
+</script>

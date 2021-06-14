@@ -1,0 +1,22 @@
+<div class="col-md-4 col-sm-6 play-lists" id="plist_{{ID}}" data-playlist="{{ID}}">
+	<div class="plist_parent" data-id="{{ID}}" data-views="{{VIEWS}}">
+		<div class="avatar">
+			<?php if (IS_LOGGED == true && $pt->isowner == true): ?> 
+				<div class="albm_hover_bg">
+					<div class="albm_hover_bg_list">
+						<div onclick="PT_EditList('{{ID}}');"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M2,6V8H14V6H2M2,10V12H14V10H2M20.04,10.13C19.9,10.13 19.76,10.19 19.65,10.3L18.65,11.3L20.7,13.35L21.7,12.35C21.92,12.14 21.92,11.79 21.7,11.58L20.42,10.3C20.31,10.19 20.18,10.13 20.04,10.13M18.07,11.88L12,17.94V20H14.06L20.12,13.93L18.07,11.88M2,14V16H10V14H2Z" /></svg> {{LANG edit}}</div>
+						<div onclick="PT_DeleteList('{{ID}}');"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M15,16H19V18H15V16M15,8H22V10H15V8M15,12H21V14H15V12M3,18A2,2 0 0,0 5,20H11A2,2 0 0,0 13,18V8H3V18M14,5H11L10,4H6L5,5H2V7H14V5Z" /></svg> {{LANG delete}}</div>
+					</div>
+				</div>
+			<?php endif; ?>
+			<a href="{{URL}}" data-load="?link1=watch&id={{VIDEO_ID_}}&list={{LIST_ID}}">
+				<img src="{{THUMBNAIL}}" alt="{{TITLE}}" />
+			</a>
+			<span class="alb_count" title="{{LANG videos}}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M17,10.5V7A1,1 0 0,0 16,6H4A1,1 0 0,0 3,7V17A1,1 0 0,0 4,18H16A1,1 0 0,0 17,17V13.5L21,17.5V6.5L17,10.5Z"/></svg> {{COUNT}}</span>
+			<div class="plist-name">
+				<h4><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19,9H2V11H19V9M19,5H2V7H19V5M2,15H15V13H2V15M17,13V19L22,16L17,13Z" /></svg> {{TITLE}}</h4>
+			</div>
+		</div>
+	</div>
+</div>
+<style>#plist_{{ID}} .plist_parent .avatar:before, #plist_{{ID}} .plist_parent .avatar:after {background-image: url('{{THUMBNAIL}}')}</style>
