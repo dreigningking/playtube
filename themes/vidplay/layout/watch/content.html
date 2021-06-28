@@ -530,30 +530,36 @@ body {background: #fff;}
 	<div class="modal-dialog modal-sm" role="document">
 		<div class="modal-content">
 			<div class="modal-body">
-				<h4 class="">Donate Tokens</h4>
-				<div class="share-video" >
-					<div><a href="javascript:void(0);" style="background:purple;" class="set_token_amount" data-token-amount="5">5</a></div>
-					<div><a href="javascript:void(0);" style="background:purple;" class="set_token_amount" data-token-amount="10">10</a></div>
-					<div><a href="javascript:void(0);" style="background:purple;" class="set_token_amount" data-token-amount="20">20</a></div>
-					<div><a href="javascript:void(0);" style="background:purple;" class="set_token_amount" data-token-amount="30">30</a></div>
-					<div><a href="javascript:void(0);" style="background:purple;" class="set_token_amount" data-token-amount="50">50</a></div>
+				<h4 class="text-center">Donate Tokens</h4>
+				<div class="share-video" style="display: flex;justify-content: space-between !important;">
+					
+					<span class="h5">Balance: 
+						<img src="{{CONFIG theme_url}}/img/exenos.png" style="height:19px;width:19px;">
+						<span id="token_balance">{{ME token_balance}}</span>
+					</span>
+					<span class="">
+						<a href="{{LINK settings/token_deposit/<?php echo $pt->settings->username; ?>}}" data-load="?link1=settings&page=token_deposit&user=<?php echo $pt->settings->username; ?>" style="border-bottom: 1px dashed #ddd;font-size:14px;height: 20px;border-radius: 0px;">Deposit</a>
+					</span>
 				</div>
+				
 				<div class="yp_copy_link" style="margin:20px 80px 20px;">
 					<button class="btn" style="background:purple;"><img src="{{CONFIG theme_url}}/img/exenos.png" style="height:19px;width:19px;margin-right:3px;"></button>
-					<input id="token_amount" tabindex="1" type="number" placeholder="Enter Amount" style="background-color:white;">
+					<input id="token_amount" name="token_amount" tabindex="1" type="number" placeholder="Enter Amount" style="background-color:white;">
 				</div>
 				<div class="yp_copy_link">
-					<input id="sender_address" tabindex="1" type="text" placeholder="Your Token Address">
-					<button class="btn" onclick="transferToken();"><i class="fa fa-chevron-circle-right" style="font-size:20px;"></i></button>
+					<input id="token_receiver_id" name="token_receiver_id" value="<?php echo $pt->get_video->user_id ?>" tabindex="1" type="hidden">
+					<input id="token_video_id" name="token_video_id" value="{{ID}}" type="hidden">
+					<input id="token_password" name="password" placeholder="Your Password" tabindex="1" type="password">
+					<input type="hidden" id="token_url" name="token_url" value="{{LINK aj/user/token-transfer}}?hash=">
+					<input type="hidden" id="token_hash_id" name="token_hash_id" value="<?php echo PT_CreateSession()?>">
+       				<input type="hidden" id="token_user_id" name="token_user_id" value="{{USER id}}">
+					<button class="btn" onclick="transferToken();">
+						<i class="fa fa-chevron-circle-right" style="font-size:20px;"></i>
+					</button>
 				</div>
-				<div id="token_error" class="text-danger text-center"></div>
+				<div id="token_message" class="text-danger text-center"></div>
 			</div>
 			<div class="modal-footer">
-				<div class="vp_custm_chk pull-left">
-					<input id="walletsave" type="checkbox" class="autoplay-video">
-					<label for="walletsave">Save my token address</label>
-				</div>
-				<input id="receiver_address" type="hidden" value="{{USER crypto_wallet_address}}">
 				<button type="button" class="matbtn btn btn-default" data-dismiss="modal">{{LANG close}}</button>
 			</div>
 		</div>

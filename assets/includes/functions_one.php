@@ -63,9 +63,38 @@ function PT_UserData($user_id = 0, $options = array()) {
         $fetched_data->fav_category = array();
     }
     $fetched_data->subscribe_count = number_format($db->where('user_id', $fetched_data->id)->getValue(T_SUBSCRIPTIONS, "count(*)"));
+    $fetched_data->token_balance = PT_TokenBalance($fetched_data->id);
+    // $fetched_data->token_transactions = PT_TokenTransactions($fetched_data->id);
     
     return $fetched_data;
 }
+
+function PT_TokenBalance($id = 0) {
+    global $pt, $db;
+    $token_balance = 0;
+    if (empty($id)) {
+        return false;
+    }
+    $token = $db->where('user_id', $id)->getOne(T_TOKEN_BAL);
+    if(!empty($token)){
+        $token_balance = $token->balance;
+    }
+    return $token_balance;
+}
+
+// function PT_TokenTransactions($id = 0) {
+//     global $pt, $db;
+//     $data = [];
+//     if (empty($id)) {
+//         return false;
+//     }
+//     $transactions = $db->where("( (receiver_id = {$id}) OR (sender_id = {$id}) )")->orderBy('id', 'DESC')->getValue(T_TOKEN_TRANS);
+//     if(!empty($transactions)){
+//         foreach($transactions as $key => $value)
+//         $data[] = $value;
+//     }
+//     return $data;
+// }
 
 function PT_GetConfig() {
     global $db;
@@ -1796,8 +1825,8 @@ function StartCloudRecording($vendor,$region,$bucket,$accessKey,$secretKey,$cnam
                 "'.date('m').'"
               ]
         }   
-    }
-} ');
+      }
+    } ');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $response  = curl_exec($ch);
     curl_close($ch);

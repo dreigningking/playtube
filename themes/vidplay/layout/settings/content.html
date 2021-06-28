@@ -5,18 +5,42 @@
 				<ul class="scrollmenu pt_shadow">
 					<p>{{LANG settings}}</p>
 					<li class="general <?php echo ($pt->setting_page == 'general') ? 'active': '';?>">
-						<a href="{{LINK settings/general/<?php echo $pt->settings->username; ?>}}" data-load="?link1=settings&page=general"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M6.044,21.58l6.982-6.983c2.354,0.968,5.16,0.497,7.071-1.414c1.911-1.912,2.382-4.717,1.414-7.071l-3.89,3.889 l-3.535-3.536l3.889-3.889c-2.354-0.968-5.159-0.498-7.07,1.415c-1.911,1.911-2.382,4.717-1.414,7.071l-6.983,6.982L6.044,21.58z"/></svg></span> {{LANG general}}</a>
+						<a href="{{LINK settings/general/<?php echo $pt->settings->username; ?>}}" data-load="?link1=settings&page=general">
+							<span>
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+									<path fill="currentColor" d="M6.044,21.58l6.982-6.983c2.354,0.968,5.16,0.497,7.071-1.414c1.911-1.912,2.382-4.717,1.414-7.071l-3.89,3.889 l-3.535-3.536l3.889-3.889c-2.354-0.968-5.159-0.498-7.07,1.415c-1.911,1.911-2.382,4.717-1.414,7.071l-6.983,6.982L6.044,21.58z"/></svg>
+								</span> {{LANG general}}
+							</a>
 					</li>
 					<?php if (($pt->config->usr_v_mon == 'on' || $pt->config->payed_subscribers == 'on') && ($pt->settings->id == $pt->user->id)): ?>
 						<li class="monetization <?php echo ($pt->setting_page == 'monetization') ? 'active': '';?>">
-							<a href="{{LINK settings/monetization/<?php echo $pt->settings->username; ?>}}" data-load="?link1=settings&page=monetization&user=<?php echo $pt->settings->username; ?>"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20,4H4C2.897,4,2,4.897,2,6v12c0,1.103,0.897,2,2,2h16c1.103,0,2-0.897,2-2V6C22,4.897,21.103,4,20,4z M20,6v2H4V6H20z M4,18v-6h16.001l0.001,6H4z"/><path fill="currentColor" d="M6 14H12V16H6z"/></svg></span> {{LANG monetization}}</a>
+							<a href="{{LINK settings/monetization/<?php echo $pt->settings->username; ?>}}" data-load="?link1=settings&page=monetization&user=<?php echo $pt->settings->username; ?>">
+								<span>
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+										<path fill="currentColor" d="M20,4H4C2.897,4,2,4.897,2,6v12c0,1.103,0.897,2,2,2h16c1.103,0,2-0.897,2-2V6C22,4.897,21.103,4,20,4z M20,6v2H4V6H20z M4,18v-6h16.001l0.001,6H4z"/><path fill="currentColor" d="M6 14H12V16H6z"/>
+									</svg>
+								</span> {{LANG monetization}}
+							</a>
 						</li>
 					<?php endif; ?>
 					<?php if (($pt->config->usr_v_mon == 'on' && $pt->config->sell_videos_system == 'on') || ($pt->config->usr_v_mon == 'off' && $pt->config->sell_videos_system == 'on') || ($pt->config->usr_v_mon == 'on' && $pt->config->sell_videos_system == 'off') ) { ?>
 					<li class="balance <?php echo (in_array($pt->setting_page, array('withdrawals','balance'))) ? 'active': '';?>">
-						<a href="{{LINK settings/balance/<?php echo $pt->settings->username; ?>}}" data-load="?link1=settings&page=balance&user=<?php echo $pt->settings->username; ?>"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20,7V5c0-1.103-0.897-2-2-2H5C3.794,3,2,3.799,2,6v11c0,2.201,1.794,3,3,3h15c1.104,0,2-0.896,2-2V9 C22,7.896,21.104,7,20,7z M4,6c0-0.805,0.55-0.988,1-1h13v2H5.012C4.55,6.988,4,6.805,4,6z M19,15h-2v-3h2V15z"/></svg></span> {{LANG balance_}}</a>
+						<a href="{{LINK settings/balance/<?php echo $pt->settings->username; ?>}}" data-load="?link1=settings&page=balance&user=<?php echo $pt->settings->username; ?>">
+							<span>
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+									<path fill="currentColor" d="M20,7V5c0-1.103-0.897-2-2-2H5C3.794,3,2,3.799,2,6v11c0,2.201,1.794,3,3,3h15c1.104,0,2-0.896,2-2V9 C22,7.896,21.104,7,20,7z M4,6c0-0.805,0.55-0.988,1-1h13v2H5.012C4.55,6.988,4,6.805,4,6z M19,15h-2v-3h2V15z"/>
+								</svg>
+							</span> {{LANG balance_}}
+						</a>
 					</li>
 					<?php } ?>
+					<li class="balance <?php echo (in_array($pt->setting_page, array('token_withdrawal','token_deposits'))) ? 'active': '';?>">
+						<a href="{{LINK settings/token_withdrawal/<?php echo $pt->settings->username; ?>}}" data-load="?link1=settings&page=token_withdrawal&user=<?php echo $pt->settings->username; ?>">
+							<span style="background-color:purple">
+								<img src="{{CONFIG theme_url}}/img/exenos.png" style="height:19px;width:19px;">
+							</span> Tokens
+						</a>
+					</li>
 					<hr>
 					<p>{{LANG profile}}</p>
 					<li class="profile <?php echo ($pt->setting_page == 'profile') ? 'active': '';?>">

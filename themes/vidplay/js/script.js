@@ -196,24 +196,50 @@ function Wo_LikeSystem(id, type, this_, is_ajax, repeat) {
    }
 }
 
-$('.set_token_amount').click(function(){
-  $('#token_amount').val($(this).attr('data-token-amount'));
-});
-
 function transferToken(){
+  
   var token_error = '';
-  if($('#receiver_address').val() == '')
-  token_error = 'Receivers address cannot be null';
-  if($('#sender_address').val() == '')
-  token_error = 'Your token address is invalid';
-  if($('#token_amount').val() == '')
+  var receiver_id = $('#token_receiver_id').val();
+  var video_id = $('#token_video_id').val();
+  var token_amount = parseInt($('#token_amount').val());
+  var password = $('#token_password').val();
+  var user_id = $('#token_user_id').val();
+  var hash_id = $('#token_hash_id').val();
+  if(token_amount == '')
   token_error = 'Token amount cannot be null';
+  if(password == '')
+  token_error = 'Password cannot be blank';
   
-  if($('#token_amount').val() == '' || $('#sender_address').val() == '' || $('#receiver_address').val() == ''){
-    $('#token_error').html(token_error);
-  }
-  // alert($('#token_amount').val())
-  
+  if(token_error != '')
+    $('#token_message').html(token_error);
+  else{
+      $.ajax({
+        url: $('#token_url').val()+$('.main_session').val(),
+        type: 'POST',
+        dataType: 'json',
+        data: {user_id:user_id,amount: token_amount,video_id:video_id,receiver_id:receiver_id,password:password,hash_id:hash_id},
+        beforeSend: function() {
+          $('#token_message').html("Please Wait");
+        },
+        success: function(data) {
+            if (data.status == 200) {
+                $('#token_message').html('<div class="alert alert-success bg-success">' + data.message + '</div>');
+                $('#token_amount').val('');
+                $('#token_password').val('');
+                $('#token_balance').html(parseInt($('#token_balance').html()) - token_amount);
+                $('.alert-success').fadeIn('fast', function() {
+                    $(this).delay(2500).slideUp(500, function() {
+                        $(this).remove();
+                    });
+                });
+            } 
+            else if (data.status == 400) {
+                $('#token_message').html('<div class="alert alert-danger bg-danger">' + data.message + '</div>');
+                $('.alert-danger').fadeOut(5000);
+            }
+        }
+      });
+  }  
 }
 
 function PT_AddLike(id, this_, type , is_ajax) {

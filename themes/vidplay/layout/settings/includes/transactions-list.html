@@ -1,0 +1,16 @@
+<tr>
+    <td>{{T_CREATED_AT}}</td>
+    <td>{{T_REF}}</td>
+    <td>{{T_DESCRIPTION}}</td>
+    <td>{{T_AMOUNT}} </td>
+    <td>{{T_BENEFICIARY}}</td>
+    <td>
+        <?php if ($pt->transaction_stat == 1): ?>
+            <span class="success">Success</span>
+        <?php elseif($pt->transaction_stat == 2): ?>
+            <span class="danger">Cancelled</span>
+        <?php else: ?>
+            <span class="warning">Pending</span>
+        <?php endif; ?>
+    </td>
+</tr> 

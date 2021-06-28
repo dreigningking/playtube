@@ -297,3 +297,36 @@ if (empty($_POST['crypto_wallet_address'])) {
 themes/vidplay/layouts/settings/general
 change donation_paypal_email to crypto_wallet_address in forms
 
+
+home/content.html LINE 196
+change slidetoshow to 5
+
+
+in Settings/content
+
+$token_transactions = "";
+if ($pt->setting_page == 'token_transactions') {
+    $user_transactions  = $db->where("( (receiver_id = {$pt->user->id}) OR (sender_id = {$pt->user->id}) )")->orderBy('id', 'DESC')->get(T_TOKEN_TRANS);  
+    foreach ($user_transactions as $transaction) {
+        if($transaction->video_id){
+            $get_video = PT_GetVideoByID(3,0,0,2);
+            if($get_video){
+                $description = 'Donation for video titled : <br> <a href="'.$get_video->url.'">'.$get_video->title.'</a>"';
+            }
+        }elseif($transaction->mode == 'withdrawal') 
+            $description = 'Withdrawal';
+        else $description = 'Deposit';
+        $get_beneficiary = PT_UserData($transaction->receiver_id);
+        $beneficiary = '<a href="'.$get_beneficiary->url.'">'.$get_beneficiary->name.'</a>';
+        $pt->transaction_stat = $transaction->status;
+        $token_transactions .= PT_LoadPage("settings/includes/transactions-list",array(
+            'T_ID' => $transaction->id,
+            'T_REF' => $transaction->reference,
+            'T_DESCRIPTION' => $description,
+            'T_CREATED_AT' => date('M-d',$transaction->created_at),
+            'T_AMOUNT' => number_format($transaction->amount, 2),
+            'T_BENEFICIARY' => $beneficiary,
+        ));
+    }
+}
+

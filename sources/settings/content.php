@@ -36,7 +36,10 @@ $pages_array      = array(
     'blocked_users',
     'manage_sessions',
     'points',
-    'my_info'
+    'my_info',
+    'token_withdrawal',
+    'token_deposit',
+    'token_transactions'
 );
 
 if ($pt->settings->id == $user->id) {
@@ -58,7 +61,10 @@ if ($pt->settings->id == $user->id) {
         'blocked_users',
         'manage_sessions',
         'points',
-        'my_info'
+        'my_info',
+        'token_withdrawal',
+        'token_deposit',
+        'token_transactions',
     );
 }
 $pt->page_url_ = $pt->config->site_url.'/settings';
@@ -95,7 +101,6 @@ foreach ($countries_name as $key => $value) {
     $selected = ($key == $pt->settings->country_id) ? 'selected' : '';
     $countries .= '<option value="' . $key . '" ' . $selected . '>' . $value . '</option>';
 }
-
 
 
 // Get user custom Fields
@@ -172,6 +177,32 @@ if ($pt->setting_page == 'withdrawals') {
     }
 }
 
+$token_transactions = "";
+if ($pt->setting_page == 'token_transactions') {
+    $user_transactions  = $db->where("( (receiver_id = {$pt->user->id}) OR (sender_id = {$pt->user->id}) )")->orderBy('id', 'DESC')->get(T_TOKEN_TRANS);  
+    foreach ($user_transactions as $transaction) {
+        if($transaction->video_id){
+            $get_video = PT_GetVideoByID(3,0,0,2);
+            if($get_video){
+                $description = 'Donation for video titled : <br> <a href="'.$get_video->url.'">'.$get_video->title.'</a>"';
+            }
+        }elseif($transaction->mode == 'withdrawal') 
+        $description = 'Withdrawal';
+        else 
+         $description = 'Deposit';
+        $get_beneficiary = PT_UserData($transaction->receiver_id);
+        $beneficiary = '<a href="'.$get_beneficiary->url.'">'.$get_beneficiary->name.'</a>';
+        $pt->transaction_stat = $transaction->status;
+        $token_transactions .= PT_LoadPage("settings/includes/transactions-list",array(
+            'T_REF' => $transaction->reference,
+            'T_DESCRIPTION' => $description,
+            'T_CREATED_AT' => date('d-M',$transaction->created_at),
+            'T_AMOUNT' => $transaction->amount,
+            'T_BENEFICIARY' => $beneficiary,
+        ));
+    }
+}
+
 
 $blocked_users = "";
 if ($pt->setting_page == 'blocked_users') {
@@ -223,6 +254,7 @@ $pt->content     = PT_LoadPage("settings/content", array(
         'COUNTRIES_LAYOUT' => $countries,
         'CUSTOM_FIELDS' => $custom_fields,
         'WITHDRAWAL_HISTORY_LIST' => $withdrawal_history,
+        'TRANSACTION_HISTORY_LIST' => $token_transactions,
         'CUSTOM_DATA' => ((!empty($custom_fields)) ? "1" : "0"),
         'BLOCKED_USERS' => $blocked_users,
         'SESSIONS' => $sessions,

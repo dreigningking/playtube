@@ -52,7 +52,6 @@ if ($type  != 'ap' && !in_array($type,$api_requests) && $first != 'download_user
 	}
 }
 
-
 if (!empty($_GET['type'])) {
 	$file = PT_Secure($_GET['type']);
 	$files = scandir('ajax');
