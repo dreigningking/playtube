@@ -28,20 +28,28 @@
 		</div>
 		<hr>
 		<div class="row">
-			<div class="col-md-12 text-center">
-				<p>Make a token transfer to the address below</p>
-			</div>
-			<div class="col-md-12">
-				<div class="yp_copy_link">
-					<input id="copyLink" readonly="" tabindex="1" type="text" value="85e75eba20fa32fcb95a56c23cb6254bcadf8c09">
-					<a class="btn" href="javascript:void(0);" onclick="copyLinkfn();">
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-							<path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path>
-						</svg>
-					</a>
-				</div>	
-			</div>
-
+			<?php if(!$pt->settings->crypto_wallet_address) { ?>
+				<div class="col-md-12 text-center">
+					<p>You don't have a wallet yet. To deposit, transfer or withdraw tokens, you will need to create a wallet Address</p>
+					<div class="vp_forms_sbm_btn text-center">
+						<a href="javascript:void(0);" onclick="createAddress()" class="btn btn_primary" id="createAddress">Create Wallet Address</a>
+					</div>
+				</div>
+			<?php }else { ?>
+				<div class="col-md-12 text-center">
+					<p>Make a token transfer to the address below</p>
+				</div>
+				<div class="col-md-12">
+					<div class="yp_copy_link">
+						<input id="copyLink" readonly="" tabindex="1" type="text" value="0xe03ea6db7A825d211D82e4146ff8cDa35c626928">
+						<a class="btn" href="javascript:void(0);" onclick="copyLinkfn();">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+								<path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path>
+							</svg>
+						</a>
+					</div>	
+				</div>
+			<?php  } ?>
 			<!-- <div class="col-md-12">
 				<p>Enter the transaction reference and the amount transfered to verify and claim tokens</p>
 			</div> -->
@@ -59,7 +67,7 @@
 				<div class="pp_mat_input">
 					<input type="number" name="amount" id="amount" placeholder="{{LANG amount}}" min="50" autocomplete="off">
 					<label for="amount">{{LANG amount}}</label>
-					<span class="help-block">{{LANG min}}: 50 Exenos</span>
+					<span class="help-block">{{LANG min}}: 100 Exenos</span>
 				</div>
 			</div>
 		</div>
@@ -83,6 +91,16 @@
 		copyText.select();
 		document.execCommand("copy");
 	};
+	function createAddress(){
+		$.get('{{LINK aj/token-address-create}}', function(data) {
+			if (data.status == 200) {
+				// location.reload();
+				console.log(data.result);
+			}
+		});
+		// alert('i am clicked');
+	}
+	
 </script>
 <script>
     jQuery(document).ready(function($) {

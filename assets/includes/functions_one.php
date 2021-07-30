@@ -63,7 +63,7 @@ function PT_UserData($user_id = 0, $options = array()) {
         $fetched_data->fav_category = array();
     }
     $fetched_data->subscribe_count = number_format($db->where('user_id', $fetched_data->id)->getValue(T_SUBSCRIPTIONS, "count(*)"));
-    $fetched_data->token_balance = PT_TokenBalance($fetched_data->id);
+    $fetched_data->token_balance = PT_TokenBalance($user_id);
     // $fetched_data->token_transactions = PT_TokenTransactions($fetched_data->id);
     
     return $fetched_data;

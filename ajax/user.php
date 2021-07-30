@@ -35,6 +35,13 @@ if ($first == 'download_user_info' && IS_LOGGED) {
     echo json_encode($data);
     exit();
 }
+// if($first == 'create-wallet'){
+
+//     $data['status']  = 200;
+//     header("Content-type: application/json");
+//     echo json_encode($data);
+//     exit();
+// }
 
 if (empty($_POST['user_id']) || !IS_LOGGED) {
     exit("Undefined Dolphin.");

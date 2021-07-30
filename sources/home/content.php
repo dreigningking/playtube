@@ -27,7 +27,7 @@ $pt->page_url_ = $pt->config->site_url;
 $limit = ($pt->theme_using == 'youplay') ? 10 : 5;
 $pt->videos_array = array();
 $db->where('converted', '2','<>');
-if ($pt->theme_using == 'default') {
+if ($pt->theme_using) {
     $video_obj = $db->where('featured', '1')->where('user_id',$pt->blocked_array , 'NOT IN')->where('is_movie', 0)->where('privacy', 0)->where('live_time', 0)->where('approved',1)->orderBy('RAND()')->get(T_VIDEOS,10);
     foreach ($video_obj as $key => $video) {
         $pt->videos_array[] = PT_GetVideoByID($video, 0, 1, 0);

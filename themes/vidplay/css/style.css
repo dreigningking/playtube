@@ -610,6 +610,7 @@ button.pro-bg:hover { background: #9c27b0;opacity:0.8; }
 .author-list .video-actions a svg{width: 14px;margin-right: 4px;}
 
 header{padding: 0 16px;box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);background-color: white;}
+.logo-img.navbar-brand{padding: 0px 10px 10px 10px;border-radius: 10px;background: #fff !important;}
 header.navbar-fixed-top, header.navbar-fixed-top > nav.navbar {left: 0px;border: 0;height: 52px;transition: all 0.3s;left: 240px;}
 nav.navbar-findcond .container-fluid>.navbar-header {margin:0;}
 nav.navbar-findcond .yp_slide_menu {display:none;}

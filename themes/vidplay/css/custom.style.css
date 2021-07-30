@@ -7,7 +7,9 @@ Add here your custom css styles Example: p { text-align: center; color: red; }
 .video-options .btn_opts.legit_btn.active span#legitbutton { background: #12ac1e !important; fill: #cfffd1; }
 .video-options .btn_opts.scam_btn.active span .fa{color:white;}
 .video-options .btn_opts.legit_btn.active span .fa{color:white;}
-
+.video-options .btn_opts{margin:0px;}
+.video-options .btn_opts span{width:40px;height:40px;}
+.icon-color{background: #f7d103 !important;}
 @media (max-width: 360px) {
 body.side_open {overflow-y:visible !important;}
 }

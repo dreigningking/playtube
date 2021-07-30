@@ -10,6 +10,7 @@
 				<div class="avatar"><a href="{{ME url}}" data-load="?link1=timeline&id={{ME username}}"><img src="{{ME avatar}}" alt="{{ME name}} avatar" /></a></div>
 				<b><a href="{{ME url}}" data-load="?link1=timeline&id={{ME username}}">{{ME name}}</a></b>
 				<p><a href="{{ME url}}" data-load="?link1=timeline&id={{ME username}}">@{{ME username}}</a></p>
+				<p style="margin-top:10px"><a href="{{LINK settings/token_deposit/<?php echo $pt->user->username; ?>}}" data-load="?link1=settings&page=token_deposit&user=<?php echo $pt->user->username; ?>">Balance: {{ME token_balance}} EXNX</a></p>
 			</div>
 		</li>
 		<?php if ($pt->config->go_pro == 'on' && !PT_IsUpgraded()): ?>

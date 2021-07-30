@@ -1,5 +1,6 @@
 /*Header*/
 .navbar-fixed-top { background: #232323 !important; border-bottom: none !important; }
+.logo-img.navbar-brand{padding: 0px 10px 10px 10px;border-radius: 10px;background: #232323 !important;}
 nav.navbar-findcond .search-header input { background-color: #121212 !important;}
 nav.navbar-findcond .search-header input:focus {border-color: #009688 !important;}
 .dropdown-menu.notfi-dropdown h5 { background: #0b0b0b !important; }
