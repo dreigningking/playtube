@@ -41,7 +41,7 @@
 				</div>
 				<div class="col-md-12">
 					<div class="yp_copy_link">
-						<input id="copyLink" readonly="" tabindex="1" type="text" value="0xe03ea6db7A825d211D82e4146ff8cDa35c626928">
+						<input id="copyLink" readonly="" tabindex="1" type="text" value="{{USER crypto_wallet_address}}">
 						<a class="btn" href="javascript:void(0);" onclick="copyLinkfn();">
 							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
 								<path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path>
@@ -92,10 +92,9 @@
 		document.execCommand("copy");
 	};
 	function createAddress(){
-		$.get('{{LINK aj/token-address-create}}', function(data) {
+		$.get('{{LINK aj/user/token-address}}', function(data) {
 			if (data.status == 200) {
-				// location.reload();
-				console.log(data.result);
+				location.reload();
 			}
 		});
 		// alert('i am clicked');

@@ -201,10 +201,11 @@ function transferToken(){
   var token_error = '';
   var receiver_id = $('#token_receiver_id').val();
   var video_id = $('#token_video_id').val();
-  var token_amount = parseInt($('#token_amount').val());
+  var token_amount = parseFloat($('#token_amount').val());
   var password = $('#token_password').val();
   var user_id = $('#token_user_id').val();
   var hash_id = $('#token_hash_id').val();
+  alert(token_amount);
   if(token_amount == '')
   token_error = 'Token amount cannot be null';
   if(password == '')
@@ -226,7 +227,7 @@ function transferToken(){
                 $('#token_message').html('<div class="alert alert-success bg-success">' + data.message + '</div>');
                 $('#token_amount').val('');
                 $('#token_password').val('');
-                $('#token_balance').html(parseInt($('#token_balance').html()) - token_amount);
+                $('#token_balance').html(data.balance);
                 $('.alert-success').fadeIn('fast', function() {
                     $(this).delay(2500).slideUp(500, function() {
                         $(this).remove();

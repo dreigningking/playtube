@@ -37,9 +37,7 @@ if ($pt->second_page == 'activities' && $pt->config->post_system == 'off') {
     $pt->second_page = 'videos';
 }
 
-$user_data   = PT_UserData($user_id, array(
-    'data' => true
-));
+$user_data   = PT_UserData($user_id->id);
 $pt->isowner = false;
 if (IS_LOGGED == true) {
     if ($user_data->id == $user->id) {

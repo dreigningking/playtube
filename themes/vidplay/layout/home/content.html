@@ -2,7 +2,7 @@
   <?php if (!empty($pt->videos_array)) {
     foreach ($pt->videos_array as $key => $video_slide) {
   ?>
-	<div class="video-player row ">
+	<div class="video-player row slick-slide">
 		<div class="col-md-7 no-padding-both">
 			<a href="<?php echo($video_slide->url) ?>" class="img_vp_feat" data-load="?link1=watch&id=<?php echo(PT_Slug($video_slide->title, $video_slide->video_id)) ?>" aria-label="{{LANG featured_video}}">
 				<div class="thumbnail_holder" style="background-image: url('<?php echo $video_slide->thumbnail; ?>');"></div>
@@ -266,44 +266,44 @@ $(document).ready(function(){
     cssEase: "linear",
     pauseOnHover: true,
 
-  slidesToShow: 1,
+  slidesToShow: 2,
   <?php if ($pt->language_type == 'rtl') { ?>rtl: true,<?php } ?>
   slidesToScroll: 1,
   responsive: [
 	{
       breakpoint: 1430,
       settings: {
-        slidesToShow: 1
+        slidesToShow: 2
       }
     },
 	{
       breakpoint: 1360,
       settings: {
-        slidesToShow: 1
+        slidesToShow: 2
       }
     },
 	{
       breakpoint: 1251,
       settings: {
-        slidesToShow: 1
+        slidesToShow: 2
       }
     },
 	{
       breakpoint: 1127,
       settings: {
-        slidesToShow: 1
+        slidesToShow: 2
       }
     },
     {
       breakpoint: 992,
       settings: {
-        slidesToShow: 1
+        slidesToShow: 2
       }
     },
 	{
       breakpoint: 910,
       settings: {
-        slidesToShow: 1
+        slidesToShow: 2
       }
     },
 	{

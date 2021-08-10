@@ -34,8 +34,8 @@
 						</a>
 					</li>
 					<?php } ?>
-					<li class="balance <?php echo (in_array($pt->setting_page, array('token_withdrawal','token_deposits'))) ? 'active': '';?>">
-						<a href="{{LINK settings/token_withdrawal/<?php echo $pt->settings->username; ?>}}" data-load="?link1=settings&page=token_withdrawal&user=<?php echo $pt->settings->username; ?>">
+					<li class="balance <?php echo (in_array($pt->setting_page, array('token_withdrawal','token_deposit'))) ? 'active': '';?>">
+						<a href="{{LINK settings/token_deposit/<?php echo $pt->settings->username; ?>}}" data-load="?link1=settings&page=token_deposit&user=<?php echo $pt->settings->username; ?>">
 							<span style="background-color:purple">
 								<img src="{{CONFIG theme_url}}/img/exenos.png" style="height:19px;width:19px;">
 							</span> Tokens

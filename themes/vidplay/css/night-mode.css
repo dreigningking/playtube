@@ -217,7 +217,7 @@ footer .footer-container { background: #212121 !important; box-shadow: none !imp
 	color: #ffffff !important;
 }
 .vp_modal_title span {
-    background-color: #1350F3;
+    background-color: #f7d103;
 }
 .swal2-modal button.swal2-cancel {
     background-color: #F44336 !important;
@@ -240,7 +240,7 @@ footer .footer-container { background: #212121 !important; box-shadow: none !imp
     border-color: #cdcdcd;
 }
 .btn_primary_rev {
-    color: #1350F3 !important;
+    color: #f7d103 !important;
 }
 .btn_primary:hover, .btn_primary:focus, .btn_primary_rev:hover, .btn_primary_rev:focus {
     background-color: #137df3;
@@ -262,7 +262,7 @@ footer .footer-container { background: #212121 !important; box-shadow: none !imp
 	background: #212121;
 }
 .vp_load_more > span {
-    background-color: #1350F3;
+    background-color: #f7d103;
 }
 .vp_vid_page_lmore {
     color: #e7e7e7;
@@ -380,7 +380,7 @@ nav.navbar-findcond .search-header .vid_close_srch {
     color: #9e9e9e;
 }
 .user-messages .messages .message.pull-right:before {
-    box-shadow: inset 0px 8px 0 4px #131313, inset 9px 0px 0 0px #1350F3, 0 0 0 0px #131313;
+    box-shadow: inset 0px 8px 0 4px #131313, inset 9px 0px 0 0px #f7d103, 0 0 0 0px #131313;
 }
 .user-messages .messages .message.pull-left:before {
     box-shadow: inset 0px 8px 0 4px #131313, inset -9px 0px 0 0px #373737, 0 0 0 0px #131313;
@@ -401,7 +401,7 @@ nav.navbar-findcond .search-header .vid_close_srch {
     background-color: #131313;
 }
 .vid_pop_chnl_filtr > button, .vid_movie_filter .dropdown-toggle {
-	color: #1350F3 !important;
+	color: #f7d103 !important;
 }
 .user_sttng_panel {
     background-color: #212121;
@@ -432,7 +432,7 @@ body {
     color: #e1e1e1;
 }
 .verifiacation-request-form .upload-files button {
-color: #1350F3 !important;}
+color: #f7d103 !important;}
 .termsofuse, .terms_sidebar {
     background-color: #212121;
 }
@@ -489,7 +489,7 @@ color: #1350F3 !important;}
     background-color: #3e3e3e;
 }
 .video-info-element .blue {
-    background: #1350F3;
+    background: #f7d103;
 }
 .vid_relat_vids .videos-list .pt_video_side_vids .yp_watch_sugg {
     background: #212121;
@@ -498,7 +498,7 @@ color: #1350F3 !important;}
     background-color: #565757;
 }
 .vid_emp_msg_empty_state .btn {
-color: #1350F3 !important;}
+color: #f7d103 !important;}
 .vid_emp_msg_empty_state .btn:hover {
 color: #fff !important;}
 .publisher-element .publisher-name .time {

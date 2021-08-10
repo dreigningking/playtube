@@ -1074,11 +1074,69 @@ function connect_to_url($url = '', $config = array()) {
             'Authorization: Bearer ' . $config['bearer']
         ));
     }
+    if (!empty($config['apikey'])) {
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            'Authorization: ' . $config['apikey']
+        ));
+    }
     //execute the session
     $curl_response = curl_exec($curl);
     //finish off the session
     curl_close($curl);
     return $curl_response;
+}
+
+function createTronAddress() {
+    global $pt;
+    $url = 'https://eu.trx.chaingateway.io/v1/newAddress';
+    $curl = curl_init($url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.7.12) Gecko/20050915 Firefox/1.0.7");
+    curl_setopt( $curl, CURLOPT_HTTPHEADER, array("Content-Type:application/json", "Authorization: " . $pt->config->tron_apikey));
+    $curl_response = curl_exec($curl);
+    curl_close($curl);
+    $result = json_decode($curl_response,true);
+    return $result;
+}
+
+function getTronBalance($tronaddress) {
+    global $pt;
+    $url = 'https://eu.trx.chaingateway.io/v1/getTronBalance';
+    $payload = json_encode( array("tronaddress" => $tronaddress) );
+    $curl = curl_init($url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.7.12) Gecko/20050915 Firefox/1.0.7");
+    curl_setopt($curl, CURLOPT_POST, 1);
+    curl_setopt( $curl, CURLOPT_POSTFIELDS, $payload );
+    curl_setopt( $curl, CURLOPT_HTTPHEADER, array("Content-Type:application/json", "Authorization: " . $pt->config->tron_apikey));
+    $curl_response = curl_exec($curl);
+    curl_close($curl);
+    // $curl_response = json_encode(array("ok"=> "true", "tronaddress"=> "TWQiHuVugyFSWDnBh2ytFPaXtGskHt3iyB", "balance" => "3.572945"));
+    $result = json_decode($curl_response,true);
+    return $result['balance'];
+}
+
+function sendTron($privatekey,$to,$amount) {
+    global $pt;
+    $url = 'https://eu.trx.chaingateway.io/v1/sendTron';
+    $payload = json_encode( array("privatekey" => $privatekey,"to" => $to, "amount" => $amount) );
+    $curl = curl_init($url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.7.12) Gecko/20050915 Firefox/1.0.7");
+    curl_setopt($curl, CURLOPT_POST, 1);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $payload );
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type:application/json", "Authorization: " . $pt->config->tron_apikey));
+    $curl_response = curl_exec($curl);
+    curl_close($curl);
+    // $curl_response = json_encode(array("txid"=> "f4935c8af33fd68ddcf6190d1ee8858159541c54e3b3e931c3a1f1fc4c02b0be", "to"=> "TWQiHuVugyFSWDnBh2ytFPaXtGskHt3iyB", "from" => "TWQiHuVugyFSWDnBh2ytFPaXtGskHt3iyB", "amount" => "1.012945"));
+    $result = json_decode($curl_response,true);
+    return $result;
 }
 
 

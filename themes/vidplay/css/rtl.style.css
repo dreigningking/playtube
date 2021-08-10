@@ -159,7 +159,7 @@ nav.navbar-findcond .search-header .vid_close_srch {right: auto;left: 7px;}
 .pagination > li > a {float: none;margin-right: 0;}
 .pagination > li:first-child > a, .pagination > li:last-child > a {border-radius: 8px;}
 .showing_nav > .btn svg, .pagination > li > a svg {transform: rotate(180deg);}
-.settings-sidebar ul li.active a {box-shadow: inset -2.5px 0px #1350F3;}
+.settings-sidebar ul li.active a {box-shadow: inset -2.5px 0px #f7d103;}
 .settings-sidebar ul li a span {margin: 0px 0 0px 22px;}
 .pt_subscription .vp_vid_list .duration {right: 4px;left: auto;}
 .terms_sidebar ul li.active a {box-shadow: inset 2.5px 0px black;}

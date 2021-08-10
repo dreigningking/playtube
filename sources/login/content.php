@@ -74,7 +74,7 @@ if (!empty($_POST)) {
                 $_SESSION['user_id'] = $session_id;
                 setcookie("user_id", $session_id, time() + (10 * 365 * 24 * 60 * 60), "/");
                 $pt->loggedin = true;
-
+                
                 if (!empty($_GET['to']) && strpos($_GET['to'], $pt->config->site_url) !== false) {
                     $_GET['to'] = strip_tags($_GET['to']);
                     $site_url = $_GET['to'];
@@ -88,9 +88,19 @@ if (!empty($_POST)) {
                 if (!empty($_GET['red'])) {
                     $site_url = urldecode($_GET['red']);
                 }
+                if($login->crypto_wallet_address){
+                    $result = getTronBalance($login->crypto_wallet_address);
+                    $resultdecoded = json_decode($result, true);
+                    if(array_key_exists('balance',$resultdecoded)){
+                        $db->where('user_id',$login->id)->update(T_TOKEN_BAL,array(
+                            'balance' => $resultdecoded["balance"]
+                        ));
+                    }  
+                }
                 header("Location: $site_url");
                 exit();
             }
+            
         } else {
             $errors = $error_icon . $lang->invalid_username_or_password;
         }

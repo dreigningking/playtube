@@ -406,13 +406,20 @@ body {background: #fff;}
 					<?php if ($pt->get_video->sell_video == 0) { ?>
 					<?php if ($pt->get_video->privacy != 1 || ($pt->get_video->privacy == 1 && $pt->get_video->is_owner)) { ?>
 						<button class="btn btn_opts" data-toggle="modal" data-target="#download_box">
-							<span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" /></svg></span> <p>{{LANG download}}</p>
+							<span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+								<path fill="currentColor" d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
+							</svg></span> <p>{{LANG download}}</p>
 						</button>
 					<?php } } } ?>
 					<?php } ?>
 					<?php if (IS_LOGGED): ?>
 						<button class="btn btn_opts" onclick="PT_AddToList('{{ID}}');">
-							<span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M2,16H10V14H2M18,14V10H16V14H12V16H16V20H18V16H22V14M14,6H2V8H14M14,10H2V12H14V10Z" /></svg></span> <p>{{LANG add_to}}</p>
+							<span>
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+									<path fill="currentColor" d="M2,16H10V14H2M18,14V10H16V14H12V16H16V20H18V16H22V14M14,6H2V8H14M14,10H2V12H14V10Z" />
+								</svg>
+							</span> 
+							<p>{{LANG add_to}}</p>
 						</button>
 						<?php if ($pt->get_video->is_owner == false) { ?>
 							<button class="btn btn_opts" data-toggle="modal" data-target="#report_box">
@@ -420,7 +427,7 @@ body {background: #fff;}
 							</button>
 						<?php }  ?>
 					<?php endif; ?>
-					<?php if ($pt->get_video->is_owner == false && $pt->config->donate_system == 'on' && !empty($pt->user_data->crypto_wallet_address) && $pt->get_video->sell_video == 0) { ?>
+					<?php if (IS_LOGGED && $pt->get_video->is_owner == false && $pt->config->donate_system == 'on' && !empty($pt->user_data->crypto_wallet_address) && $pt->get_video->sell_video == 0) { ?>
 						<button class="btn btn_opts" data-toggle="modal" data-target="#donate_box">
 							<span>
 								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -537,13 +544,15 @@ body {background: #fff;}
 						<img src="{{CONFIG theme_url}}/img/exenos.png" style="height:19px;width:19px;">
 						<span id="token_balance">{{ME token_balance}}</span>
 					</span>
-					<span class="">
+					<span class="icon-color">
 						<a href="{{LINK settings/token_deposit/<?php echo $pt->settings->username; ?>}}" data-load="?link1=settings&page=token_deposit&user=<?php echo $pt->settings->username; ?>" style="border-bottom: 1px dashed #ddd;font-size:14px;height: 20px;border-radius: 0px;">Deposit</a>
 					</span>
 				</div>
 				
 				<div class="yp_copy_link" style="margin:20px 80px 20px;">
-					<button class="btn" style="background:purple;"><img src="{{CONFIG theme_url}}/img/exenos.png" style="height:19px;width:19px;margin-right:3px;"></button>
+					<button class="btn" style="background:purple;">
+						<img src="{{CONFIG theme_url}}/img/exenos.png" style="height:19px;width:19px;margin-right:3px;">
+					</button>
 					<input id="token_amount" name="token_amount" tabindex="1" type="number" placeholder="Enter Amount" style="background-color:white;">
 				</div>
 				<div class="yp_copy_link">

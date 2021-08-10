@@ -43,6 +43,184 @@ if ($first == 'download_user_info' && IS_LOGGED) {
 //     exit();
 // }
 
+if($first == 'token-address'){
+    $error    = none;
+    $user_id  = $pt->user->id;
+    $result = createTronAddress();
+    if(array_key_exists('address',$result)){
+        $db->where('id',$user_id)->update(T_USERS,array(
+            'crypto_wallet_address' => $result["address"],
+            'crypto_wallet_secret' => $result["privatekey"],
+        ));
+        
+    }
+    if (empty($error)) {
+        $insert_data    = array(
+            'user_id'   => $user_id,
+            'balance'    => 0,
+        );
+        $insert  = $db->insert(T_TOKEN_BAL,$insert_data);
+        if(!empty($insert)){
+            $data['status']  = 200;
+            $data['address']  = $result["address"];
+            $data['message'] = 'Your tron address has been successfully created!';
+        } 
+    }
+    else{
+        $data['status']  = 400;
+        $data['message'] = $error;
+    }
+    header("Content-type: application/json");
+    echo json_encode($data);
+    exit();
+}
+
+if($first == 'token-withdrawal') {
+    $error    = none;
+    $user_id  = $user->id;
+    $user  = $db->where('id',$user_id)->getOne(T_USERS);
+    $sender_balance  = getTronBalance($user->crypto_wallet_address);
+    $receiver_address  = $_POST['receiver_address'];
+    $required_amount = $_POST['amount'] + $pt->config->tron_gas;
+    
+    if (empty($_POST['receiver_address']) ) {
+        $error = $lang->please_check_details;
+    }
+    
+    if(empty($_POST['amount']) || !is_numeric($_POST['amount'])){
+        $error = 'Please enter amount';
+    }
+    if($sender_balance < $required_amount){
+        $error = 'Insufficient balance';
+    }
+    
+    if (empty($error)) {
+        $result = sendTron($user->crypto_wallet_secret,$receiver_address,$_POST['amount']);
+
+        if($pt->config->tron_gas){
+            $admin = $db->where('admin',1)->getOne(T_USERS);
+            $gasResult = sendTron($user->crypto_wallet_secret,$admin->crypto_wallet_address,$pt->config->tron_gas);
+        
+            if(array_key_exists('txid',$gasResult)){
+                $admin_balance = getTronBalance($admin->crypto_wallet_address);
+                $update_admin = $db->where('user_id',$admin->id)->update(T_TOKEN_BAL,array('balance' => $admin_balance));
+            }
+        }
+        $sender_balance = $sender_balance - $required_amount;
+        $update_sender = $db->where('user_id',$user_id)->update(T_TOKEN_BAL,array('balance' => $sender_balance));
+        $insert_data    = array(
+            'reference'   => uniqid("", true),
+            'amount'    => PT_Secure($_POST['amount']),
+            'sender_id'   => 1,
+            'receiver_id'   => $user_id,
+            'receiver_address'   => PT_Secure($_POST['receiver_address']),
+            'mode' => 'withdrawal',
+            'created_at' => time(),
+        );
+        $insert  = $db->insert(T_TOKEN_TRANS,$insert_data);
+        if (!empty($insert)) {
+            $notif_data = array(
+                'recipient_id' => 0,
+                'type' => 'with',
+                'admin' => 1,
+                'time' => time()
+            );
+            
+    //         pt_notify($notif_data);
+            $data['status']  = 200;
+            $data['message'] = 'Token withdrawn successfully!';
+        }
+    }
+
+    else{
+        $data['status']  = 400;
+        $data['message'] = $error;
+    }
+    header("Content-type: application/json");
+    echo json_encode($data);
+    exit();
+}
+
+if($first == 'token-transfer') {
+    $error    = none;
+    $user_id  = $user->id;
+    $user  = $db->where('id',$user_id)->getOne(T_USERS);
+    $sender_balance  = getTronBalance($user->crypto_wallet_address);
+    $receiver  = $db->where('id',$_POST['receiver_id'])->getOne(T_USERS);
+    $required_amount = $_POST['amount'] + $pt->config->tron_gas;
+    $video_id = $_POST['video_id'];
+    if(empty($_POST['password'])){
+        $error = 'Please enter password';
+    }
+    else if(empty($_POST['amount']) || !is_numeric($_POST['amount'])){
+        $error = 'Please enter amount';
+    }
+    else if($sender_balance < $required_amount){
+        $error = 'Insufficient balance';
+    }
+    else{
+        $password        = PT_Secure($_POST['password']);
+        $password_hashed = sha1($password);
+        $sender = $db->where('id',$user_id)->where('active',1)->where('password',$password_hashed)->getOne(T_USERS);
+        if(empty($sender)) {
+            $error = 'Your password is wrong';
+        }
+    }
+
+    if (empty($error)) {
+        $result = sendTron($user->crypto_wallet_secret,$receiver->crypto_wallet_address,$_POST['amount']);
+        if(array_key_exists('txid',$result)){
+            $receiver_balance = getTronBalance($receiver->crypto_wallet_address);
+            $update_receiver = $db->where('user_id',$receiver->id)->update(T_TOKEN_BAL,array('balance' => $receiver_balance));
+        }
+
+        if($pt->config->tron_gas){
+            $admin = $db->where('admin',1)->getOne(T_USERS);
+            $gasResult = sendTron($user->crypto_wallet_secret,$admin->crypto_wallet_address,$pt->config->tron_gas);
+            if(array_key_exists('txid',$gasResult)){
+                $admin_balance = getTronBalance($admin->crypto_wallet_address);
+                $update_admin = $db->where('user_id',$admin->id)->update(T_TOKEN_BAL,array('balance' => $admin_balance));
+            }
+        }
+        
+        $sender_balance = $sender_balance - $required_amount;
+        $update_sender = $db->where('user_id',$user_id)->update(T_TOKEN_BAL,array('balance' => $sender_balance));
+        $insert_data    = array(
+            'reference'   => uniqid("", true),
+            'amount'    => PT_Secure($_POST['amount']),
+            'sender_id'   => $user_id,
+            'receiver_id'   => $receiver->id,
+            'video_id'   => $video_id,
+            'mode' => 'donation',
+            'status' => 1,
+            'created_at' => time(),
+        );
+        $insert  = $db->insert(T_TOKEN_TRANS,$insert_data);
+        if (!empty($insert)) {
+            $notif_data = array(
+                'recipient_id' => 0,
+                'type' => 'with',
+                'admin' => 1,
+                'time' => time()
+            );
+            
+            pt_notify($notif_data);
+            $data['status']  = 200;
+            $data['balance']  = $sender_balance;
+            $data['message'] = 'Token transfered successfully!';
+        }
+    }
+
+    else{
+        $data['status']  = 400;
+        $data['message'] = $error;
+    }
+    header("Content-type: application/json");
+    echo json_encode($data);
+    exit();
+}
+
+
 if (empty($_POST['user_id']) || !IS_LOGGED) {
     exit("Undefined Dolphin.");
 }
@@ -573,194 +751,6 @@ if ($first == 'request-withdrawal') {
             pt_notify($notif_data);
             $data['status']  = 200;
             $data['message'] = $lang->withdrawal_request_sent;
-        }
-    }
-
-    else{
-        $data['status']  = 400;
-        $data['message'] = $error;
-    }
-}
-
-if ($first == 'token-withdrawal') {
-    
-    $error    = none;
-    $balance  = $user->token_balance;
-    $user_id  = $user->id;
-    //var_dump($first);
-    // Check is unprocessed requests exits
-    $db->where('receiver_id',$user_id);
-    $db->where('status',0);
-    $db->where('mode','withdrawal');
-    $requests = $db->getValue(T_TOKEN_TRANS, 'count(*)');
-    
-    if (!empty($requests)) {
-        $error = $lang->cant_request_withdrawal;
-    }
-    
-    else if ($user->token_balance < $_POST['amount']) {
-        $error = $lang->please_check_details;
-    }
-
-    else{
-
-        if (empty($_POST['crypto_wallet_address']) ) {
-            $error = $lang->please_check_details;
-        }
-
-        else if(empty($_POST['amount']) || !is_numeric($_POST['amount'])){
-            $error = $lang->please_check_details;
-        }
-
-        else if($_POST['amount'] < 50){
-            $error = 'Your balance is'.$balance. ', the minimum withdrawal request amount is 50';
-        }
-    }
-
-    if (empty($error)) {
-        $insert_data    = array(
-            'reference'   => uniqid("", true),
-            'amount'    => PT_Secure($_POST['amount']),
-            'sender_id'   => 1,
-            'receiver_id'   => $user_id,
-            'receiver_address'   => PT_Secure($_POST['crypto_wallet_address']),
-            'mode' => 'withdrawal',
-            'created_at' => time(),
-        );
-
-        $insert  = $db->insert(T_TOKEN_TRANS,$insert_data);
-        if (!empty($insert)) {
-            $notif_data = array(
-                'recipient_id' => 0,
-                'type' => 'with',
-                'admin' => 1,
-                'time' => time()
-            );
-            
-            pt_notify($notif_data);
-            $data['status']  = 200;
-            $data['message'] = 'Your withdrawal request has been successfully sent!';
-        }
-    }
-
-    else{
-        $data['status']  = 400;
-        $data['message'] = $error;
-    }
-}
-
-if($first == 'token-deposit'){
-    
-    $error    = none;
-    $user_id  = $user->id;
-    // Check is unprocessed requests exits
-    $db->where('sender_id',$user_id);
-    $db->where('status',0);
-    $db->where('mode','deposit');
-    $requests = $db->getValue(T_TOKEN_TRANS, 'count(*)');
-
-    if (!empty($requests)) {
-        $error = 'You can not submit deposit request until the previous requests has been verified';
-    }
-
-    else{
-
-        if (empty($_POST['transaction_reference']) ) {
-            $error = $lang->please_check_details;
-        }
-
-        else if(empty($_POST['amount']) || !is_numeric($_POST['amount'])){
-            $error = $lang->please_check_details;
-        }
-
-        else if($_POST['amount'] < 50){
-            $error = 'The minimum deposit amount is 50';
-        }
-    }
-
-    if (empty($error)) {
-        $insert_data    = array(
-            'reference'   => PT_Secure($_POST['transaction_reference']),
-            'amount'    => PT_Secure($_POST['amount']),
-            'receiver_id'   => 1,
-            'sender_id'   => $user_id,
-            'mode' => 'deposit',
-            'created_at' => time(),
-        );
-
-        $insert  = $db->insert(T_TOKEN_TRANS,$insert_data);
-        if (!empty($insert)) {
-            $notif_data = array(
-                'recipient_id' => 0,
-                'type' => 'with',
-                'admin' => 1,
-                'time' => time()
-            );
-            
-            pt_notify($notif_data);
-            $data['status']  = 200;
-            $data['message'] = 'Your deposit verification request has been successfully sent!';
-        }
-    }
-
-    else{
-        $data['status']  = 400;
-        $data['message'] = $error;
-    }
-}
-
-if($first == 'token-transfer') {
-    $error    = none;
-    $user_id  = $user->id;
-    $balance  = $user->token_balance;
-    $receiver  = PT_UserData($_POST['receiver_id']);
-    $video_id = $_POST['video_id'];
-
-    if(empty($_POST['password'])){
-        $error = 'Please enter password';
-    }
-    else if(empty($_POST['amount']) || !is_numeric($_POST['amount'])){
-        $error = 'Please enter amount';
-    }
-    else if($balance < $_POST['amount']){
-        $error = 'Insufficient balance';
-    }
-    else{
-        $password        = PT_Secure($_POST['password']);
-        $password_hashed = sha1($password);
-        $sender = $db->where('id',$user_id)->where('active',1)->where('password',$password_hashed)->getOne(T_USERS);
-        if(empty($sender)) {
-            $error = 'Your password is wrong';
-        }
-    }
-
-    if (empty($error)) {
-        $receiver_balance = $receiver->token_balance + PT_Secure($_POST['amount']);
-        $update_receiver = $db->where('user_id',$receiver->id)->update(T_TOKEN_BAL,array('balance' => $receiver_balance));
-        $sender_balance = $user->token_balance - PT_Secure($_POST['amount']);
-        $update_sender = $db->where('user_id',$sender->id)->update(T_TOKEN_BAL,array('balance' => $sender_balance));
-        $insert_data    = array(
-            'reference'   => uniqid("", true),
-            'amount'    => PT_Secure($_POST['amount']),
-            'sender_id'   => $user_id,
-            'receiver_id'   => $receiver->id,
-            'video_id'   => $video_id,
-            'mode' => 'donation',
-            'status' => 1,
-            'created_at' => time(),
-        );
-        $insert  = $db->insert(T_TOKEN_TRANS,$insert_data);
-        if (!empty($insert)) {
-            $notif_data = array(
-                'recipient_id' => 0,
-                'type' => 'with',
-                'admin' => 1,
-                'time' => time()
-            );
-            
-            pt_notify($notif_data);
-            $data['status']  = 200;
-            $data['message'] = 'Token transfered successfully!';
         }
     }
 

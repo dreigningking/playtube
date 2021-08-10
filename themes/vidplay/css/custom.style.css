@@ -9,7 +9,9 @@ Add here your custom css styles Example: p { text-align: center; color: red; }
 .video-options .btn_opts.legit_btn.active span .fa{color:white;}
 .video-options .btn_opts{margin:0px;}
 .video-options .btn_opts span{width:40px;height:40px;}
-.icon-color{background: #f7d103 !important;}
+.icon-color{background: #f7d103 !important; fill:#f7d103 !important}
+.mejs__overlay-play:hover .mejs__overlay-button{background-color: #f7d103 !important;box-shadow: 0 0px 10px rgba(0, 0, 0, 0.4);}
+
 @media (max-width: 360px) {
 body.side_open {overflow-y:visible !important;}
 }
