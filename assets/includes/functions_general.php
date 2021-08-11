@@ -1103,8 +1103,9 @@ function createTronAddress() {
 
 function getTronBalance($tronaddress) {
     global $pt;
-    $url = 'https://eu.trx.chaingateway.io/v1/getTronBalance';
-    $payload = json_encode( array("tronaddress" => $tronaddress) );
+    $url = 'https://eu.trx.chaingateway.io/v1/getTRC20Balance';
+    $contractaddress = 'TCcVeKtYUrHEQDPmozjJFMrf6XX7BgF84A';
+    $payload = json_encode( array("contractaddress"=> $contractaddress,"tronaddress" => $tronaddress) );
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
