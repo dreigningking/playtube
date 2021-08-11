@@ -1117,7 +1117,9 @@ function getTronBalance($tronaddress) {
     curl_close($curl);
     // $curl_response = json_encode(array("ok"=> "true", "tronaddress"=> "TWQiHuVugyFSWDnBh2ytFPaXtGskHt3iyB", "balance" => "3.572945"));
     $result = json_decode($curl_response,true);
+    if(array_key_exists('balance',$result))
     return $result['balance'];
+    else return 0;
 }
 
 function sendTron($privatekey,$to,$amount) {
