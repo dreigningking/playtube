@@ -11,7 +11,7 @@
 				<b><a href="{{ME url}}" data-load="?link1=timeline&id={{ME username}}">{{ME name}}</a></b>
 				<p><a href="{{ME url}}" data-load="?link1=timeline&id={{ME username}}">@{{ME username}}</a></p>
 				<p style="margin-top:10px"><a href="{{LINK settings/balance/<?php echo $pt->settings->username; ?>}}" data-load="?link1=settings&page=balance&user=<?php echo $pt->settings->username; ?>">Wallet Bal: {{ME balance}} </a></p>
-				<p style="margin-top:10px"><a href="{{LINK settings/token_deposit/<?php echo $pt->user->username; ?>}}" data-load="?link1=settings&page=token_deposit&user=<?php echo $pt->user->username; ?>">EXNX Bal: {{ME token_balance}} </a></p>
+				<p style="margin-top:10px"><a href="{{LINK settings/token_deposit/<?php echo $pt->user->username; ?>}}" data-load="?link1=settings&page=token_deposit&user=<?php echo $pt->user->username; ?>">EXNX Bal: <span class="tronBalance">{{ME token_balance}}</span>  </a> | <a href="javascript:void(0);" id="getTronBalance"><i class="fa fa-refresh"></i></a></p>
 			</div>
 		</li>
 		<?php if ($pt->config->go_pro == 'on' && !PT_IsUpgraded()): ?>
@@ -81,3 +81,12 @@
 		<span class="headtoppoint"></span>
 	</ul>
 </li>
+<script>
+	$('#getTronBalance').click(function(){
+		$.get('{{LINK aj/user/token-balance}}', function(data) {
+			if (data.status == 200) {
+				location.reload();
+			}
+		});
+	});
+</script>

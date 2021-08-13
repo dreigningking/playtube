@@ -75,6 +75,28 @@ if($first == 'token-address'){
     exit();
 }
 
+if($first == 'token-balance'){
+    $error    = none;
+    $user_id  = $pt->user->id;
+    $user = $db->where('id',$user_id)->getOne(T_USERS);
+    if($user->crypto_wallet_address){
+        $result = getTronBalance($user->crypto_wallet_address);
+        $db->where('user_id',$user->id)->update(T_TOKEN_BAL,array(
+            'balance' => $result
+        )); 
+        $data['status']  = 200;
+        $data['balance']  = number_format($result,2);
+        $data['message'] = 'Your balance is updated successfully!';
+    }
+    else{
+        $data['status']  = 400;
+        $data['message'] = $error;
+    }
+    header("Content-type: application/json");
+    echo json_encode($data);
+    exit();
+}
+
 if($first == 'token-withdrawal') {
     $error    = none;
     $user_id  = $user->id;
@@ -219,6 +241,8 @@ if($first == 'token-transfer') {
     echo json_encode($data);
     exit();
 }
+
+
 
 
 if (empty($_POST['user_id']) || !IS_LOGGED) {

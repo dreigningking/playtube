@@ -6,7 +6,7 @@
 		<div class="sett_my_blnc_">
 			<div class="my_blnc_avlbal">
 				<p>{{LANG balance}}</p>
-				<div><b>Ex.</b> <h3>{{ME token_balance}}</h3></div>
+				<div><b>Ex.</b> <h3><span class="tronBalance">{{ME token_balance}}</span> <a href="javascript:void(0);" class="getTronBalance"><i class="fa fa-refresh"></i></a></h3></div>
 			</div>
 			<span class="my_blnc_widthdrw">
 				<a href="{{LINK settings/token_transactions/{{ME username}}}}"> 
@@ -57,7 +57,21 @@
 	<div class="col-md-1"></div>
 </form>
 
-
+<script>
+	
+	$('.getTronBalance').click(function(){
+		var getBalance = $(this);
+		getBalance.find('i').addClass('fa-spin');
+		$.get('{{LINK aj/user/token-balance}}', function(data) {
+			if (data.status == 200) {
+				$('.tronBalance').html(data.balance);
+				getBalance.find('i').removeClass('fa-spin');
+			}
+		});
+	});
+	
+	
+</script>
 <script>
     jQuery(document).ready(function($) {
         

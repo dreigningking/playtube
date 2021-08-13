@@ -79,7 +79,7 @@ function PT_TokenBalance($id = 0) {
     if(!empty($token)){
         $token_balance = $token->balance;
     }
-    return $token_balance;
+    return number_format($token_balance,2);
 }
 
 // function PT_TokenTransactions($id = 0) {
