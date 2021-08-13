@@ -8,30 +8,30 @@
 // | PlayTube - The Ultimate Video Sharing Platform
 // | Copyright (c) 2017 PlayTube. All rights reserved.
 // +------------------------------------------------------------------------+
+$whitelist = array('127.0.0.1', '::1');
 // MySQL Hostname
 $sql_db_host = "localhost";
-// $sql_db_host = "us-cdbr-east-04.cleardb.com";
+if(!in_array($_SERVER['REMOTE_ADDR'], $whitelist)){
+    // MySQL Database User
+    $sql_db_user = "exenfdrm_bc7d6f4b36cc2f";
+    // MySQL Database Password
+    $sql_db_pass = "f556b82e";
+    // MySQL Database Name
+    $sql_db_name = "exenfdrm_tube";
+    // Site URL
+    $site_url = "https://tube.exenox.co"; 
+}
+else{
+    // MySQL Database User
+    $sql_db_user = "root";
+    // MySQL Database Password
+    $sql_db_pass = "";
+    // MySQL Database Name
+    $sql_db_name = "playtube";
+    // Site URL
+    $site_url = "http://localhost/playtube";
 
-
-// MySQL Database User
-$sql_db_user = "root";
-// $sql_db_user = "bc7d6f4b36cc2f";
-// $sql_db_user = "exenfdrm_bc7d6f4b36cc2f";
-
-// MySQL Database Password
-$sql_db_pass = "";
-// $sql_db_pass = "f556b82e";
-
-
-// MySQL Database Name
-$sql_db_name = "playtube";
-// $sql_db_name = "heroku_3bf8212c3dc5db2";
-// $sql_db_name = "exenfdrm_tube";
-
-// Site URL
-$site_url = "http://localhost/playtube"; // e.g (http://example.com)
-// $site_url = "http://cryptotube.herokuapp.com/"; // e.g (http://example.com)
-// $site_url = "https://tube.exenox.co"; // e.g (http://example.com)
+}
 
 // Purchase code
 //$purchase_code = "12345678"; // Your purchase code, don't give it to anyone. 
