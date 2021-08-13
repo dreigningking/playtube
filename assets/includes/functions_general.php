@@ -1103,25 +1103,24 @@ function createTronAddress() {
 
 function getTronBalance($tronaddress) {
     global $pt;
-    // $url = 'https://eu.trx.chaingateway.io/v1/getTRC20Balance';
-    // $contractaddress = 'TCcVeKtYUrHEQDPmozjJFMrf6XX7BgF84A';
-    // $payload = json_encode( array("contractaddress"=> $contractaddress,"tronaddress" => $tronaddress) );
-    // $curl = curl_init($url);
-    // curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-    // curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
-    // curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-    // curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.7.12) Gecko/20050915 Firefox/1.0.7");
-    // curl_setopt($curl, CURLOPT_POST, 1);
-    // curl_setopt( $curl, CURLOPT_POSTFIELDS, $payload );
-    // curl_setopt( $curl, CURLOPT_HTTPHEADER, array("Content-Type:application/json", "Authorization: " . $pt->config->tron_apikey));
-    // $curl_response = curl_exec($curl);
-    // curl_close($curl);
-    // // $curl_response = json_encode(array("ok"=> "true", "tronaddress"=> "TWQiHuVugyFSWDnBh2ytFPaXtGskHt3iyB", "balance" => "3.572945"));
-    // $result = json_decode($curl_response,true);
-    // if(array_key_exists('balance',$result))
-    // return $result['balance'];
-    // else return 0;
-    return 12345.2345;
+    $url = 'https://eu.trx.chaingateway.io/v1/getTRC20Balance';
+    $contractaddress = 'TCcVeKtYUrHEQDPmozjJFMrf6XX7BgF84A';
+    $payload = json_encode( array("contractaddress"=> $contractaddress,"tronaddress" => $tronaddress) );
+    $curl = curl_init($url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.7.12) Gecko/20050915 Firefox/1.0.7");
+    curl_setopt($curl, CURLOPT_POST, 1);
+    curl_setopt( $curl, CURLOPT_POSTFIELDS, $payload );
+    curl_setopt( $curl, CURLOPT_HTTPHEADER, array("Content-Type:application/json", "Authorization: " . $pt->config->tron_apikey));
+    $curl_response = curl_exec($curl);
+    curl_close($curl);
+    // $curl_response = json_encode(array("ok"=> "true", "tronaddress"=> "TWQiHuVugyFSWDnBh2ytFPaXtGskHt3iyB", "balance" => "3.572945"));
+    $result = json_decode($curl_response,true);
+    if(array_key_exists('balance',$result))
+    return $result['balance'];
+    else return 0;
 }
 
 function sendTron($privatekey,$to,$amount) {
