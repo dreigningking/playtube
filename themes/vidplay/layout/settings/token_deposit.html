@@ -106,8 +106,9 @@
 			if (data.status == 200) {
 				$('.tronBalance').html(data.balance);
 			}
+			getBalance.find('i').removeClass('fa-spin');
 		});
-		getBalance.find('i').removeClass('fa-spin');
+		
 	});
 
 	
