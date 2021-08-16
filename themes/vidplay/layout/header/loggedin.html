@@ -10,8 +10,8 @@
 				<div class="avatar"><a href="{{ME url}}" data-load="?link1=timeline&id={{ME username}}"><img src="{{ME avatar}}" alt="{{ME name}} avatar" /></a></div>
 				<b><a href="{{ME url}}" data-load="?link1=timeline&id={{ME username}}">{{ME name}}</a></b>
 				<p><a href="{{ME url}}" data-load="?link1=timeline&id={{ME username}}">@{{ME username}}</a></p>
-				<p style="margin-top:10px"><a href="{{LINK settings/balance/<?php echo $pt->settings->username; ?>}}" data-load="?link1=settings&page=balance&user=<?php echo $pt->settings->username; ?>">Wallet Bal: {{ME balance}} </a></p>
-				<p style="margin-top:10px"><a href="{{LINK settings/token_deposit/<?php echo $pt->user->username; ?>}}" data-load="?link1=settings&page=token_deposit&user=<?php echo $pt->user->username; ?>">EXNX Bal: <span class="tronBalance">{{ME token_balance}}</span>  </a> | <a href="javascript:void(0);" id="getTronBalance"><i class="fa fa-refresh"></i></a></p>
+				<br><a href="{{LINK settings/balance/<?php echo $pt->settings->username; ?>}}" data-load="?link1=settings&page=balance&user=<?php echo $pt->settings->username; ?>">Wallet Bal: {{ME balance}} </a><br>
+				<a href="{{LINK settings/token_deposit/<?php echo $pt->user->username; ?>}}" data-load="?link1=settings&page=token_deposit&user=<?php echo $pt->user->username; ?>"><small>EXNX Bal:</small> <span class="tronBalance">{{ME token_balance}}</span>  </a> | <a href="javascript:void(0);" id="getTronBalance"><i class="fa fa-refresh"></i></a>
 			</div>
 		</li>
 		<?php if ($pt->config->go_pro == 'on' && !PT_IsUpgraded()): ?>

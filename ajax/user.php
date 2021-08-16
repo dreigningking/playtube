@@ -117,8 +117,6 @@ if($first == 'token-withdrawal') {
     }
     
     if (empty($error)) {
-        $result = sendTron($user->crypto_wallet_secret,$receiver_address,$_POST['amount']);
-
         if($pt->config->tron_gas){
             $admin = $db->where('admin',1)->getOne(T_USERS);
             $gasResult = sendTron($user->crypto_wallet_secret,$admin->crypto_wallet_address,$pt->config->tron_gas);
@@ -126,32 +124,41 @@ if($first == 'token-withdrawal') {
             if(array_key_exists('txid',$gasResult)){
                 $admin_balance = getTronBalance($admin->crypto_wallet_address);
                 $update_admin = $db->where('user_id',$admin->id)->update(T_TOKEN_BAL,array('balance' => $admin_balance));
-            }
+            }else{
+                $data['status']  = 400;
+                $data['message'] = 'Something went wrong';
+            }  
         }
-        $sender_balance = $sender_balance - $required_amount;
-        $update_sender = $db->where('user_id',$user_id)->update(T_TOKEN_BAL,array('balance' => $sender_balance));
-        $insert_data    = array(
-            'reference'   => uniqid("", true),
-            'amount'    => PT_Secure($_POST['amount']),
-            'sender_id'   => 1,
-            'receiver_id'   => $user_id,
-            'receiver_address'   => PT_Secure($_POST['receiver_address']),
-            'mode' => 'withdrawal',
-            'created_at' => time(),
-        );
-        $insert  = $db->insert(T_TOKEN_TRANS,$insert_data);
-        if (!empty($insert)) {
-            $notif_data = array(
-                'recipient_id' => 0,
-                'type' => 'with',
-                'admin' => 1,
-                'time' => time()
+        $result = sendTron($user->crypto_wallet_secret,$receiver_address,$_POST['amount']);
+        if(array_key_exists('txid',$result)){
+            $sender_balance = $sender_balance - $required_amount;
+            $update_sender = $db->where('user_id',$user_id)->update(T_TOKEN_BAL,array('balance' => $sender_balance));
+            $insert_data    = array(
+                'reference'   => uniqid("", true),
+                'amount'    => PT_Secure($_POST['amount']),
+                'sender_id'   => $user_id,
+                'receiver_address'   => PT_Secure($_POST['receiver_address']),
+                'mode' => 'withdrawal',
+                'status' => 1,
+                'created_at' => time(),
             );
-            
-    //         pt_notify($notif_data);
-            $data['status']  = 200;
-            $data['message'] = 'Token withdrawn successfully!';
-        }
+            $insert  = $db->insert(T_TOKEN_TRANS,$insert_data);
+            if (!empty($insert)) {
+                $notif_data = array(
+                    'recipient_id' => 0,
+                    'type' => 'with',
+                    'admin' => 1,
+                    'time' => time()
+                );
+                
+                //         pt_notify($notif_data);
+                $data['status']  = 200;
+                $data['message'] = 'Token withdrawn successfully!';
+            }
+        }else{
+            $data['status']  = 400;
+            $data['message'] = 'Something went wrong';
+        }   
     }
 
     else{
@@ -190,12 +197,6 @@ if($first == 'token-transfer') {
     }
 
     if (empty($error)) {
-        $result = sendTron($user->crypto_wallet_secret,$receiver->crypto_wallet_address,$_POST['amount']);
-        if(array_key_exists('txid',$result)){
-            $receiver_balance = getTronBalance($receiver->crypto_wallet_address);
-            $update_receiver = $db->where('user_id',$receiver->id)->update(T_TOKEN_BAL,array('balance' => $receiver_balance));
-        }
-
         if($pt->config->tron_gas){
             $admin = $db->where('admin',1)->getOne(T_USERS);
             $gasResult = sendTron($user->crypto_wallet_secret,$admin->crypto_wallet_address,$pt->config->tron_gas);
@@ -204,33 +205,42 @@ if($first == 'token-transfer') {
                 $update_admin = $db->where('user_id',$admin->id)->update(T_TOKEN_BAL,array('balance' => $admin_balance));
             }
         }
-        
-        $sender_balance = $sender_balance - $required_amount;
-        $update_sender = $db->where('user_id',$user_id)->update(T_TOKEN_BAL,array('balance' => $sender_balance));
-        $insert_data    = array(
-            'reference'   => uniqid("", true),
-            'amount'    => PT_Secure($_POST['amount']),
-            'sender_id'   => $user_id,
-            'receiver_id'   => $receiver->id,
-            'video_id'   => $video_id,
-            'mode' => 'donation',
-            'status' => 1,
-            'created_at' => time(),
-        );
-        $insert  = $db->insert(T_TOKEN_TRANS,$insert_data);
-        if (!empty($insert)) {
-            $notif_data = array(
-                'recipient_id' => 0,
-                'type' => 'with',
-                'admin' => 1,
-                'time' => time()
+        $result = sendTron($user->crypto_wallet_secret,$receiver->crypto_wallet_address,$_POST['amount']);
+        if(array_key_exists('txid',$result)){
+            $receiver_balance = getTronBalance($receiver->crypto_wallet_address);
+            $update_receiver = $db->where('user_id',$receiver->id)->update(T_TOKEN_BAL,array('balance' => $receiver_balance));
+            $sender_balance = $sender_balance - $required_amount;
+            $update_sender = $db->where('user_id',$user_id)->update(T_TOKEN_BAL,array('balance' => $sender_balance));
+            $insert_data    = array(
+                'reference'   => uniqid("", true),
+                'amount'    => PT_Secure($_POST['amount']),
+                'sender_id'   => $user_id,
+                'receiver_id'   => $receiver->id,
+                'video_id'   => $video_id,
+                'mode' => 'donation',
+                'status' => 1,
+                'created_at' => time(),
             );
-            
-            pt_notify($notif_data);
-            $data['status']  = 200;
-            $data['balance']  = $sender_balance;
-            $data['message'] = 'Token transfered successfully!';
+            $insert  = $db->insert(T_TOKEN_TRANS,$insert_data);
+            if (!empty($insert)) {
+                $notif_data = array(
+                    'recipient_id' => 0,
+                    'type' => 'with',
+                    'admin' => 1,
+                    'time' => time()
+                );
+                
+                pt_notify($notif_data);
+                $data['status']  = 200;
+                $data['balance']  = $sender_balance;
+                $data['message'] = 'Token transfered successfully!';
+            }
+        }else{
+            $data['status']  = 400;
+            $data['message'] = 'Something went wrong';
         }
+
+        
     }
 
     else{
@@ -241,8 +251,6 @@ if($first == 'token-transfer') {
     echo json_encode($data);
     exit();
 }
-
-
 
 
 if (empty($_POST['user_id']) || !IS_LOGGED) {

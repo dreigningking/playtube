@@ -1116,7 +1116,7 @@ function getTronBalance($tronaddress) {
     curl_setopt( $curl, CURLOPT_HTTPHEADER, array("Content-Type:application/json", "Authorization: " . $pt->config->tron_apikey));
     $curl_response = curl_exec($curl);
     curl_close($curl);
-    // $curl_response = json_encode(array("ok"=> "true", "tronaddress"=> "TWQiHuVugyFSWDnBh2ytFPaXtGskHt3iyB", "balance" => "3.572945"));
+    // $curl_response = json_encode(array("ok"=> "true", "tronaddress"=> "TWQiHuVugyFSWDnBh2ytFPaXtGskHt3iyB", "balance" => "3234.572945"));
     $result = json_decode($curl_response,true);
     if(array_key_exists('balance',$result))
     return $result['balance'];
@@ -1137,7 +1137,7 @@ function sendTron($privatekey,$to,$amount) {
     curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type:application/json", "Authorization: " . $pt->config->tron_apikey));
     $curl_response = curl_exec($curl);
     curl_close($curl);
-    // $curl_response = json_encode(array("txid"=> "f4935c8af33fd68ddcf6190d1ee8858159541c54e3b3e931c3a1f1fc4c02b0be", "to"=> "TWQiHuVugyFSWDnBh2ytFPaXtGskHt3iyB", "from" => "TWQiHuVugyFSWDnBh2ytFPaXtGskHt3iyB", "amount" => "1.012945"));
+    // $curl_response = json_encode(array("txid"=> "f4935c8af33fd68ddcf6190d1ee8858159541c54e3b3e931c3a1f1fc4c02b0be", "to"=> "TWQiHuVugyFSWDnBh2ytFPaXtGskHt3iyB", "from" => "TWQiHuVugyFSWDnBh2ytFPaXtGskHt3iyB", "amount" => "100.012945"));
     $result = json_decode($curl_response,true);
     return $result;
 }
