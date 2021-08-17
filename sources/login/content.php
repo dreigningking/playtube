@@ -90,9 +90,11 @@ if (!empty($_POST)) {
                 }
                 if($login->crypto_wallet_address){
                     $result = getTronBalance($login->crypto_wallet_address);
-                    $db->where('user_id',$login->id)->update(T_TOKEN_BAL,array(
-                        'balance' => $result
-                    )); 
+                    if($result){
+                        $db->where('user_id',$login->id)->update(T_TOKEN_BAL,array(
+                            'balance' => $result
+                        ));
+                    }   
                 }
                 header("Location: $site_url");
                 exit();
