@@ -119,7 +119,7 @@ if($first == 'token-withdrawal') {
     if (empty($error)) {
         if($pt->config->tron_gas){
             $admin = $db->where('admin',1)->getOne(T_USERS);
-            $gasResult = sendTron($user->crypto_wallet_secret,$admin->crypto_wallet_address,$pt->config->tron_gas);
+            $gasResult = sendTron($user->crypto_wallet_address,$user->crypto_wallet_secret,$admin->crypto_wallet_address,$pt->config->tron_gas);
         
             if(array_key_exists('txid',$gasResult)){
                 $admin_balance = getTronBalance($admin->crypto_wallet_address);
@@ -129,7 +129,7 @@ if($first == 'token-withdrawal') {
                 $data['message'] = 'Something went wrong';
             }  
         }
-        $result = sendTron($user->crypto_wallet_secret,$receiver_address,$_POST['amount']);
+        $result = sendTron($user->crypto_wallet_address,$user->crypto_wallet_secret,$receiver_address,$_POST['amount']);
         if(array_key_exists('txid',$result)){
             $sender_balance = $sender_balance - $required_amount;
             $update_sender = $db->where('user_id',$user_id)->update(T_TOKEN_BAL,array('balance' => $sender_balance));
@@ -199,13 +199,13 @@ if($first == 'token-transfer') {
     if (empty($error)) {
         if($pt->config->tron_gas){
             $admin = $db->where('admin',1)->getOne(T_USERS);
-            $gasResult = sendTron($user->crypto_wallet_secret,$admin->crypto_wallet_address,$pt->config->tron_gas);
+            $gasResult = sendTron($user->crypto_wallet_address,$user->crypto_wallet_secret,$admin->crypto_wallet_address,$pt->config->tron_gas);
             if(array_key_exists('txid',$gasResult)){
                 $admin_balance = getTronBalance($admin->crypto_wallet_address);
                 $update_admin = $db->where('user_id',$admin->id)->update(T_TOKEN_BAL,array('balance' => $admin_balance));
             }
         }
-        $result = sendTron($user->crypto_wallet_secret,$receiver->crypto_wallet_address,$_POST['amount']);
+        $result = sendTron($user->crypto_wallet_address,$user->crypto_wallet_secret,$receiver->crypto_wallet_address,$_POST['amount']);
         if(array_key_exists('txid',$result)){
             $receiver_balance = getTronBalance($receiver->crypto_wallet_address);
             $update_receiver = $db->where('user_id',$receiver->id)->update(T_TOKEN_BAL,array('balance' => $receiver_balance));

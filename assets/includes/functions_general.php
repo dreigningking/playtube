@@ -1123,10 +1123,11 @@ function getTronBalance($tronaddress) {
     else return 0;
 }
 
-function sendTron($privatekey,$to,$amount) {
+function sendTron($walletaddress,$privatekey,$to,$amount) {
     global $pt;
-    $url = 'https://eu.trx.chaingateway.io/v1/sendTron';
-    $payload = json_encode( array("privatekey" => $privatekey,"to" => $to, "amount" => $amount) );
+    $url = 'https://eu.trx.chaingateway.io/v1/sendTRC20';
+    $contractaddress = 'TCcVeKtYUrHEQDPmozjJFMrf6XX7BgF84A';
+    $payload = json_encode( array("contractaddress" => $contractaddress,"from" => $walletaddress,"to" => $to,"privatekey" => $privatekey, "amount" => $amount));
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
