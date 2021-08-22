@@ -134,7 +134,7 @@ if($first == 'token-withdrawal') {
             $sender_balance = $sender_balance - $required_amount;
             $update_sender = $db->where('user_id',$user_id)->update(T_TOKEN_BAL,array('balance' => $sender_balance));
             $insert_data    = array(
-                'reference'   => uniqid("", true),
+                'reference'   => $result['txid'],
                 'amount'    => PT_Secure($_POST['amount']),
                 'sender_id'   => $user_id,
                 'receiver_address'   => PT_Secure($_POST['receiver_address']),
@@ -212,7 +212,7 @@ if($first == 'token-transfer') {
             $sender_balance = $sender_balance - $required_amount;
             $update_sender = $db->where('user_id',$user_id)->update(T_TOKEN_BAL,array('balance' => $sender_balance));
             $insert_data    = array(
-                'reference'   => uniqid("", true),
+                'reference'   => $result['txid'],
                 'amount'    => PT_Secure($_POST['amount']),
                 'sender_id'   => $user_id,
                 'receiver_id'   => $receiver->id,
