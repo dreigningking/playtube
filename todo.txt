@@ -42,57 +42,6 @@ change the scam and legit calculations from the video table
 in contents, get all the rael likes and rael dislikes
 
 =====================================================
-give points to users in database
-let user A transfer points to another user B
-let user B get notification of the transfer
-let user user A see the transfer in his transactions
-let user B see the transfer in his transactions
-let user B request withdrawal of points
-show transaction in user B and admin 
-
-CRON
-when user A sends money to platform(admin)
-let user A enter amount to send, and from which address 
-ask user A to perform the transaction
-let system scan online for the transaction
-let system update the transaction table and admin wallet
-let admin get notification that user A deposited funds
-admin can now 
-let user A get notification that deposit is confirmed.
-
-
-1. Create Address for user A and save to database : https://eu.bsc.chaingateway.io/v1/newAddress
-
-2. Create Address for user B and save to database 
-User A wants to donate to user B
-3. Get user A balance and save : https://eu.bsc.chaingateway.io/v1/getBinancecoinBalance
-4. If sufficient for transfer, Initiate transfer to user B : https://eu.bsc.chaingateway.io/v1/sendBinancecoin
-5. Initiate transfer of gas to admin
-6. withdrawal
-
-<?php if($pt->settings->crypto_wallet_address) { ?>
-    <p>Say hello</p>
-<?php  } ?>
-
-When user login, check if user has address
-if yes, get balance.. then update balance 
-
-
-when user clicks get new address,
-get address and save to database with balance of 0.
-
-when user A wants to transfer to user B
-get user A balance,
-if balance is greater than amount, 
-send to user B
-get user B balance
-update user A and user B balance 
-
-when user B wants to withdraw funds
-user B enters amount and address
-get user B balance
-if balance is greater than threshold,
-send
 
 notify [type,admin]
 update users balance on frontend after withdrawal

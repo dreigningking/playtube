@@ -483,7 +483,6 @@ function ToArray($obj) {
     }
     return $new;
 }
-
 function PT_Secure($string, $censored_words = 1, $br = true) {
     global $mysqli;
     $string = trim($string);
@@ -543,8 +542,6 @@ function PT_GetUserFromSessionID($session_id, $platform = 'web') {
     $return     = $db->where('platform', $platform);
     return $db->getValue(T_SESSIONS, 'user_id');
 }
-
-
 function PT_GenerateKey($minlength = 20, $maxlength = 20, $uselower = true, $useupper = true, $usenumbers = true, $usespecial = false) {
     $charset = '';
     if ($uselower) {
@@ -609,7 +606,6 @@ function PT_Resize_Crop_Image($max_width, $max_height, $source_file, $dst_dir, $
     if ($src_img)
         @imagedestroy($src_img);
 }
-
 function PT_CompressImage($source_url, $destination_url, $quality) {
     $info = getimagesize($source_url);
     if ($info['mime'] == 'image/jpeg') {
@@ -716,7 +712,6 @@ function covtime($youtube_time) {
     $start->add(new DateInterval($youtube_time));
     return $start->format('H:i:s');
 }   
-
 function PT_CreateSession() {
     $hash = sha1(rand(1111, 9999));
     if (!empty($_SESSION['hash_id'])) {
@@ -1139,6 +1134,26 @@ function sendTron($walletaddress,$privatekey,$to,$amount) {
     $curl_response = curl_exec($curl);
     curl_close($curl);
     // $curl_response = json_encode(array("txid"=> "f4935c8af33fd68ddcf6190d1ee8858159541c54e3b3e931c3a1f1fc4c02b0be", "to"=> "TWQiHuVugyFSWDnBh2ytFPaXtGskHt3iyB", "from" => "TWQiHuVugyFSWDnBh2ytFPaXtGskHt3iyB", "amount" => "100.012945"));
+    $result = json_decode($curl_response,true);
+    return $result;
+}
+
+function getDepositAddress($user,$crypto,$amount) {
+    global $pt;
+    $url = 'https://api.nowpayments.io/v1/payment';
+    $payload = json_encode( array("price_amount" => $amount,"price_currency" => "usd","pay_currency" => strtolower($crypto),"order_id" => $user, "ipn_callback_url" => "https://nowpayments.io"));
+    // $payload = json_encode( array("price_amount" => 100,"price_currency" => "usd","pay_currency" => 'btc',"order_id" => 2, "ipn_callback_url" => "https://nowpayments.io"));
+    $curl = curl_init($url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.7.12) Gecko/20050915 Firefox/1.0.7");
+    curl_setopt($curl, CURLOPT_POST, 1);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $payload );
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type:application/json", "x-api-key: A7M40XV-CG1448Z-KVVED3G-NW3V0TK"));
+    $curl_response = curl_exec($curl);
+    curl_close($curl);
+    // $curl_response = json_encode(array("payment_id"=> "5745459419","payment_status"=> "waiting","pay_address" => "3EZ2uTdVDAMFXTfc6uLDDKR6o8qKBZXVkj","price_amount" => 3999.5,"price_currency" => "usd","pay_amount"=> 0.17070286,"pay_currency"=> "btc","order_id"=> "RGDBP-21314","order_description"=> "Apple Macbook Pro 2019 x 1","ipn_callback_url"=> "https://nowpayments.io","created_at"=> "2020-12-22T15:00:22.742Z","updated_at"=> "2020-12-22T15:00:22.742Z","purchase_id"=> "5837122679"));
     $result = json_decode($curl_response,true);
     return $result;
 }

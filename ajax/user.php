@@ -251,6 +251,37 @@ if($first == 'token-transfer') {
     echo json_encode($data);
     exit();
 }
+if($first == 'wallet-deposit'){
+    $error    = 'Something is wrong';
+    $user_id  = $pt->user->id;
+    $user = $db->where('id',$user_id)->getOne(T_USERS);
+    if($_GET['crypto']){
+        $result = getDepositAddress($user_id,$_GET['crypto'],$_GET['amount']);
+        if(array_key_exists('pay_address',$result)){
+            $insert_data    = array(
+                'user_id'   => $user_id,
+                'payment_id'    => $result['payment_id'],
+                'payment_address'   => $result['pay_address'],
+                'created_at' => time(),
+            );
+            $insert  = $db->insert(T_NOW_PAYMENTS,$insert_data);
+            $data['status']  = 200;
+            $data['address']  = $result['pay_address'];
+            
+        }
+        else{
+            $data['status']  = 400;
+            $data['message'] = "Could not get address";
+        }
+    }
+    else{
+        $data['status']  = 400;
+        $data['message'] = $error;
+    }
+    header("Content-type: application/json");
+    echo json_encode($data);
+    exit();
+}
 
 
 if (empty($_POST['user_id']) || !IS_LOGGED) {

@@ -58,4 +58,5 @@ define('T_LIVE_SUB', 'live_sub_users');
 define('T_CARDS', 'cards');
 define('T_TOKEN_BAL','token_balances');
 define('T_TOKEN_TRANS','token_transactions');
+define('T_NOW_PAYMENTS','nowpayments');
 ?>

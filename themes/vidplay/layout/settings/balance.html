@@ -14,66 +14,130 @@
 				</a>
 			</span>
 		</div>
-		<hr>
+		<div class="vp_dash_links">
+			<ul>
+				<li class="active">
+					<a href="#">Deposit</a>
+				</li>
+			</ul>
+			
+		</div>
+		<div class="pp_mat_input">
+			<input type="number" name="amount" id="amount" placeholder="{{LANG amount}}" min="10" autocomplete="off">
+			<label for="amount">$ {{LANG amount}}</label>
+			<span class="help-block">{{LANG min}}: 10 {{CONFIG payment_currency}}</span>
+		</div>
+		<div class="col-md-12 text-center">
+			<p class="font-bold">Select a deposit method</p>
+		</div>
+		<ul class="list-inline  " style="display: flex;justify-content: center;margin-bottom:20px;">
+			<li>
+				<a href="preventDefault();" class="px-0 currency" data-value="BTC" data-toggle="modal" data-target="#myModalwallet">
+					<img src="https://s2.coinmarketcap.com/static/img/coins/200x200/1.png" width="40px" height="40px" > BTC 
+				</a>
+			</li>
+			<li>
+				<a href="" onclick="event.preventDefault()"  class="px-2 currency" data-value="ETH" data-toggle="modal" data-target="#myModalwallet">
+					<img src="https://s2.coinmarketcap.com/static/img/coins/200x200/1321.png" width="40px" height="40px" > ETH
+				</a>
+			</li>
+			<li>
+				<a href="#" class="px-2 currency" data-value="LTC" data-toggle="modal" data-target="#myModalwallet">
+					<img src="https://s2.coinmarketcap.com/static/img/coins/200x200/2.png" width="40px" height="40px" > LTC
+				</a>
+			</li>
+			<li>
+				<a href="#" class="px-2 currency" data-value="BNB" data-toggle="modal" data-target="#myModalwallet">
+					<img src="https://www.fintechfutures.com/files/2018/08/binance.png" width="40px" height="40px" > BNB
+				</a>
+			</li>
+			<li>
+				<a href="#" class="px-2 currency" data-value="TRX" data-toggle="modal" data-target="#myModalwallet">
+					<img src="https://s2.coinmarketcap.com/static/img/coins/200x200/1958.png" width="40px" height="40px" > TRX
+				</a>
+			</li>
+		   
+		</ul>
+		
 		<div class="clear"></div>
 		<div class="row">
-			<div class="col-md-6">
-				<div class="pp_mat_input">
-					<input type="email" name="email" id="email" placeholder="PayPal {{LANG email}}" value="{{ME email}}">
-					<label for="email">PayPal {{LANG email}}</label>
-				</div>
+			<hr>
+			<div class="col-md-12 text-center fetching" style="display:none;">
+				<p id="copyaddress">Fetching Address for <span class="doc"></span>payment...</p>
 			</div>
-			<div class="col-md-6">
-				<div class="pp_mat_input">
-					<input type="number" name="amount" id="amount" placeholder="{{LANG amount}}" min="50" autocomplete="off">
-					<label for="amount">{{LANG amount}}</label>
-					<span class="help-block">{{LANG min}}: 50 {{CONFIG payment_currency}}</span>
-				</div>
+			<div class="col-md-12 address" style="display:none;">
+				<div class="yp_copy_link">
+					<input id="copyLink" readonly="" tabindex="1" type="text" value="">
+					<a class="btn" href="javascript:void(0);" onclick="copyLinkfn();">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+							<path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path>
+						</svg>
+					</a>
+				</div>	
 			</div>
 		</div>
-
-        <input type="hidden" name="hash_id" value="<?php echo PT_CreateSession()?>">
-        <input type="hidden" name="user_id" value="{{USER id}}">
-		<div class="vp_forms_sbm_btn text-center">
-			<button type="submit" class="btn btn_primary" id="submit">
-				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-					<path fill="currentColor" d="M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z" />
-				</svg> {{LANG submit_withdrawal_request}}
-			</button>
-		</div>
+		
 	</div>
 	<div class="col-md-1"></div>
 </form>
 
 
 <script>
-    jQuery(document).ready(function($) {
+	function copyLinkfn() {
+		var copyText = document.getElementById("copyLink");
+		copyText.select();
+		document.execCommand("copy");
+	}
+
+	$('.currency').click(function() {
+		var crypto = $(this).attr('data-value');
+		// SHOW CRYPTO SELECTED
+		if($('#amount').val() == 0 || $('#amount').val() == '' || $('#amount').val() < 10)
+		$('#amount').val(10);
+		else{
+			$('.doc').html(crypto);
+			$('.fetching').show();
+			// CLEAR EXISTING ADDRESS
+			$('#copyLink').val('');
+
+			$.get('{{LINK aj/user/wallet-deposit}}', {amount:$('#amount').val(),crypto: crypto}, function(data) {
+			if (data.status == 200) {
+				// $('#copyLink').val(data.address);
+				console.log(data.address);
+				// $('.address').show();
+			}
+			$('#copyaddress').html('Copy '+crypto+' Address ');
+		});
+		
+		}
+	});
+    // jQuery(document).ready(function($) {
         
-        var form = $('form#monetization-settings');
-        form.ajaxForm({
-            url: '{{LINK aj/user/request-withdrawal}}?hash=' + $('.main_session').val(),
-            dataType:'json',
-            beforeSend: function() {
-                form.find('button').text("{{LANG please_wait}}");
-            },
-            success: function(data) {
-                scrollToTop();
-                if (data.status == 200) {
-                    $('.monetization-settings-alert').html('<div class="alert alert-success bg-success">' + data.message + '</div>');
-					$('#amount').val('');
-                    $('.alert-success').fadeIn('fast', function() {
-                        $(this).delay(2500).slideUp(500, function() {
-                            $(this).remove();
-                        });
-                    });
-                } 
-                else if (data.status == 400) {
-                    $('.monetization-settings-alert').html('<div class="alert alert-danger bg-danger">' + data.message + '</div>');
-                    $('.alert-danger').fadeIn(300);
-                }
-                form.find('button').html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z" /></svg> {{LANG submit_withdrawal_request}}');
-            }
-        });
-    });
+    //     var form = $('form#monetization-settings');
+    //     form.ajaxForm({
+    //         url: '{{LINK aj/user/request-withdrawal}}?hash=' + $('.main_session').val(),
+    //         dataType:'json',
+    //         beforeSend: function() {
+    //             form.find('button').text("{{LANG please_wait}}");
+    //         },
+    //         success: function(data) {
+    //             scrollToTop();
+    //             if (data.status == 200) {
+    //                 $('.monetization-settings-alert').html('<div class="alert alert-success bg-success">' + data.message + '</div>');
+	// 				$('#amount').val('');
+    //                 $('.alert-success').fadeIn('fast', function() {
+    //                     $(this).delay(2500).slideUp(500, function() {
+    //                         $(this).remove();
+    //                     });
+    //                 });
+    //             } 
+    //             else if (data.status == 400) {
+    //                 $('.monetization-settings-alert').html('<div class="alert alert-danger bg-danger">' + data.message + '</div>');
+    //                 $('.alert-danger').fadeIn(300);
+    //             }
+    //             form.find('button').html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z" /></svg> {{LANG submit_withdrawal_request}}');
+    //         }
+    //     });
+    // });
 
 </script>
