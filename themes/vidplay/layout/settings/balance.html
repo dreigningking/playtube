@@ -102,11 +102,11 @@
 
 			$.get('{{LINK aj/user/wallet-deposit}}', {amount:$('#amount').val(),crypto: crypto}, function(data) {
 			if (data.status == 200) {
-				// $('#copyLink').val(data.address);
+				$('#copyLink').val(data.address);
 				console.log(data.address);
-				// $('.address').show();
+				$('.address').show();
 			}
-			$('#copyaddress').html('Copy '+crypto+' Address ');
+			$('#copyaddress').html('Copy '+crypto+' Address '+'<br>'+'This address will be valid for 24hours');
 		});
 		
 		}
